@@ -1,0 +1,6 @@
+### What is Phoenix?
+Phoenix is a comprehensive Minecraft network suite that provides an all-in-one solution for managing your server. With powerful features like Rank Management, Punishment Management, and Staff Management commands, along with Essentials and much more.
+
+Phoenix is designed to eliminate the need for additional plugins like Luck Perms, LiteBans, and Essentials, which can save valuable server resources. Phoenix is compatible with Java 8+ and Minecraft versions 1.7.10+, and has been extensively tested with up to 300+ players on 20 TPS.
+
+Phoenix can be bought via our [Store](https://refinedev.xyz/resources/phoenix.3/)

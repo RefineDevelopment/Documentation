@@ -1,0 +1,9 @@
+Follow these steps to get Phoenix up and running on your Bungee/Velocity server:
+
+1. Download the pxBungee/pxVelocity jar from our [Discord](https://ptb.discord.com/channels/888463667895623812/1067486276296642560)
+2. Upload the pxBungee/pxVelocity jar file to your Bungee/Velocity server's plugins folder.
+3. Start the server for the first time with pxBungee/pxVelocity.
+4. Shut the server down.
+5. Navigate to your Bungee/Velocity plugins folder and find the "Phoenix" folder.
+6. Open the global.yml file and fill out the database details.
+7. Change the server name to a suitable name for your proxy.

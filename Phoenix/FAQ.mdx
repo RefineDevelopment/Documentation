@@ -8,7 +8,7 @@ You can set up ranks by using the `/rank` command. Be sure to go to Phoenix `buk
 </details>
   
 <details>
-<summary>My menus are not working on 1.12+ servers.</summary>
+<summary>My menus are not working on 1.12+ servers. How do I fix?</summary>
 
 To ensure your menus work properly on 1.12+ servers, follow these steps:
 
@@ -23,25 +23,20 @@ The menus should start working properly for 1.12+ servers again.
 <details>
 <summary>I have an error saying Missing Dependency. Why am I getting this?</summary>
 
-A: This usually means you are missing a dependency such as PlaceholderAPI!
+This usually means you are missing a dependency. Some addons of Phoenix depend on the following plugin(s):
+- PlaceholderAPI
 </details>
   
 <details>
-<summary>Why can’t I grant when I am OP??</summary>
+<summary>Why can’t I grant a rank even when I am OP?</summary>
 
-A: Please ensure you have core.grant.* or core.grant.rankName AND you are above the rank you are trying to both !
+Please ensure you have `core.grant.*` or `core.grant.[rankName]` and your rank is above the rank you are trying to grant.
 </details>
   
 <details>
-<summary>Why am I being blacklisted randomly when I op someone or I get opped!?</summary>
+<summary>Why am I being blacklisted randomly when I op someone or I get opped?</summary>
 
-This is because of our security system we added. Please do security add [ign] or disable it in the config.
-</details>
-  
-<details>
-<summary>Why is Tab broken?</summary>
-
-A: Some versions are not supported yet.
+This is because of our security system we added. Please do `/security add [your username]` or disable it in the config.
 </details>
   
 <details>
@@ -53,5 +48,5 @@ You can grant a rank from the console using the `/ogrant` command
 <details>
 <summary>How do I add a tag to a rank?</summary>
 
-Add the permission autotaggrant.tagName or .* to the rank
+Add the permission `autotaggrant.[tagName]` (or `autotaggrant.*` if you wish to add all tags) to the rank
 </details>

@@ -1,3 +1,6 @@
+---
+sidebar_position: 1
+---
 ### What is Phoenix?
 Phoenix is a comprehensive Minecraft network suite that provides an all-in-one solution for managing your server. With powerful features like Rank Management, Punishment Management, and Staff Management commands, along with Essentials and much more.
 

@@ -1,0 +1,14 @@
+## Introduction
+pxQueue is a queue plugin that prevents large amount of players from joining your server at once by allowing only one player to join at the time per few seconds.
+
+## Commands and Permissions
+| Command              | Permission                      | Purpose                                                    |
+| -------------------- | ------------------------------- | ---------------------------------------------------------- |
+| `/adminqueue`        | queue.command.adminqueue        | Queue management commands                                  |
+| `/adminqueue reload` | queue.command.adminqueue.reload | Reload pxQueue's config.yml                                |
+| `/joingroupqueue`    | -                               | Join a group queue                                         |
+| `/joinqueue`         | -                               | Join a queue                                               |
+| `/leavequeue`        | -                               | Leave current queue                                        |
+| -                    | core.queue.bypass               | Bypass a queue                                             |
+| -                    | core.queue.logout               | Allows you to stay in a queue even after you disconnect    |
+| -                    | core.time.\<duration>           | Time before you get removed from queue when you disconnect |

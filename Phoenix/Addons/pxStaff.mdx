@@ -4,18 +4,20 @@ sidebar_position: "1"
 ## Introduction
 pxStaff is an addon to Phoenix and is specifically designed to be a complete staff core, also known as a mod suite. This addon comes packed with several features such as staff mode, report, helpop, freeze, and more. With pxStaff, server administrators can efficiently manage their staff and ensure the smooth functioning of their servers. The addon is easy to install and can be quickly integrated into your Phoenix installation. With its user-friendly interface, you can easily manage your staff and enhance the overall performance of your server.
 ## Commands and Permissions
-| Command        | Permission                 | Purpose                                                         |
-| -------------- | -------------------------- | --------------------------------------------------------------- |
-| `/AmIVanished` | core.command.vanish        | View if you are vanished or not                                 |
-| `/freeze`      | core.command.freeze        | Freeze a player                                                 |
-| `/clearchat`   | core.command.clearchat     | Clear the in game chat                                          |
-| `/mutechat`    | core.command.mutechat      | Mute the in game chat                                           |
-| `/slowchat`    | core.command.slowchat      | Set a slowdown for the in game chat. Useful for preventing spam |
-| `/pxstaff`     | pxstaff.command.reload     | Used for reloading configs                                      |
-| `/report`      | core.command.report        | Allows players to report other players                          |
-| `/request`     | core.command.request       | An alias for /helpop                                            |
-| `/reports`     | core.command.reports       | View player reports                                             |
-| `/requestmute` | core.command.requestmute   | Request for a player to be reported                             |
-| -              | core.command.vanish.others | Allows staff to put other players in vanish                     |
-| `/hidestaff`   | core.command.hidestaff     | Allows for staff to be hidden                                   |
-
+| Command             | Permission                  | Purpose                                                         |
+| ------------------- | --------------------------- | --------------------------------------------------------------- |
+| `/pxstaff reload`   | pxstaff.command.reload      | Reloads all pxStaff files                                       |
+| `/AmIVanished`      | core.command.vanish         | View if you are vanished or not                                 |
+| `/vanish`           | core.command.vanish         | Toggles your vanish state                                       |
+| `/vanish <player>`  | core.command.vanish.others  | Allows vanishing other players                                  |
+| `/freeze`           | core.command.freeze         | Freeze a player                                                 |
+| `/clearchat`        | core.command.clearchat      | Clear the in game chat                                          |
+| `/mutechat`         | core.command.mutechat       | Mute the in game chat                                           |
+| `/slowchat`         | core.command.slowchat       | Set a slowdown for the in game chat. Useful for preventing spam |
+| `/modmode`          | core.command.modmode        | Access to /modmode                                              |
+| `/modmode <player>` | core.command.modmode.others | Allows modmoding state for other                                |
+| `/report`           | core.command.report         | Allows players to report other players                          |
+| `/request`          | core.command.request        | An alias for /helpop                                            |
+| `/reports`          | core.command.reports        | View player reports                                             |
+| `/requestmute`      | core.command.requestmute    | Request for a player to be reported                             |
+| `/hidestaff`        | core.command.hidestaff      | Allows for staff to be hidden                                   |

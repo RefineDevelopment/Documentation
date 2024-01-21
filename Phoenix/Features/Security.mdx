@@ -1,0 +1,46 @@
+---
+sidebar_position: 2
+---
+
+Before a player can perform a dangerous task, they must be added as a security user.
+
+<details>
+<summary>Related Tasks</summary>
+
+Command                     | Description
+--------------------------- | ----------------------------------------------
+`/execcmd`                  | Executes console commands on servers in game.
+`/mclogs`                   | Uploads a minecraft log files to the internet.
+`/phoenix editor`           | Starts a pxEditor session.
+`/phoenix editor-update`    | Loads changes made in pxEditor.
+`/phoenix import-litebans`  | Imports data from LiteBans.
+`/phoenix import-luckperms` | Imports data from LuckPerms.
+`/user cleargrants`         | Clear a users grants.
+</details>
+
+## Prevention
+
+If configured in `global.yml`, users who are granted specific ranks or become opped and aren't a security user,
+will be permanently blacklisted. The player as well as the sender can both be configured to be blacklisted in the config.
+
+This is to stop unauthorized access to permissions, and require a manual unblacklist for the player to join again.
+
+## Admin User
+
+If you're a security admin user, you can add other players as security users.
+It is recommended that you minimise the amount of players that have this.
+
+:::info
+`/security` can only be run by security admin users or from console.
+:::
+
+## Commands
+
+`<>` = Required `[]` = Optional
+
+Command                          | Permission              | Description
+-------------------------------- | ----------------------- | --------------------------------------------
+`/security add <player> <admin>` | `core.command.security` | Adds a player as a security user.
+`/security help [page]`          | `core.command.security` | Shows a list of security commands.
+`/security list [page]`          | `core.command.security` | Shows a list of security users.
+`/security remove <player>`      | `core.command.security` | Removes a player from being a security user.

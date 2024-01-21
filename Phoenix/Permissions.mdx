@@ -1,102 +1,319 @@
 ---
-sidebar_position: "2"
+sidebar_position: 3
 ---
 
-| Permission                                | Purpose                                                                                 |
-| ------------------------------------------|---------------------------------------------------------------------------------------- |
-| `core.command.cban`                       | CompetitiveBan                                                                          |
-| `core.2fa`                                | Access to 2fa related commands                                                          |
-| `core.admin`                              | Permissions to Bypass TAB completion and admin alerts server statuses and admin chat and admin profile menu                                                                       |
-| `core.staff`                              | Access to viewing staff chat and reports and helpop and other stuff                     |
-| `core.media`                              | Be marked as media ex. (/medialist)                                                     |
-| `core.command.force2fa`                   | Force 2fa                                                                               |
-| `core.command.reset2fa`                   | Reset 2fa                                                                               |
-| `core.command.find`                       | Find                                                                                    |
-| `core.command.jump`                       | Jump                                                                                    |
-| `core.command.pull`                       | Pull                                                                                    |
-| `core.command.chattagsadmin`              | Tags Management                                                                         |
-| `core.command.commandlogs`                | CommandLogs                                                                             |
-| `core.command.disguiseadmin`              | Disguise Management Commands                                                            |
-| `core.command.disguiseadmin.names.add`    | Adds Usernames to Disguise                                                              |
-| `core.command.disguiseadmin.names.remove` | Removes user names from a Disguise                                                      |
-| `core.command.disguiseadmin.names.list`   | Lists all the names                                                                     |
-| `core.command.disguiseadmin.skins.add`    | Add skins                                                                               |
-| `core.command.execcmd`                    | ExecuteCommand                                                                          |
-| `core.command.filter`                     | Filter Command                                                                          |
-| `core.command.testfilter`                 | Test Filter                                                                             |
-| `core.command.groupinfo`                  | Server Group Management                                                                 |
-| `core.command.notifications.list`         | List all the current notifications                                                      |
-| `core.command.notifications.create`       | Create a Notification                                                                   |
-| `core.command.notifications.delete`       | Deletes a Notification                                                                  |
-| `core.command.notifications.title`        | Set a notification Title                                                                |
-| `core.command.notitifcations.lore`        | Create lores for a notification                                                         |
-| `core.command.notifications.stats`        | Show the stats of a notification                                                        |
-| `core.command.phoenix`                    | Debug info for Phoenix                                                                  |
-| `core.command.proxyinfo`                  | ProxyInfo                                                                               |
-| `core.command.proxyinfo.delete`           | Delete an offline proxy                                                                 |
-| `core.command.serverinfo`                 | Serverinfo                                                                              |
-| `core.command.sessions`                   | Display sessions                                                                        |
-| `core.command.user`                       | User Management Commands                                                                |
-| `core.command.user.disguise`              | Disguise a user                                                                         |
-| `core.command.whitelist`                  | whitelist management                                                                    |
-| `core.command.wltokens`                   | Shows whitelisted tokens                                                                |
-| `core.command.chatsnapshot`               | ChatSnapShot                                                                            |
-| `core.command.chatsnapshot.create`        | Create a chatsnapshot                                                                   |
-| `core.command.chatsnapshot.delete`        | Deletes a ChatSnap                                                                      |
-| `core.command.chatsnapshot.own`           | Owns a chatsnap                                                                         |
-| `core.command.chatsnapshot.player`        | Get player chatsnaps                                                                    |
-| `core.command.chatsnapshot.view`          | View a chatsnap by token                                                                |
-| `core.command.disguise`                   | Disguise                                                                                |
-| `core.command.disguise.name`              | Disguise as a player                                                                    |
-| `core.command.undisguise`                 | Undisguise                                                                              |
-| `core.command.redisguise`                 | Redisguise as the player previously disguised as                                        |
-| `core.command.stafflist`                  | Shows the current online staff                                                          |
-| `core.command.togglestaffmessages`        | Toggle Staff Messages                                                                   |
-| `core.command.ban`                        | Ban                                                                                     |
-| `core.command.blacklist`                  | Blacklist                                                                               |
-| `core.command.tempban`                    | Tempban                                                                                 |
-| `core.command.ipban`                      | Ipban                                                                                   |
-| `core.command.kick`                       | Kick                                                                                    |
-| `core.command.mute`                       | Mute                                                                                    |
-| `core.command.reban`                      | Reban                                                                                   |
-| `core.command.remute`                     | Remute                                                                                  |
-| `core.command.shadowmute`                 | Shadowmute                                                                              |
-| `core.command.shadowtempmute`             | Shadowtempmute                                                                          |
-| `core.command.tempipban`                  | Tempipban                                                                               |
-| `core.command.tempmute`                   | Tempmute                                                                                |
-| `core.command.warn`                       | Warn                                                                                    |
-| `core.command.unban`                      | Unban                                                                                   |
-| `core.command.staffrollback`              | Rolls back staff who have ran commands                                                  |
-| `core.command.unblacklist`                | Unblacklist                                                                             |
-| `core.command.voidbans`                   | Voidbans                                                                                |
-| `core.command.voidmutes`                  | Voidmutes                                                                               |
-| `core.command.voidblacklists`             | Voidblacklists                                                                          |
-| `core.command.grants`                     | Grants                                                                                  |
-| `core.command.vanish`                     | Vanish                                                                                  |
-| `core.builderchat`                        | Builderchat perms                                                                       |
-| `core.staffchat`                          | Staffchat perms                                                                         |
-| `core.adminchat`                          | Adminchat perms                                                                         |
-| `core.managementchat`                     | Management chat perms                                                                   |
-| `core.command.granthistory`               | Grant history                                                                           |
-| `core.command.history`                    | History / punishment history                                                            |
-| `core.command.staffhistory`               | View Staff History                                                                      |
-| `core.command.checkwarns`                 | Check Warns of a player                                                                 |
-| `core.command.removewarn`                 | Remove a warn                                                                           |
-| `core.command.lookup`                     | Lookup a punishment id                                                                  |
-| `core.command.alts`                       | View alts of a player                                                                   |
-| `core.command.notes`                      | Notes Command                                                                           |
-| `core.command.notes.add`                  | Add a note                                                                              |
-| `core.command.notes.remove`               | Remove a note                                                                           |
-| `core.command.timer`                      | Timer command for motd                                                                  |
-| `core.tags.[tagname] or .*`               | Make a rank grant automatically give tag grants too                                     |
-| `core.filter.bypass`                      | Bypass Filter                                                                           |
-| `core.globalchat.bypass`                  | Bypass Global Chat stuff                                                                |
-| `core.cooldowns.bypass`                   | Bypass cooldowns for commands and chat                                                  |
-| `core.history.viewaddedby`                | View who added the punishment                                                           |
-| `core.history.viewblacklists`             | View blacklists                                                                         |
-| `core.disguise.*`                         | Disguise                                                                                |
-| `core.settings.tips`                      | Toggle tips                                                                             |
-| `core.restrictedhub`                      | Access to restricted hub                                                                |
-| `core.join.[server] or core.join.*`       | Access to join and server command                                                       |
-| `core.command.mclogs`                     | Get MCLogs for developers be careful giving this out it gives out info from the console |
-| `core.command.disguiseadmin.history`      | Get the disguise history of a player                                                    |
+A list of permissions for phoenix and all it's addons.
+
+Please take a look at [Features/Ranks/Permissions](/Phoenix/Features/Ranks#permissions) for detailed information on permissions and how you can set them up.
+
+## Phoenix
+
+These are the main phoenix permissions, addon permissions can be found below.
+
+### Grants
+
+Visit [Features/Grants](/Phoenix/Features/Grants) for more information regarding grant permissions.
+
+Permission                  | Description
+--------------------------- | -----------------------------
+`core.command.grant`        | Access to grant menu.
+`core.command.grants`       | Access to grants menu.
+`core.command.granthistory` | Access to grant history menu.
+`core.grant.*`              | Grant & Revoke all ranks.
+`core.grant.<rank>`         | Grant & Revoke specific rank.
+
+### Ranks
+
+Visit [Features/Ranks](/Phoenix/Features/Ranks) for more information regarding rank permissions.
+
+Permission          | Description
+------------------- | -----------------------------------
+`core.command.rank` | Access to rank editor and commands.
+
+### Security
+
+Visit [Features/Security](/Phoenix/Features/Security) for more information regarding security permissions.
+
+Permission              | Description
+----------------------- | --------------------------------
+`core.command.security` | Access to manage security users.
+
+### Alts
+
+Visit [Features/Alts](/Phoenix/Features/Alts) for more information regarding alts permissions.
+
+Permission              | Description
+----------------------- | --------------------------------
+`core.command.alts` | Access to alts commands.
+
+### Punishments
+
+Visit [Features/Punishments](/Phoenix/Features/Punishments) for more information regarding punishment permissions.
+
+Permission                                       | Description
+------------------------------------------------ | ---------------------------------------------------------------------
+`core.command.punish`                            | Access to the punish menu (/punish)
+`core.punish.<ladder>`                           | Allow the use of a punishment ladder in the punish menu.
+`core.command.lookup`                            | Allows a staff member to lookup a punishment id.
+`core.command.removewarn`                        | Allows a staff member to remove a player's warns.
+`core.command.checkwarns`                        | Allows a staff member to check a player's warns.
+`core.command.history`                           | Access to history menu via. (/history)
+`core.command.staffhistory`                      | Access to the staff history menu (/staffhistory)
+`core.command.unmute`                            | Allows a staff member to unmute a player.
+`core.command.unblacklist`                       | Allows a staff member to unblacklist a player.
+`core.command.unban`                             | Allows a staff member to unban a player.
+`core.command.staffrollback`                     | Access to rollback a staff members punishments.
+`core.command.cunban`                            | Allows a staff member to competitive.
+`core.command.tempmute`                          | Allows a staff member to temp mute a player.
+`core.command.tempipmute`                        | Allows a staff member to temp ip mute a player.
+`core.command.tempipban`                         | Allows a staff member to temp ip ban a player.
+`core.command.tempban`                           | Allows a staff member to temp ban a player.
+`core.command.shadowtempmute`                    | Allows a staff member to temp shadow mute a player.
+`core.command.remute`                            | Allows a staff member to remute a player.
+`core.command.reban`                             | Allows a staff member to reban a player.
+`core.command.ctempban`                          | Allows a staff member to temp competitive ban a player.
+`core.command.warn`                              | Allows a staff member to warn a player.
+`core.command.shadowmute`                        | Allows a staff member to shadow mute a player.
+`core.command.mute`                              | Allows a staff member to mute a player.
+`core.command.kick`                              | Allows a staff member to kick a player.
+`core.command.ipmute`                            | Allows a staff member to IP mute a player.
+`core.command.ipban`                             | Allows a staff member to IP ban a player.
+`core.command.cban`                              | Allows a staff member to competitive ban a player.
+`core.command.blacklist`                         | Allows a staff member to blacklist a player.
+`core.command.ban`                               | Allows a staff member to ban a player.
+`core.command.punishmentladder`                  | Access to /pladder, this permissions is required for all subcommands.
+`core.command.punishmentladder.punish`           | Access to /pladder punish.
+`core.command.punishmentladder.create`           | Access to /pladder create.
+`core.command.punishmentladder.delete`           | Access to /pladder delete.
+`core.command.punishmentladder.addpunishment`    | Access to /pladder addpunishment.
+`core.command.punishmentladder.deletepunishment` | Access to /pladder deletepunishment.
+`core.command.punishmentladder.listpunishments`  | Access to /pladder listpunishments.
+
+:::warning
+All below permissions do not have finished feature pages, they will come soon.
+
+They are also not organized.
+:::
+
+### Unfinished
+
+Permission                                 | Description
+------------------------------------------ | -----------
+`core.adminchat`                           | Access to view and talk in admin chat.
+`core.builderchat`                         | Access to view and talk in builder chat.
+`core.globalchat.bypass`                   | Show up in chat when players have global chat disabled.
+`core.managementchat`                      | Access to view and talk in management chat.
+`core.staff`                               | Access to staff related actions and messages.
+`core.filter.bypass`                       | Bypass the chat filter.
+`core.command.adminprofile`                | View a players admin profile.
+`core.command.alert`                       | Access to /alert.
+`core.2fa`                                 | Access to 2fa related commands and actions.
+`core.command.force2fa`                    | Forces a player to authenticate with 2fa.
+`core.command.chattagsadmin`               | Access to manage chat tags.
+`core.command.commandlogs`                 | View a players command logs.
+`core.command.disguiseadmin`               | Access to /disguiseadmin.
+`core.command.disguiseadmin.names.add`     | Add disguise names.
+`core.command.disguiseadmin.names.remove`  | Remove disguise names.
+`core.command.disguiseadmin.names.addbulk` | Bulk add disguise names.
+`core.command.disguiseadmin.names.list`    | List disguise names.
+`core.command.disguiseadmin.skins.add`     | Add disguise skins.
+`core.command.disguiseadmin.skins.addbulk` | Bulk add disguise skins.
+`core.command.disguiseadmin.skins.remove`  | Remove disguise skins.
+`core.command.disguiseadmin.skins.list`    | List disguise skins.
+`core.command.disguiseadmin.disguise`      | Disguise a player.
+`core.command.disguiseadmin.listdisguised` | List disguised players.
+`core.command.disguiseadmin.undisguise`    | Undisguise a player.
+`core.command.disguiseadmin.checkdisguise` | Check a player's disguise.
+`core.command.disguiseadmin.history`       | View disguise history.
+`core.command.execcmd`                     | Access to /execcmd.
+`core.command.filter`                      | Access to /filter.
+`core.command.groupinfo`                   | Access to /groupinfo.
+`core.command.mclogs`                      | Access to /mclogs
+`core.command.notifications.list`          | List notifications.
+`core.command.notifications.create`        | Create notifications.
+`core.command.notifications.delete`        | Delete notifications.
+`core.command.notifications.title`         | Change the title of notifications.
+`core.command.notifications.lore`          | Update the lore of notifications.
+`core.command.notifications.stats`         | View the stats of notifications.
+`core.command.phoenix`                     | Access to /phoenix.
+`core.command.proxyinfo`                   | Access to /proxyinfo.
+`core.command.proxyinfo.delete`            | Delete a proxy from proxy info.
+`core.command.reboot`                      | Access to /reboot.
+`core.command.serverinfo`                  | Access to /serverinfo.
+`core.command.serverinfo.delete`           | Delete a server from server info.
+`core.command.setspawn`                    | Access to /setspawn.
+`core.command.socialspy`                   | Access to /socialspy.
+`core.command.user`                        | Access to /user.
+`core.command.user.disguise`               | Disguise a user.
+`core.command.user.clearcooldowns`         | Clear a user's cooldowns.
+`core.command.user.clearips`               | Clear a user's ips.
+`core.command.user.clearalts`              | Clear a user's alts.
+`core.command.user.cleargrants`            | Clear a user's grants.
+`core.command.user.clearpunishments`       | Clear a user's punishments.
+`core.command.user.info`                   | View information about a user.
+`core.command.user.addperm`                | Add a permission to a user.
+`core.command.user.removeperm`             | Remove a user's permissions.
+`core.command.user.listperm`               | List a user's permissions.
+`core.command.whitelist`                   | Access to /whitelist.
+`core.command.chatsnapshot`                | Access to /chatsnapshot.
+`core.command.chatsnapshot.create`         | Create a chat snapshot.
+`core.cooldowns.bypass`                    | Bypass cooldowns.
+`core.command.chatsnapshot.delete`         | Delete chat snapshots.
+`core.command.chatsnapshot.own`            | View own chat snapshots.
+`core.command.chatsnapshot.player`         | View chat snapshots from player.
+`core.command.chatsnapshot.view`           | View chat snapshots by id.
+`core.command.disguise`                    | Access to /disguise.
+`core.command.disguise.name`               | Specify the name in /disguise.
+`core.command.undisguise`                  | Access to /undisguise.
+`core.command.redisguise`                  | Access to /redisguise.
+`core.command.stafflist`                   | Access to /stafflist.
+`core.command.medialist`                   | Access to /medialist.
+`core.command.togglestaffmessages`         | Access to /togglestaffmessags.
+`core.command.spawn.others`                | Send other players to spawn.
+`core.command.spawn`                       | Access to /spawn.
+`core.staffchat`                           | Access to view and talk in staffchat.
+`core.command.notes`                       | Access to /notes command.
+`core.command.notes.remove`                | Remove notes from a player.
+`core.command.notes.add`                   | Add notes to a player.
+`core.chat.colorcodes`                     | Allows color codes in chat.
+`core.admin`                               | Access to staff related actions and messages.
+`core.joinfull`                            | Allows joining full servers.
+`core.history.viewblacklists`              | View blacklists in /history.
+`core.history.viewaddedby`                 | View who issued a punishment in /history.
+`core.disguise.<rank>`                     | Access to disguise as a rank.
+`core.settings.tips`                       | Access to toggle chat tips.
+`core.tags.<tag>`                          | Use of specific tag.
+`core.tags.*`                              | Use of all tags.
+`core.command.antivpn`                     | Access to /antivpn
+`core.command.bungeereload`                | Access to /bungeereload
+`core.command.find`                        | Access to /find
+`core.command.list`                        | Access to /list
+`core.join.<server>`                       | Access to join specific server.
+`core.join.*`                              | Access to join any server.
+`core.command.jump`                        | Access to /jump.
+`core.command.maintenance`                 | Access to /maintenance.
+`core.command.pull`                        | Access to /pull.
+`core.command.registerserver`              | Access to /registerserver.
+`core.command.send`                        | Access to /send.
+`core.command.timer`                       | Access to /timer.
+`core.command.unregisterserver`            | Access to /unregisterserver.
+`core.restrictedHub`                       | Access to join restricted hubs.
+`core.media`                               | Show up in /medialist.
+
+## Addons
+
+These are the phoenix addon permissions.
+
+### pxBasic
+
+Visit [Addons/Quark](/Phoenix/Addons/pxBasic) for more information regarding punishment permissions.
+
+Permission                      | Description
+------------------------------- | ------------------------------------
+`core.command.sudo`             | Access to /sudo.
+`core.command.masssay`          | Access to /masssay.
+`core.command.heal.others`      | Heal other players.
+`core.command.heal`             | Access to /heal.
+`core.command.more`             | Access to /more.
+`core.command.skull`            | Access to /skull.
+`core.command.craft`            | Access to /craft.
+`core.command.god`              | Access to /god.
+`core.command.staffalert`       | Access to /staffalert.
+`core.command.staffbroadcast`   | Access to /staffbroadcast.
+`core.command.speed`            | Access to /speed
+`core.command.broadcast`        | Access to /broadcast
+`core.command.build.other`      | Enable build mode for other players.
+`core.command.fly.others`       | Enable fly for other players.
+`core.command.fly`              | Access to /fly.
+`core.command.feed.others`      | Feed other players.
+`core.command.feed`             | Access to /feed.
+`core.command.clear`            | Access to /clear.
+`core.command.enchant`          | Access to /enchant.
+`core.command.gamemode`         | Access to /gamemode.
+`core.command.enderchest.other` | Open another player's enderchest.
+`core.command.shrug`            | Access to /shrug.
+`core.command.item`             | Access to /item.
+`core.command.addlore`          | Access to /addlore.
+`core.command.removelore`       | Access to /removelore.
+`core.command.rename`           | Access to /rename.
+`core.command.pxbasic`          | Access to /pxbasic.
+`core.command.repair`           | Access to /repair.
+`core.command.repair.hand`      | Repair item in hand.
+`core.command.repair.all`       | Repair all items.
+`core.command.repair.armor`     | Repair armor.
+`core.command.teleport`         | Access to /teleport.
+`core.command.teleporthere`     | Access to /teleporthere.
+`core.command.teleportall`      | Access to /teleportall.
+`core.command.teleportposition` | Access to /teleportposition.
+`core.command.teleportworld`    | Access to /teleportworld.
+`core.command.top`              | Access to /top
+
+### pxStaff
+
+Visit [Addons/pxStaff](/Phoenix/Addons/pxStaff) for more information regarding pxStaff permissions.
+
+Permission                   | Description
+---------------------------- | ----------------------------------
+`core.command.adminreport`   | Access to /adminreport.
+`core.command.vanish`        | Access to /vanish.
+`core.command.freeze`        | Access to /freeze.
+`core.command.invsee`        | Access to /invsee.
+`core.command.clearchat`     | Access to /clearchat.
+`core.command.mutechat`      | Access to /mutechat.
+`core.command.slowchat`      | Access to /showchat.
+`core.command.modmode.other` | Toggle modmode for another player.
+`core.command.modmode`       | Access to /modmode.
+`pxstaff.command.reload`     | Access to /pxstaff reload.
+`core.command.report`        | Access to /report.
+`core.command.request`       | Access to /request.
+`core.command.reports`       | Access to /reports.
+`core.command.requestmute`   | Access to /requestmute.
+`core.command.vanish`        | Access to /vanish.
+`core.command.vanish.other`  | Vanish another player.
+`core.command.hidestaff`     | Access /hidestaff.
+
+### pxCosmetics
+
+Visit [Addons/pxCosmetics](/Phoenix/Addons/pxCosmetics) for more information regarding pxCosmetics permissions.
+
+Permission                         | Description
+---------------------------------- | ---------------------------
+`core.chat.colors.*`               | Use any chat color.
+`core.chat.colors.<chatcolor>`     | Use specific chat color.
+`core.colors.*`                    | Use any color.
+`core.colors.<color>`              | Use specific color.
+`core.killeffect.*`                | Use any kill effect.
+`core.killeffect.<killeffect>`     | Use specific kill effect.
+`core.killmessages.*`              | Use any kill messages.
+`core.killmessages.<killmessages>` | Use specific kill messages.
+`core.particle.* (WIP)`            | Use any particle.
+`core.particle.<particle> (WIP)`   | Use specific particle.
+`core.trails.*`                    | Use any trail.
+`core.trails.<trail>`              | Use specific trail.
+
+### pxLevels
+
+Visit [Addons/pxLevels](/Phoenix/Addons/pxLevels) for more information regarding pxLevels permissions.
+
+Permission                | Description
+------------------------- | ----------------------
+`core.command.adminexp`   | Access to /adminexp.
+`core.command.adminlevel` | Access to /adminlevel.
+
+### pxQueue
+
+Visit [Addons/pxQueue](/Phoenix/Addons/pxQueue) for more information regarding pxQueue permissions.
+
+Permission                                 | Description
+------------------------------------------ | -----------
+`queue.command.adminqueue` | Access to /adminqueue.
+`queue.command.adminqueue.reload` | Access to /adminqueue reload.
+
+
+### Quark
+
+Visit [Addons/Quark](/Phoenix/Addons/Quark) for more information regarding Quark permissions.
+
+Permission                                 | Description
+------------------------------------------ | -----------
+`hub.command.hub` | Access to /quark.

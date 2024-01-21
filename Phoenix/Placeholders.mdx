@@ -1,44 +1,78 @@
 ---
-sidebar_position: "3"
+sidebar_position: 4
 ---
 
-| Placeholder                                      | Purpose                                                         |
-|--------------------------------------------------|-----------------------------------------------------------------|
-|`%phoenix_player_rank%`                           | Returns players highest rank.                                   |
-|`%phoenix_player_rank_duration%`                  | Returns players highest rank duration.                          |   
-|`%phoenix_player_general_rank%`                   | Returns players general rank (No Disguise).                     |
-|`%phoenix_player_general_rank_duration%`          | Returns player general rank duration (No Disguise).             |
-|`%phoenix_player_rank_color%`                     | Returns players highest rank color.                             |
-|`%phoenix_player_general_rank_color%`             | Returns players general rank color (No Disguise).               |
-|`%phoenix_player_rank_prefix%`                    | Returns players highest rank prefix.                            |
-|`%phoenix_player_general_rank_prefix%`            | Returns players general rank prefix (No Disguise).              |
-|`%phoenix_player_rank_playerlist_prefix%`         | Returns players highest rank playerlist prefix.                 |
-|`%phoenix_player_general_rank_playerlist_prefix%` | Returns players general rank playerlist prefix (No Disguise).   |
-|`%phoenix_player_rank_suffix%`                    | Returns players highest rank suffix.                            |
-|`%phoenix_player_general_rank_suffix%`            | Returns players general rank suffix (No Disguise).              |
-|`%phoenix_player_tag%`                            | Returns players active tag prefix.                              |
-|`%phoenix_player_name%`                           | Returns players name.                                           |
-|`%phoenix_player_hidingstaff%`                    | Hiding staff? (Returns true or false)                           |
-|`%phoenix_player_modmode%`                        | In Mod Mode? (Returns true or false)                            |
-|`%phoenix_player_vanished%`                       | Vanished? (Returns Visible or Vanished)                         |
-|`%phoenix_player_level_name%`                     | Returns players level name.                                     |
-|`%phoenix_player_level_displayname%`              | Get players level display name.                                 |
-|`%phoenix_player_exp%`                            | Returns players current experience.                             |
-|`%phoenix_server_whitelisted%`                    | Whitelisted? (Returns true or false)                            |
-|`%phoenix_server_online%`                         | Returns current server player count.                            |
-|`%phoenix_server_name%`                           | Returns current server name.                                    |
-|`%phoenix_server_displayname%`                    | Returns current server displayname.                             |
-|`%phoenix_server_global_online%`                  | Returns server global player count.                             |
-|`%phoenix_server_whitelisted_<server>%`           | Whitelisted? (Returns true or false)                            |
-|`%phoenix_server_online_<server>%`                | Returns a servers player count.                                 |
-|`%phoenix_server_displayname_<server>%`           | Returns a servers displayname.                                  |
-|`%phoenix_server_max_<server>%`                   | Returns a servers max player count.                             |
-|`%phoenix_group_online_<server>%`                 | Returns a groups player count.                                  |
-|`%phoenix_group_max_<server>%`                    | Returns a groups max player count.                              |
-|`%pxcosmetics_player_color%`                      | Returns players custom name color.                              |
-|`%pxcosmetics_player_chat_color%`                 | Returns players chat color.                                     |
-|`%pxcosmetics_player_coins%`                      | Returns players coins.                                          |
-|`%pxcosmetics_player_kill_message%`               | Returns players kill message.                                   |
-|`%pxfriends_friends%`                             | Returns your friends count.                                     |
-|`%pxfriends_friends_online%`                      | Returns your online friends count.                              |
+These are PlaceholderAPI placeholders and can be used in messages, menus, etc.
+They also let you display information in other plugins.
+
+## Phoenix
+
+These are the main phoenix placeholders, addon placeholders can be found below.
+
+### Player
+
+Placeholder                                      | Returns                                                | Example
+------------------------------------------------ | ------------------------------------------------------ | --------------------
+`%phoenix_player_rank%`                          | The player's highest rank's display name.              | `&b&lMVP`
+`%phoenix_player_rank_duration%`                 | The player's highest rank's duration.                  | `Permanent`
+`%phonix_player_rank_color%`                     | The player's highest rank's color.                     | `&b`
+`%phonix_player_rank_prefix%`                    | The player's highest rank's prefix.                    | `&b[MVP]`
+`%phonix_player_rank_suffix%`                    | The player's highest rank's suffix.                    | `Suffix`
+`%phonix_player_rank_playerlist_prefix%`         | The player's highest rank's tab prefix.                | `&b`
+`%phoenix_player_general_rank%`                  | The player's highest non-disguise rank's display name. | `&4&lOwner`
+`%phoenix_player_general_rank_duration%`         | The player's highest non-disguise rank's duration.     | `Permanent`
+`%phonix_player_general_rank_color%`             | The player's highest non-disguise rank's color.        | `&4`
+`%phonix_player_general_rank_prefix%`            | The player's highest rank's prefix.                    | `&4[OWNER]`
+`%phonix_player_general_rank_suffix%`            | The player's highest rank's suffix.                    | `Suffix`
+`%phonix_player_general_rank_playerlist_prefix%` | The player's highest rank's tab prefix.                | `&4`
+`%phoenix_player_tag%`                           | The player's active chat tag.                          | `&7[&cCool&7]`
+`%phoenix_player_name%`                          | The players' name, changes with disguises.             | `Notch`
+`%phoenix_player_hidingstaff%`                   | If the player is hiding staff members.                 | `true`/`false`
+`%phoenix_player_modmode%`                       | If the player is in mod mode.                          | `true`/`false`
+`%phoenix_player_vanished%`                      | If the player is vanished.                             | `Visible`/`Vanished`
+`%phoenix_player_level_name%`                    | The player's current level's name.                     | `&cI`
+`%phoenix_player_exp%`                           | The player's experience.                               | `0`
+
+### Server
+
+Placeholder                             | Returns                             | Example
+--------------------------------------- | ----------------------------------- | --------------
+`%phoenix_server_whitelisted_<server>%` | If a server is whitelisted          | `true`/`false`
+`%phoenix_server_displayname_<server>%` | A server's display name.            | `Practice`
+`%phoenix_server_online_<server>%`      | A server's player count.            | `23`
+`%phoenix_server_max_<server>%`         | A server's max player count.        | `100`
+`%phoenix_group_online_<group>%`        | A server group's player count.      | `142`
+`%phoenix_group_max_<group>%`           | A server groups's max player count. | `500`
+
+## Addons
+
+These are the placeholders for all of Phoenix's addons.
+
+:::info
+The addon need to be enabled in Retention for the corrosponding placeholders to function.
+:::
+
+### pxCosmetics
+
+Placeholder                         | Returns                       | Example
+----------------------------------- | ----------------------------- | --------
+`%pxcosmetics_player_color%`        | A player's custom name color. | `&a`
+`%pxcosmetics_player_chat_color%`   | A player's custom chat color. | `&6`
+`%pxcosmetics_player_coins%`        | A player's coin balance.      | `250`
+`%pxcosmetics_player_kill_message%` | A player's kill message.      | `killed`
+
+### pxFriends
+
+Placeholder                  | Returns                         | Example
+---------------------------- | ------------------------------- | -------
+`%pxfriends_friends%`        | A player's friend count.        | `27`
+`%pxfriends_friends_online%` | A player's online friend count. | `4`
+
+### Quark
+
+Placeholder                      | Returns                      | Example
+-------------------------------- | ---------------------------- | ----------
+`%quark_server_status_<server>%` | A server's status.           | `&aOnline`
+`%quark_server_online_<server>%` | A servers's player count.    | `23`
+`%quark_server_max_<server>%`    | A server's max player count. | `100`
 

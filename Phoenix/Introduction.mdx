@@ -1,10 +1,69 @@
 ---
 sidebar_position: 0
 ---
-### What is Phoenix?
 
-Phoenix is a comprehensive Minecraft network suite that provides an all-in-one solution for managing your server. With powerful features like Rank Management, Punishment Management, and Staff Management commands, along with Essentials and much more.
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+import Admonition from '@theme/Admonition'
 
-Phoenix is designed to eliminate the need for additional plugins like Luck Perms, LiteBans, and Essentials, which can save valuable server resources. Phoenix is compatible with Java 8+ and Minecraft versions 1.7.10+, and has been extensively tested with up to 300+ players on 20 TPS.
+An advanced Network Core plugin that provides a plethora of features to enhance any server administration experience. Phoenix core is compatible with multiple plugins and comes with numerous free add-ons that expand features of Phoenix.
 
-Phoenix can be bought via our [Store](https://refinedev.xyz/resources/phoenix.3/)
+Its simple, its powerful and it gets the job done.
+
+Phoenix is extremely customizable. The freedom to change messages, menus, settings and more will allow Phoenix to fit in to your network seamlessly.
+
+:::warning
+The documentation for Phoenix is incomplete and being worked on, it is being actively updated.
+:::
+
+## Installation
+
+<Tabs queryString="type">
+    <TabItem value="spigot" label="Spigot / Paper" default>
+        1. Download and install Retention, which can be found on the resource page, into your plugins folder.<br/>
+        2. Start your server and wait until it finishes booting up, once finished, stop your server.<br/>
+        3. Open global.yml in the newly created Phoenix plugin folder and enter your database details.<br/>
+        4. Start up your server again. If the database details are correct, Phoenix will load right up.<br/>
+    </TabItem>
+    <TabItem value="proxy" label="Velocity / Bungee">
+        <Admonition type="info" title="Please Note:">
+            Phoenix is still required on all of the spigot instances you want to use it on.
+        </Admonition>
+        1. Download and install pxVelocity/pxBungee, which can be found on our Discord, into your proxy's plugin folder.<br/>
+        2. Start your proxy and wait until it finishes booting up, once finished, shutdown your proxy.<br/>
+        3. Open global.yml in the newly created Phoenix plugin folder and enter your database details.<br/>
+        4. Start up your proxy again. If the database details are correct, Phoenix will load right up.<br/>
+    </TabItem>
+</Tabs>
+
+## FAQ
+
+<details>
+<summary>My menus are not working on 1.12+ servers. How do I fix?</summary>
+
+Change `fill-glass` in `menus.yml` to something line `GRAY_STAINED_GLASS_PANE`, then restart.
+</details>
+
+<details>
+<summary>I have a missing dependency error. Why am I getting this?</summary>
+
+You are missing a required dependency that Phoenix relies on, please ensure you have all plugins listed below.
+
+- PlaceholderAPI
+  
+</details>
+
+<details>
+<summary>Why can’t I grant a rank even when I'm OP?</summary>
+
+Please ensure you have `core.grant.*` or `core.grant.<rank>`, and your rank is above the rank you're trying to grant.
+</details>
+
+<details>
+<summary>Why am I being blacklisted randomly when I op someone or I get opped?</summary>
+
+This is because you arent a [security user](/Phoenix/Features/Security).
+Execute `/security add <player> [admin]` in console to fix this.
+
+You can also turn security off in config but it is highly recommended not to.
+</details>

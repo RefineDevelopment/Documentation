@@ -1,0 +1,49 @@
+---
+sidebar_position: 10
+---
+
+The Phoenix web editor (pxEditor) allows you to edit ranks, tags and chat filters
+online using a convenient online interface.
+
+## Showcase
+
+<details>
+<summary>Rank Screenshots</summary>
+
+![Rank Select](./assets/web-editor/rank-select.png)
+![Rank Create](./assets/web-editor/rank-create.png)
+![Rank Info](./assets/web-editor/rank-info.png)
+![Rank Edit](./assets/web-editor/rank-edit.png)
+</details>
+
+<details>
+<summary>Tag Screenshots</summary>
+
+![Tag Select](./assets/web-editor/tag-select.png)
+![Tag Create](./assets/web-editor/tag-create.png)
+![Tag Info](./assets/web-editor/tag-info.png)
+![Tag Edit](./assets/web-editor/tag-edit.png)
+</details>
+
+<details>
+<summary>Filter Screenshots</summary>
+
+![Filter Select](./assets/web-editor/filter-select.png)
+![Filter Create](./assets/web-editor/filter-create.png)
+![Filter Edit](./assets/web-editor/filter-edit.png)
+</details>
+
+## Sessions
+
+When you open the web editor using `/phoenix editor` it creates a session which expires after 24 hours.
+
+If the editor changes are applied using the `/phoenix editor-update` command the session will close.
+
+## Commands
+
+`<>` = Required `[]` = Optional
+
+Command                  | Permission                    | Description
+------------------------ | ----------------------------- | --------------------------------------------
+`/phoenix editor`        | `core.command.phoenix.editor` | Starts an editor session.
+`/phoenix editor-update` | `core.command.phoenix.editor` | Pulls changes and closes the editor session.

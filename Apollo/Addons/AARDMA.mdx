@@ -1,0 +1,27 @@
+---
+sidebar_position: 1
+name: Apollo Anticheat Remote Data Management Addon
+---
+
+## Introduction
+
+Apollo Anticheat Remote Data Management Addon is an amazing addon to Apollo that is specially designed to enhance the server operator's experience by providing a wide range of improved operational efficiencies. With the Apollo Anticheat Remote Data Management Addon, you can scale your servers using Apollo more easily, and more efficiently by centralizing the management of data. This addon can also improve the efficiency and accuracy of the false flag detection system.
+
+You can buy Apollo Anticheat Remote Data Management Addon on our [Store](https://refinedev.xyz/resources/apollo-anticheat-remote-data-management-addon.25/)
+
+## Deployment
+
+Upload the Addon to a server (and use the included start.sh script to start it), set the port and MySQL connection info in the config.toml file, then restart the addon (by stopping it then starting it).
+
+## Integration with the Anticheat
+- Locate the false_flags field of the config.conf file.
+- Locate the remote-server sub-section of that.
+- Set the remote-server field to the IP address of the server to connect to (ex. `127.0.0.1`).
+- Set the remote-port field to the port that you run the addon on.
+- Set the token to any of the randomly generated tokens from the config.toml file the addon generated.
+- Set enabled to true.
+- Run `/apollo reload` or restart your server for maximum performance.
+
+:::note
+Older versions of some databases may not be supported by this. We only officially support MySQL 8.0+ and the latest version of MariaDB and PostgresSQL. Most databases offer an easy way to upgrade.
+:::

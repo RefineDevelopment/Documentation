@@ -1,0 +1,16 @@
+---
+sidebar_position: 2
+---
+
+# Redis Bungee Sync
+Redis Bungee Sync allows you to sync all your different instances. This allows you to synchronize alerts and some amounts of computed data between servers.<br />
+First, locate the redis-alerts section, then set the authentication and connection information for your database. <br />
+Then customize the alert message and set enabled to true.
+
+:::warning
+To avoid issues, make sure to set the `maxmemory-policy` value of the redis server config to `allkeys-lfu`
+:::
+
+:::note
+If you do not have your own Redis database then you can create one at [redis.com](https://redis.com/)
+:::

@@ -1,0 +1,72 @@
+---
+title: Database Setup
+sidebar_position: 1
+---
+
+# Apollo Database Setup
+
+:::note
+Everything in this document relates to the config.conf file unless otherwise specified
+:::
+
+## MySQL/MariaDB (Recommended)
+
+Locate the database section of the config.
+Config Fields and Recommended Values:
+
+| Field                  | Example Value                    | Description                                           |
+| ---------------------- | ------------------------------   | ----------------------------------------------------- |
+| `host`                 | `"172.18.0.1"` or `"127.0.0.1"`  | The ip address of your database                       |
+| `port`                 | `3306`                           | The port the database runs on                         |
+| `storage_type`         | `MARAIDB` or `MYSQL`             | The database you are using                            |
+| `username`             | `root`                           | The username to login to the database with            |
+| `password`             | `pass`                           | The password to login to the database with            |
+| `name`                 | `apollo`                         | The database name to use.                             |
+
+:::warning
+The database you select must already be created. Pterodactyl and other tools do this for you.
+:::
+
+:::note
+Most Server Hosts include a MySQL database, and it is also [very easy to install, but does require some firewall config to work with Pterodactyl](https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-ubuntu-22-04) and can run on [a very cheap vps](https://contabo.com/en/vps/).<br /> If you need a free MySQL database, then [Aiven.io](https://aiven.io/) has a free plan for Aiven for MySQL on DigitalOcean in some locations. PlanetScale also has a free plan but it won't work as expected and will require a dev branch and is therefore not really worth it. Please note that none of these services have been certified to work as expected or work with Apollo, as me and all my testers just use our own MySQL/MariaDB databases.
+:::
+
+## PostgresSQL
+
+Locate the database section of the config.
+Config Fields and Recommended Values:
+
+| Field                  | Example Value                    | Description                                           |
+| ---------------------- | ------------------------------   | ----------------------------------------------------- |
+| `host`                 | `"172.18.0.1"` or `"127.0.0.1"`  | The ip address of your database                       |
+| `port`                 | `5432`                           | The port the database runs on                         |
+| `storage_type`         | `POSTGRES`                       | The database you are using                            |
+| `username`             | `root`                           | The username to login to the database with            |
+| `password`             | `pass`                           | The password to login to the database with            |
+| `name`                 | `apollo`                         | The database name to use.                             |
+
+:::warning
+The database you select must already be created.
+:::
+
+:::note
+[Neon](https://neon.tech/) offers a free database if needed.
+:::
+
+## MongoDB (Not Recommended)
+| Field                  | Example Value                    | Description                                           |
+| ---------------------- | ------------------------------   | ----------------------------------------------------- |
+| `host`                 | `"172.18.0.1"` or `"127.0.0.1"`  | The ip address of your database                       |
+| `port`                 | `27017`                          | The port the database runs on                         |
+| `storage_type`         | `MONGODB`                        | The database you are using                            |
+| `username`             | `root`                           | The username to login to the database with            |
+| `password`             | `pass`                           | The password to login to the database with            |
+| `name`                 | `apollo`                         | The database name to use.                             |
+
+:::info
+The database you select does not already need to be created.
+:::
+
+:::note
+[MongoDB Atlas](https://www.mongodb.com/atlas/database) has free small MongoDB databases, but you should really use SQL.
+:::

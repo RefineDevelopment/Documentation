@@ -3,8 +3,9 @@ sidebar_position: 2
 ---
 
 # Apollo Realtime Network Sync
-Apollo Realtime Network Sync allows you to sync all your different instances via a redis server. This allows you to synchronize alerts and some amounts of computed data between servers, improving performance <br />
-First, locate the redis-alerts section, then set the authentication and connection information for your database. <br />
+Apollo Realtime Network Sync allows you to sync Apollo data and alerts between all your different instances via a redis server. 
+This is useful on bungeecord networks, and can provide general performance improvements, while also preventing certain bugs on networks with multiple server instances running Apollo. <br />
+First, locate the `redis-alerts` config section, then set the authentication and connection information for your keydb or redis database. <br />
 Then customize the alert message and set enabled to true.
 
 :::warning
@@ -16,7 +17,7 @@ Apollo Realtime Network Sync also requires a normal database to be setup.
 :::
 
 :::note
-If you do not have your own redis database then you can create one at [redis.com (Recommended)](https://redis.com/) or [Upstash (Not recommended, pay-as-you-go plan is required)](https://upstash.com/)
+If you do not have your own database then you can create one at [redis.com (Recommended)](https://redis.com/) or [Upstash (Not recommended, pay-as-you-go plan is required)](https://upstash.com/)
 :::
 
 :::info

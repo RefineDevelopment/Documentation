@@ -1,0 +1,31 @@
+---
+title: Check Groups
+sidebar_position: 1
+---
+
+# Check Groups / Actions / Punishments setup
+
+Further syntax-related documentation, and examples are included in the checkgroups.conf file.
+
+## What are Check Groups?
+Check Groups are groups of checks grouped together to make punishment configuration easier.
+There are four check groups by default, `Combat`, `Player`, `Movement` and `Default`, however you do not need to use these and can add custom ones.
+
+## What are actions?
+Apollo Actions are enhanced commands the anticheat can execute to punish a player, for example, send a discord webhook, run a ban command, add proof to a phoenix ban, or setback a player.
+
+## Database Integration
+Apollo **only** logs commands (and custom actions like phoenix ban) that are formatted with `PUNISH %YOURCOMMANDHERE%` to the database.
+
+## What actions exist?
+| Action                 | Example Usage                    | Description                                                                                                  |
+| ---------------------- | ------------------------------   | -----------------------------------------------------                                                        |
+| `SETBACK`              | `SETBACK`                        | Lags back a player.                                                                                          |
+| `WEBHOOK`              | `WEBHOOK`                        | Sends a discord webhook with an alert                                                                        |
+| `DAMAGE`               | `DAMAGE 2`                       | Damages a player by a configurable amount of health                                                          |
+| `PUNISH`               | `PUNISH ban %player% hax`        | Runs a punishment command, and logs it to the db                                                             |
+| `PX_BAN`               | `PUNISH PX_BAN STANDARD 5d`      | Bans a player with Phoenix, automatically adding proof, using one of your pre configured formats.            |
+| `PX_COMP`              | `PUNISH PX_COMP STANDARD perm`   | Competitive Bans a player with Phoenix, automatically adding proof, using one of your pre configured formats.|
+| `PX_PROOF`             | `PX_PROOF`                       | Adds proof to the most recent Phoenix ban                                                                    |
+| `ALERT`                | `ALERT`                          | Sends an alert, if you have auto alerts disabled.                                                            |
+|                        | `staffmsg i found a haxorman!!`  | Runs a command without logging to the database.                                                              |

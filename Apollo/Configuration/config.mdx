@@ -1,0 +1,172 @@
+---
+title: Main Config
+sidebar_position: 0
+---
+
+# Main Config
+The main config of Apollo is where you configure the core of Apollo.
+
+## alerts
+Configure the alerts from the anticheat.
+
+### console
+Do you want alerts to be sent to console?
+
+### message
+The message to use as the alert message. 
+
+#### Message Specific Placeholders:
+- %dev% (Displays a * if the check is a experimental check)
+- %vl% (Displays the amount of flags the check has for the player)
+- %check% (The name of the check, ex. Speed)
+- %type% (The id of the check, ex. A)
+
+## analysis
+Configure the background analysis component of Apollo. This allows you to catch more cheaters, faster. Most options are self explaining, or have good comments and therefore will not be featured here.
+
+### client_analysis
+Configure the client analysis system that detects some cheat clients on join.
+
+### drag_click_fix
+Enable this if you allow drag clicking or 25+ cps clicking on your server.
+
+## ban_delay
+Ban delays allow you to delay bans for 30 seconds to allow staff to cancel or report any false bans before the player gets banned. Alternatively, staff can click the instant ban button to instantly ban the player.
+Most options here are self explaining.
+
+### enabled
+Enable this to use the ban delay system.
+
+## database
+Configure the database here. (More information on common options is here.)[/Apollo/Setup/Database]
+
+### cache_purge_time
+How often should we run the automatic recent log expiry system? Lowering this quickly increases cpu usage, increasing this will slowly increase memory usage.
+
+## features
+Random extra features are listed in this section.
+
+### apollo-hit-detection
+This improves the hit detection by fixing issues with the client, while also tuning some other internals to improve hit detection.
+
+#### spoof-particle
+An experimental debug option you should not use, unless you get cases where players health goes down without the attack being acknowledged to the client.
+
+## hider
+Hides the anticheat by changing the command.
+
+### enabled
+Enable the hider?
+
+### name
+The new name for the anticheat.
+
+## hooks
+Integrations with other plugins
+
+### carbon
+Hooks with the carbon chunks system to improve performance. This has sub-values that you should enable when the matching option in your settings.yml is also enabled.
+
+### phoenix
+Integrates with Phoenix core to provide enhanced punishments with proof and more.
+
+#### ban_formats
+All the premade ban formats you want to use with PX_BAN/PX_COMP actions.
+
+#### enabled
+Enable the integration? Enable this if you use Phoenix Core.
+
+#### proof_format
+The format for the proof.
+
+#### silent
+Should the anticheat do silent bans or non silent bans?
+
+## messages
+Configure the messages here. Most values have comments and are not documented here.
+
+### prefix
+The Prefix for the anticheat. Use in combination with the hider feature, mentioned above.
+
+### name
+The name for the anticheat. Use in combination with the hider feature, mentioned above.
+
+### `redis-alerts`
+(Read more here)[/Apollo/Setup/Sync]
+
+## setbacks
+Configure lagbacks, setbacks and ghost block handling here.
+
+### damage_settings
+Configure damage given to players when they are lagged back for cheating
+
+### ghost_block_settings
+Configure the ghost block lagbacks. Do not disable this unless you want crazy bypasses.
+
+### initial_teleports
+Configure the handling of join teleports. Mis-configuring this can cause bypasses, or weirdness.
+If you end up with players being incorrectly teleported out of arenas or similar, then consider modifying this.
+
+### resend_teleports
+This has a good comment, but in summary, it lets you configure how teleports are resent. It is recommended to set this to TICKS for smooth setbacks, and to PING to not send many extra teleports.
+
+## threads
+Configure the threading system of the anticheat.
+
+### max_threads
+Configure the maximum number of threads to target.
+
+### players_per_threads
+How many players should we try to put on each thread?
+
+### async_pre_tick
+Run some pre-processing async? This can reduce main thread load, but may cause some false flags.
+
+## transactions
+Configure Apollo's lag handling
+
+### max_delay
+The maximum amount of time a player can not respond to packets for before being kicked. Increasing this can quickly cause bypasses, lowering too far can cause false kicks.
+
+### kick
+What message do we kick players with if they ignore packets for too long?
+
+### send_extra_packet
+Send an extra packet to prevent false flags? It is not recommended to disable this.
+
+### tracker_exempt
+Exempt the player while block states are not fully known? Can cause a lot of bypasses.
+
+## vpn_detection
+Configure the vpn detection system. This is not a traditional antivpn system as it mainly works in ways other than kicking/banning the player.
+
+### enable
+Enable the VPN detection system? This will send ips of your players to the antivpn services configured below.
+
+### ordering
+The order of antivpn services to try. Services that are not first are only used if the first one is down.
+
+#### Available Options:
+- VPNAPI - Good AntiVPN API that detects most VPNs and proxies. Has fast responses, but requires an API key to be configured below. This is not used by default, if you want to use it, add `VPNAPI` to the top of the list, and set your API key below.
+- IPRisk - Good AntiVPN API that detects most VPNs and proxies. Has slow response times. Is also used in Phoenix. View more info (here)[https://iprisk.info/]
+- ProVPN - Basic free AntiVPN service.
+- Mario - [oddmario](https://github.com/oddmario) Anti Fraud, a basic antivpn service that is down half the time. 
+
+### vpnapi-api-key
+If you want to use the [VPNAPI](https://vpnapi.io/) service, then configure your key here, and add `VPNAPI` to the top of your ordering list. You can get a key at [vpnapi.io](https://vpnapi.io/).
+
+### mitigate
+Make the anticheat slightly stricter for people who use vpns?
+
+### kick
+Kick players who use VPNs? This is not recommended.
+
+### kick-message
+The message to kick players with if the `kick` option is enabled.
+
+## webhooks
+Configure the discord webhooks. Most of these options are self explaining. 
+
+:::note
+You need to use the webhook action in your [Check Groups Config](/Apollo/configuration/checkgroups) to make this send anything.
+:::

@@ -1,0 +1,80 @@
+---
+sidebar_position: 3
+---
+
+Here you can find Bolt's PlaceholderAPI placeholder and in built placeholders,
+which are used in the scoreboard and tablist.
+
+## PlaceholderAPI
+
+These are PlaceholderAPI placeholders and can be used in messages, menus, etc.
+They also let you display information in other plugins.
+
+### Match
+
+Placeholder                | Returns                                | Example
+-------------------------- | -------------------------------------- | --------------
+`%bolt_match_duration%`    | How long the match has been going for. | `01:20`
+`%bolt_match_description%` | The match's description.               | `NotDrizzy vs J4C0B3Y (Unranked Fireball Fight)`
+`%bolt_match_id%`          | The match's id.                        | `4ff9a32e-3f9c-4326-ad77-79be0e1dd12c`
+`%bolt_match_arena%`       | The match arena's display name.        | `&6Gold Mine`
+`%bolt_match_kit%`         | The match kit's display name.          | `&fNo Debuff`
+`%bolt_match_starting%`    | If the match is starting.              | `true`/`false`
+`%bolt_match_fighting%`    | If the match is in progress.           | `true`/`false`
+`%bolt_match_ending%`      | If the match is ending.                | `true`/`false`
+`%bolt_match_forfeited%`   | If the match was forfeited.            | `true`/`false`
+`%bolt_match_solo%`        | If the match is solo.                  | `true`/`false`
+`%bolt_match_team%`        | If the match is team.                  | `true`/`false`
+`%bolt_match_ffa%`         | If the match is ffa.                   | `true`/`false`
+`%bolt_match_duel%`        | If the match is a duel.                | `true`/`false`
+`%bolt_match_party%`       | If the match is a party match.         | `true`/`false`
+`%bolt_match_bridges%`     | If the match is bridge.                | `true`/`false`
+`%bolt_match_battlerush%`  | If the match is battlerush.            | `true`/`false`
+`%bolt_match_bedfight%`    | If the match is bedfight.              | `true`/`false`
+`%bolt_match_pearlfight%`  | If the match is pearlfight.            | `true`/`false`
+`%bolt_match_mlgrush%`     | If the match is mlgrush.               | `true`/`false`
+
+### Stats
+
+#### Global
+
+Placeholder                     | Returns                           | Example
+------------------------------- | --------------------------------- | --------
+`%bolt_stats_globalelo%`        | A player's global ELO.            | `1120`
+`%bolt_stats_kills%`            | A player's kills.                 | `57`
+`%bolt_stats_wins%`             | A player's wins                   | `8`
+`%bolt_stats_winstreak%`        | A player's current winstreak.     | `3`
+`%bolt_stats_highestwinstreak%` | A player's highest winstreak.     | `4`
+`%bolt_stats_wlr%`              | A player's win loss ratio.        | `2.67`
+`%bolt_stats_kdr%`              | A player's kill death ratio.      | `3.35`
+`%bolt_stats_division%`         | A player's division display name. | `&6Gold`
+
+#### Kit Specific
+
+Placeholder                                 | Returns                                  | Example
+------------------------------------------- | ---------------------------------------- | -------
+`%bolt_stats_<kit>_elo%`                    | A player's kit elo.                      | `1012`
+`%bolt_stats_<kit>_wins%`                   | A player's kit wins.                     | `1`
+`%bolt_stats_<kit>_kills%`                  | A player's kit kills.                    | `3`
+`%bolt_stats_<kit>_losses%`                 | A player's kit losses.                   | `0`
+`%bolt_stats_<kit>_deaths%`                 | A player's kit deaths.                   | `2`
+`%bolt_stats_<kit>_winstreak%`              | A player's current kit winstreak.        | `1`
+`%bolt_stats_<kit>_highestWinstreak%`       | A player's highest kit winstreak.        | `3`
+`%bolt_stats_<kit>_rankedWins%`             | A player's ranked kit wins.              | `2`
+`%bolt_stats_<kit>_rankedLosses%`           | A player's ranked kit losses.            | `3`
+`%bolt_stats_<kit>_rankedWinstreak%`        | A player's current ranked kit winstreak. | `1`
+`%bolt_stats_<kit>_rankedHighestWinstreak%` | A player's highest ranked kit winstreak  | `4`
+
+### Leaderboard
+
+Placeholder                                             | Returns                       | Example
+------------------------------------------------------- | ----------------------------- | ----------------------------------
+`%bolt_lb_global_<elo/wins/winstreak/kills>_pos%`       | The leaderboard entry.        | `&c#1 &fCreaxx &7- &c3 &7- &6Gold`
+`%bolt_lb_global_<elo/wins/winstreak/kills>_pos_name%`  | The leaderboard entry's name. | `Creaxx`
+`%bolt_lb_global_<elo/wins/winstreak/kills>_pos_value%` | The leaderboard entry's value | `3`
+
+## Included
+
+### Tablist
+
+### Scoreboard

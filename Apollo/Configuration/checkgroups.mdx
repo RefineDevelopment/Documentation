@@ -29,3 +29,20 @@ Apollo **only** logs commands (and custom actions like phoenix ban) that are for
 | `PX_PROOF`             | `PX_PROOF`                       | Adds proof to the most recent Phoenix ban                                                                    |
 | `ALERT`                | `ALERT`                          | Sends an alert, if you have auto alerts disabled.                                                            |
 |                        | `staffmsg i found a haxorman!!`  | Runs a command without logging to the database.                                                              |
+
+## Placeholders:
+
+:::note
+Global Placeholders do not work here.
+:::
+
+- %player% - the name of a player
+- %banid% - the ban id, not compatible with PX_BAN/PX_COMP
+- %info% - debug info from the flag
+- %check% - the check name
+- %group% - the check group
+- %dev% - is the check experimental?
+- %vl% - the check's vl
+- %group_vl% - the check group's vl
+- %ping% - the player's ping
+- %type% - the id of a check

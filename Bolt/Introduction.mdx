@@ -1,8 +1,50 @@
 ---
-sidebar_position: 1
+sidebar_position: 0
 ---
-# What is Bolt?
 
-Bolt is a unique practice core created specifically for Phoenix that adds exciting features such as various duels similar to those found on popular practice servers like MMC and Lunar. Whether you want to train and improve your skills or challenge other players in a competitive environment, Bolt is the perfect addition to your Phoenix network.
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
 
-Bolt can be purchased via our [Store](https://refinedev.xyz/resources/bolt.8/)
+Bolt is a unique practice core created specifically for [Phoenix](/Phoenix/Introduction) that adds exciting features such as various duels similar to those found on popular practice servers like MMC and Lunar. Whether you want to train and improve your skills or challenge other players in a competitive environment, Bolt is the perfect addition to your Phoenix network.
+
+## Installation
+
+<Tabs queryString="type">
+    <TabItem value="spigot" label="Spigot / Paper" default>
+        1. Download and install Retention, which can be found on the resource page, into your plugins folder.<br/>
+        2. Start your server and wait until it finishes booting up, once finished, stop your server.<br/>
+        3. Open loader.yml in Retention's plugin folder and enable Bolt, save and reboot.<br/>
+        4. Enter your mongo details in Bolt's database.yml, reboot, and Bolt should be ready.<br/>
+    </TabItem>
+</Tabs>
+
+## FAQ
+
+<details>
+<summary>My server runs out of ram on startup.</summary>
+
+It is recommended to allocate as much memory you can to the server
+in accordance with the amount of chunks/arenas you have.
+
+Alternatively, you can enable `WAIT-FOR-CHUNKS` in your `settings.yml`
+which will load, cache then unload arena chunks to save on ram.
+</details>
+
+<details>
+<summary>I'm getting a java.lang.VerifyError or IllegalMethodError.</summary>
+
+Add the `-noverify` flag before `-jar` in your startup command.
+</details>
+
+<details>
+<summary>JVM Patch Failed error on load.</summary>
+
+These JVM args are required to allow reflection to work properly,
+add these before `-jar` in your startup command:
+
+```
+--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED
+--add-opens=java.base/jdk.internal.reflect=ALL-UNNAMED
+--add-opens=java.base/java.lang=ALL-UNNAMED
+```
+</details>

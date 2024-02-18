@@ -1,0 +1,29 @@
+### Information
+
+MySQL is recommended for Apollo.
+
+You must create the database before you run Apollo, 
+Pterodactyl and other tools automatically do this.
+
+### Hosting
+
+Most Server Hosts include a MySQL database, and it is also [very easy to install, but does require some firewall config to work with Pterodactyl](https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-ubuntu-22-04) and can run on [a very cheap vps](https://contabo.com/en/vps/).
+
+If you need a free MySQL database, then [Aiven.io](https://aiven.io/) has a free plan for MySQL on DigitalOcean in some locations. 
+PlanetScale also has a free plan but it won't work as expected and will require a dev branch and is therefore not really worth it. 
+
+:::warning
+None of these services have been certified to work as expected or work with Apollo, 
+as me and all my testers just use our own MySQL/MariaDB databases.
+:::
+
+### Configuration
+
+Field          | Example           | Description
+-------------- | ----------------- | -------------------------------------------
+`host`         | `127.0.0.1`       | The database hostname.
+`port`         | `3306`            | The port the database is running on.
+`storage_type` | `MARAIDB`/`MYSQL` | The database type.
+`username`     | `root`            | The username to login to the database with.
+`password`     | `pass`            | The password to login to the database with.
+`name`         | `apollo`          | The database name.

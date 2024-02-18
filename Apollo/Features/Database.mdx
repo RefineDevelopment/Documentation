@@ -1,0 +1,26 @@
+---
+sidebar_position: 6
+---
+
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+
+import MySQL from './database/_mysql.mdx'
+import PostgreSQL from './database/_postgresql.mdx'
+import MongoDB from './database/_mongodb.mdx'
+
+Apollo utilizes a database to save data such as logs.
+
+## Database Software
+
+<Tabs queryString="type">
+    <TabItem value="mysql" label="MySQL / MariaDB" default>
+        <MySQL />
+    </TabItem>
+    <TabItem value="postgresql" label="PostgreSQL">
+        <PostgreSQL />
+    </TabItem>
+    <TabItem value="mongodb" label="MongoDB">
+        <MongoDB />
+    </TabItem>
+</Tabs>

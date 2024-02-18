@@ -1,13 +1,19 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 ---
 
-| Permission Node                           | Use                                                                                     |
-| ------------------------------------------|---------------------------------------------------------------------------------------- |
-| `apollo.alerts`                           | Get alerts from the anticheat                                                           |
-| `apollo.use`                              | Access to the `/apollo` command                                                         |
-| `apollo.falses`                           | Use the report falses button. This button should be used with extreme care.             |
-| `apollo.bypass`                           | Bypass the anticheat.                                                                   |
-| `apollo.switchserver`                     | Switch servers using the buttons in the Redis Alerts.                                   |
-| `apollo.toggleexempt`                     | Allows you to toggle a player's exempt status.                                          |
-| `apollo.vpn.exempt`                       | Bypass the kick on vpn feature, if it is enabled in the config.                         |
+A list of permissions for Apollo and all its features.
+
+If you use Phoenix, please take a look at [Phoenix/Features/Ranks/Permissions](/Phoenix/Features/Ranks#permissions) for detailed information on permissions and how you can set them up.
+
+## Apollo
+
+Permission            | Description
+--------------------- | ---------------------------------------------------------------------------
+`apollo.alerts`       | Receive alert notifications in chat from the anticheat.
+`apollo.use`          | Access to the `/apollo` command.
+`apollo.falses`       | Access to report falses. (should be used with care)
+`apollo.bypass`       | Bypass all checks and punishments.
+`apollo.switchserver` | Switch servers using the buttons in the redis alerts.
+`apollo.toggleexempt` | Access to toggle a players exempt status.
+`apollo.vpn.exempt`   | Bypass the AntiVPN, if enabled in the config.

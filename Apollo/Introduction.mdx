@@ -1,18 +1,33 @@
 ---
-sidebar_position: 3
+sidebar_position: 1
 ---
-### What is Apollo?
+
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
 
 Apollo is a highly configurable, Minecraft Anticheat that provides an advanced solution for removing cheaters your server. Apollo has numerous checks, an analysis engine, advanced database support, machine learning features, a powerful punishment and violation system, an advanced threading system, prediction systems and more.
 
-Apollo can be bought via our [Store](https://refinedev.xyz/resources/apollo-anticheat.17/)
+## Installation
 
-### Setup
-First, [Setup your Database](/Apollo/Setup/Database) then enable [Realtime Alert and Data Sync](/Apollo/Setup/Database), and [Configure Punishments](/Apollo/Configuration/checkgroups)
+<Tabs queryString="type">
+    <TabItem value="spigot" label="Spigot / Paper" default>
+        1. Download and install Retention, which can be found on the resource page, into your plugins folder.<br/>
+        2. Start your server and wait until it finishes booting up, once finished, stop your server.<br/>
+        3. Open loader.yml in Retention's plugin folder and enable Apollo, save and reboot.<br/>
+    </TabItem>
+</Tabs>
 
-### Global Placeholders
-| Placeholder                               | Info                                                                                    |
-| ------------------------------------------|---------------------------------------------------------------------------------------- |
-| `$player`                                 | Returns the player's username. Some areas also suppord $username                        |
-| `$playerUuid`                             | Returns the player's uuid. Some areas also suppord $uuid                                |
-| `%placeholderapi_placeholder_here%`        | Any PlaceholderAPI placeholder if PlaceholderAPI is installed                           |
+## Setup Guide
+
+1. Setup the [Database](/Apollo/Features/Database).
+2. Enable [Realtime Network Sync](/Apollo/Features/NetworkSync).
+3. Configure [Punishments](/Apollo/Features/CheckGroups).
+<!--
+## FAQ
+
+<details>
+<summary>Question</summary>
+
+Answer
+</details>
+-->

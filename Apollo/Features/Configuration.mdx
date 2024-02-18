@@ -6,7 +6,8 @@ The `config.conf` file allows you to configure the core of Apollo and its functi
 
 ## alerts
 
-Configure Apollo's alert system.
+- **Type:** `Section`
+- **Description:** Configure Apollo's alert system.
 
 ### console
 
@@ -29,7 +30,8 @@ Placeholder | Returns                                             | Example
 
 ## analysis
 
-Configure the background analysis component of Apollo. This allows you to catch more cheaters, faster. Most options are self explaining, or have good comments and therefore will not be featured here.
+- **Type:** `Section`
+- **Description:** Configure the background analysis component of Apollo. This allows you to catch more cheaters, faster. Most options are self explaining, or have good comments and therefore will not be featured here.
 
 ### client_analysis
 
@@ -43,7 +45,8 @@ Configure the background analysis component of Apollo. This allows you to catch 
 
 ## ban_delay
 
-Ban delays allow you to delay bans for 30 seconds to allow staff to cancel or report any false bans before the player gets banned. Alternatively, staff can click the instant ban button to instantly ban the player.
+- **Type:** `Section`
+- **Description:** Ban delays allow you to delay bans for 30 seconds to allow staff to cancel or report any false bans before the player gets banned. Alternatively, staff can click the instant ban button to instantly ban the player.
 Most options here are self explaining.
 
 ### enabled
@@ -53,7 +56,8 @@ Most options here are self explaining.
 
 ## database
 
-Configure the database here. (More information on common options is here.)[/Apollo/Setup/Database]
+- **Type:** `Section`
+- **Description:** Configure the database here. (More information on common options is here.)[/Apollo/Setup/Database]
 
 ### cache_purge_time
 
@@ -62,11 +66,13 @@ Configure the database here. (More information on common options is here.)[/Apol
 
 ## features
 
-Random extra features are listed in this section.
+- **Type:** `Section`
+- **Description:** Random extra features are listed in this section.
 
 ### apollo-hit-detection
 
-This improves the hit detection by fixing issues with the client, while also tuning some other internals to improve hit detection.
+- **Type:** `Section`
+- **Description:** This improves the hit detection by fixing issues with the client, while also tuning some other internals to improve hit detection.
 
 #### spoof-particle
 
@@ -75,7 +81,8 @@ This improves the hit detection by fixing issues with the client, while also tun
 
 ## hider
 
-Hides the anticheat by changing the command.
+- **Type:** `Section`
+- **Description:** Hides the anticheat by changing the command.
 
 ### enabled
 
@@ -89,15 +96,18 @@ Hides the anticheat by changing the command.
 
 ## hooks
 
-Integrations with other plugins
+- **Type:** `Section`
+- **Description:** Integrations with other plugins
 
 ### carbon
 
-Hooks with the carbon chunks system to improve performance. This has sub-values that you should enable when the matching option in your settings.yml is also enabled.
+- **Type:** `Section`
+- **Description:** Hooks with the carbon chunks system to improve performance. This has sub-values that you should enable when the matching option in your settings.yml is also enabled.
 
 ### phoenix
 
-Integrates with Phoenix core to provide enhanced punishments with proof and more.
+- **Type:** `Section`
+- **Description:** Integrates with Phoenix core to provide enhanced punishments with proof and more.
 
 #### ban_formats
 
@@ -121,7 +131,8 @@ Integrates with Phoenix core to provide enhanced punishments with proof and more
 
 ## messages
 
-Configure the messages here. Most values have comments and are not documented here.
+- **Type:** `Section`
+- **Description:** Configure the messages here. Most values have comments and are not documented here.
 
 ### prefix
 
@@ -135,23 +146,28 @@ Configure the messages here. Most values have comments and are not documented he
 
 ## redis-alerts
 
-Take a look at [Features/Realtime Network Sync](/Apollo/Features/RealtimeNetworkSync) for configuration options.
+- **Type:** `Section`
+- **Description:** Take a look at [Features/Realtime Network Sync](/Apollo/Features/RealtimeNetworkSync) for configuration options.
 
 ## setbacks
 
-Configure lagbacks, setbacks and ghost block handling here.
+- **Type:** `Section`
+- **Description:** Configure lagbacks, setbacks and ghost block handling here.
 
 ### damage_settings
 
-Configure damage given to players when they are lagged back for cheating
+- **Type:** `Section`
+- **Description:** Configure damage given to players when they are lagged back for cheating
 
 ### ghost_block_settings
 
-Configure the ghost block lagbacks. Do not disable this unless you want crazy bypasses.
+- **Type:** `Section`
+- **Description:** Configure the ghost block lagbacks. Do not disable this unless you want crazy bypasses.
 
 ### initial_teleports
 
-Configure the handling of join teleports. Mis-configuring this can cause bypasses, or weirdness.
+- **Type:** `Section`
+- **Description:** Configure the handling of join teleports. Mis-configuring this can cause bypasses, or weirdness.
 If you end up with players being incorrectly teleported out of arenas or similar, then consider modifying this.
 
 ### resend_teleports
@@ -161,7 +177,8 @@ If you end up with players being incorrectly teleported out of arenas or similar
 
 ## threads
 
-Configure the threading system of the anticheat.
+- **Type:** `Section`
+- **Description:** Configure the threading system of the anticheat.
 
 ### max_threads
 
@@ -180,7 +197,8 @@ Configure the threading system of the anticheat.
 
 ## transactions
 
-Configure Apollo's lag handling.
+- **Type:** `Section`
+- **Description:** Configure Apollo's lag handling.
 
 ### max_delay
 
@@ -204,7 +222,8 @@ Configure Apollo's lag handling.
 
 ## vpn_detection
 
-Configure the vpn detection system. This is not a traditional antivpn system as it mainly works in ways other than kicking/banning the player.
+- **Type:** `Section`
+- **Description:** Configure the vpn detection system. This is not a traditional antivpn system as it mainly works in ways other than kicking/banning the player.
 
 ### enable
 
@@ -248,7 +267,8 @@ Mario    | [oddmario](https://github.com/oddmario) Anti Fraud, a basic antivpn s
 
 ## webhooks
 
-Configure the discord webhooks. Most of these options are self explaining. 
+- **Type:** `Section`
+- **Description:** Configure the discord webhooks. Most of these options are self explaining. 
 
 :::note
 You need to use the webhook action in your [Check Groups Config](/Apollo/Features/CheckGroups) to make this send anything.

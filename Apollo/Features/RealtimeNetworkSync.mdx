@@ -16,12 +16,10 @@ This is useful on bungeecord networks, and can provide general performance impro
 
 ## Redis
 
-Realtime Network Sync requires a redis database to be setup.
+Realtime Network Sync requires a redis database to be setup, [KeyDB](https://docs.keydb.dev/docs/ppa-deb) is a higher performance database that can be used with Apollo Realtime Network Sync.
 
 :::info
 To avoid issues, make sure to set the `maxmemory-policy` value of the redis server config to `allkeys-lfu`, and to set the `maxmemory` value to a reasonable value like `4000mb` for 4gb.
 :::
 
-If you do not have your own database then you can create one at [redis.com (Recommended)](https://redis.com/) or [Upstash (Not recommended, pay-as-you-go plan is required)](https://upstash.com/)
-
-[KeyDB](https://docs.keydb.dev/docs/ppa-deb) is a higher performance database that can be used with Apollo Realtime Network Sync.
+If you do not have your own database then you can create one at [redis.com (Recommended)](https://redis.com/) or [Upstash (Not recommended, pay-as-you-go plan is required)](https://upstash.com/).

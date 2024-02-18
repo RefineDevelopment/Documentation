@@ -1,0 +1,40 @@
+---
+sidebar_position: 6
+---
+
+A list of included placeholders for dynamic values in messages and menus.
+
+## PlaceholderAPI
+
+PlaceholderAPI placeholders can be used anywhere in the plugin as long as PlaceholderAPI is installed.
+
+## Included
+
+These placeholders are included in the plugin and are for internal use,
+they are not PlaceholderAPI placeholders and will not work for other plugins. 
+
+### Global
+
+Placeholder   | Returns                                                 | Example
+------------- | ------------------------------------------------------- | --------------------------------------
+`$player`     | The player's username. Some places support `$username`. | `Notch`
+`$playerUuid` | The player's uuid. Some places support `$uuid`.         | `069a79f4-44e9-4726-a5be-fca90e38aaf5`
+
+### Check Groups
+
+:::warning
+Global Placeholders do not work in check groups.
+:::
+
+Placeholder  | Returns                                          | Example
+------------ | ------------------------------------------------ | -------
+`%player%`   | The player's name.                               | `Notch`
+`%banid%`    | The ban id. (not compatible with PX_BAN/PX_COMP) | `(TODO)`
+`%group%`    | The check's group.                               | `Combat`
+`%check%`    | The check's name.                                | `Flight`
+`%type%`     | The check's id.                                  | `A`
+`%vl%`       | The check's vl.                                  | `5`
+`%group_vl%` | The check group's vl.                            | `20`
+`%dev%`      | If the check is experimental.                    | `true`/`false`
+`%ping%`     | The player's ping.                               | `250`
+`%info%`     | Debug info from the flag.                        | `Raytrace did not intercept target: , Target: (-8.3125, 66.0, 9.03125) , Attacker: (5.493335083492272, 66.58078525118793, 3.3145126659433903)`

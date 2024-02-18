@@ -1,0 +1,34 @@
+---
+sidebar_position: 2
+title: Check Groups
+---
+
+Check Groups are groups of checks grouped together to make punishment configuration easier.
+Syntax related documentation, and examples are included in the checkgroups.conf file.
+
+There are four check groups by default, `Combat`, `Player`, `Movement` and `Default`, 
+however you do not need to use these and can add custom ones.
+
+## Actions
+
+Apollo Actions are enhanced commands the anticheat can execute to punish a player, for example, send a discord webhook, run a ban command, add proof to a phoenix ban, or setback a player.
+
+Action     | Example                        | Description
+---------- | ------------------------------ | -----------------------------------------------------------------------------
+`SETBACK`  | `SETBACK`                      | Lags a player back.
+`WEBHOOK`  | `WEBHOOK`                      | Sends a discord webhook alert.
+`DAMAGE`   | `DAMAGE 2`                     | Damages a player by a configurable amount.
+`PUNISH`   | `PUNISH ban %player% hax`      | Runs a punishment command and logs it in the database.
+`PX_BAN`   | `PUNISH PX_BAN STANDARD 5d`    | Executes a Phoenix ban, adds proof, using your configured format.
+`PX_COMP`  | `PUNISH PX_COMP STANDARD perm` | Executes a Phoenix competitive ban, adds proof, using your configured format.
+`PX_PROOF` | `PX_PROOF`                     | Adds proof to the player's most recent phoenix ban.
+`ALERT`    | `ALERT`                        | Sends an alert if auto alerts are disabled.
+NONE       | `staffmsg found a haxorman!`   | Runs a command without logging it in the database.
+
+## Database
+
+Apollo **only** logs commands (and custom actions like phoenix bans) that are formatted with `PUNISH %YOURCOMMANDHERE%` to the database.
+
+## Placeholders
+
+A list of placeholders can be found at [Placeholders/Included/Check Groups](/Apollo/Placeholders#check-groups).

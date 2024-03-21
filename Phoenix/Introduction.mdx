@@ -4,7 +4,8 @@ sidebar_position: 1
 
 import Tabs from '@theme/Tabs'
 import TabItem from '@theme/TabItem'
-import Admonition from '@theme/Admonition'
+import Spigot from './installation/_spigot.mdx'
+import Proxy from './installation/_proxy.mdx'
 
 An advanced Network Core plugin that provides a plethora of features to enhance any server administration experience. Phoenix core is compatible with multiple plugins and comes with numerous free add-ons that expand features of Phoenix.
 
@@ -20,19 +21,10 @@ The documentation for Phoenix is incomplete and being worked on, it is being act
 
 <Tabs queryString="type">
     <TabItem value="spigot" label="Spigot / Paper" default>
-        1. Download and install Retention, which can be found on the resource page, into your plugins folder.<br/>
-        2. Start your server and wait until it finishes booting up, once finished, stop your server.<br/>
-        3. Open global.yml in the newly created Phoenix plugin folder and enter your database details.<br/>
-        4. Start up your server again. If the database details are correct, Phoenix will load right up.<br/>
+        <Spigot />
     </TabItem>
     <TabItem value="proxy" label="Velocity / Bungee">
-        <Admonition type="info" title="Please Note:">
-            Phoenix is still required on all of the spigot instances you want to use it on.
-        </Admonition>
-        1. Download and install pxVelocity/pxBungee, which can be found on our Discord, into your proxy's plugin folder.<br/>
-        2. Start your proxy and wait until it finishes booting up, once finished, shutdown your proxy.<br/>
-        3. Open global.yml in the newly created Phoenix plugin folder and enter your database details.<br/>
-        4. Start up your proxy again. If the database details are correct, Phoenix will load right up.<br/>
+        <Proxy />
     </TabItem>
 </Tabs>
 

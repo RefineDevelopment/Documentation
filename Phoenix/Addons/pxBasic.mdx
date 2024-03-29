@@ -2,49 +2,73 @@
 sidebar_position: 0
 ---
 
+pxBasic adds a bunch of commands found in base minecraft and some extra,
+allowing configuration of how they work and their messages.
+
+I also adds some helpful features such as tips and the addition of a welcome message.
+
+## God Mode
+
+If a player is in god mode, all damage dealt to them will be cancelled.
+
+## Tips
+
+Tips are messages that are sent out to player that have tips enabled at a regular interval.
+These are configurable in the `tips.yml` file.
+
+## Welcome Message
+
+pxBasic adds a configurable welcome message can be sent to players when they join the server.
+
 ## Commands
 
 `<>` = Required `[]` = Optional
 
-<!-- TODO: Check command parameters -->
-
-Command                         | Permission                    | Description
-------------------------------- | ----------------------------- | -------------------------------------------------------
-`/sudo <player> <chat command>` | `core.command.sudo`           | Talk or executes a command on behalf of another player.
-`/masssay <chat command>`       | `core.command.masssay`        | Makes everyone say something or execute a command.
-`/heal`                         | `core.command.heal`           | Heals a player to full health.
-`/more`                         | `core.command.more`           | Gets a stack of the item you are currently holding.
-`/skull <player>`               | `core.command.skull`          | Give yourself a player's head.
-`/craft`                        | `core.command.craft`          | Opens the crafting table menu.
-`/god`                          | `core.command.god`            | Toggles god mode.
-`/staffalert <message>`         | `core.command.staffalert`     | Sends a cross server alert to all staff.
-`/staffboardcast <message>`     | `core.command.staffbroadcast` | Sends a message to staff of your current server.
-`/speed`                        | `core.command.speed`          | Changes your fly / walking speed.
-`/broadcast <message>`          | `core.command.broadcast`      | Sends a message to everyone on your current server.
-`/fly`                          | `core.command.fly`            | Toggles your flight.
-`/feed`                         | `core.command.feed`           | Fills a players hunger bar to full.
-`/clear`                        | `core.command.clear`          | Clears a players inventory.
-`/enchant`                      | `core.command.enchant`        | Enchants the item you are currently holding.
-`/gamemode <gamemode> [player]` | `core.command.gamemode`       | Changes a players gamemode.
-
-`core.command.enderchest`       | Open your enderchest.
-`core.command.shrug`            | Access to /shrug.
-`core.command.item`             | Access to /item.
-`core.command.kill`             | Access to /kill.
-`core.command.addlore`          | Access to /addlore.
-`core.command.removelore`       | Access to /removelore.
-`core.command.rename`           | Access to /rename.
-`core.command.pxbasic`          | Access to /pxbasic.
-`core.command.repair`           | Access to /repair.
-`core.command.repair.hand`      | Repair item in hand.
-`core.command.repair.all`       | Repair all items.
-`core.command.repair.armor`     | Repair armor.
-`core.command.teleport`         | Access to /teleport.
-`core.command.teleporthere`     | Access to /teleporthere.
-`core.command.teleportall`      | Access to /teleportall.
-`core.command.teleportposition` | Access to /teleportposition.
-`core.command.teleportworld`    | Access to /teleportworld.
-`core.command.top`              | Access to /top
+Command                              | Permission                      | Description
+------------------------------------ | ------------------------------- | -----------
+`/more`                              | `core.command.more`             | Gets a stack of the item you are currently holding.
+`/skull <skull>`                     | `core.command.skull`            | Give yourself a player's head.
+`/craft`                             | `core.command.craft`            | Opens the crafting table menu.
+`/god`                               | `core.command.god`              | Toggles god mode.
+`/speed <fly~walk> <amount>`         | `core.command.speed`            | Changes your fly / walking speed.
+`/build [player]`                    | `core.command.build`            | Toggles build mode.
+`/broadcast <message>`               | `core.command.broadcast`        | Sends a message to everyone on your current server.
+`/clear [target]`                    | `core.command.clear`            | Clears a players inventory.
+`/enchant <enchantment> <level>`     | `core.command.enchant`          | Enchants the item you are currently holding.
+`/feed [player]`                     | `core.command.feed`             | Fills a players hunger bar to full.
+`/fly [player]`                      | `core.command.fly`              | Toggles your flight.
+`/gamemode <gamemode> [player]`      | `core.command.gamemode`         | Changes a player's gamemode.
+`/gms [player]`                      | `core.command.gamemode`         | Changes a player's gamemode to survival.
+`/gmc [player]`                      | `core.command.gamemode`         | Changes a player's gamemode to creative.
+`/gma [player]`                      | `core.command.gamemode`         | Changes a player's gamemode to adventure.
+`/gmsp [player]`                     | `core.command.gamemode`         | Changes a player's gamemode to spectator.
+`/ping [player]`                     | None                            | Displays a player's ping.
+`/enderchest [player]`               | `core.command.enderchest`       | Open's a player's enderchest.
+`/shrug`                             | `core.command.shrug`            | Sends `¯\_(ツ)_/¯` in chat.
+`/heal [player]`                     | `core.command.heal`             | Heals a player to full health.
+`/help`                              | None                            | Displays the server's help message.
+`/store`                             | None                            | Links the server's store page.
+`/teamspeak`                         | None                            | Links the server's teamspeak.
+`/twitter`                           | None                            | Links the server's twitter.
+`/website`                           | None                            | Links the server's website.
+`/discord`                           | None                            | Links the server's discord.
+`/item <material> [player] <amount>` | `core.command.item`             | Equivalent to /give.
+`/addlore <lore>`                    | `core.command.addlore`          | Adds lore to an item.
+`/removelore <number>`               | `core.command.removelore`       | Removes lore from an item.
+`/rename <name>`                     | `core.command.rename`           | Renames an item.
+`/kill <player>`                     | `core.command.kill`             | Kills a player.
+`/pxbasic reload`                    | `core.command.pxbasic`          | Reloads the pxBasic configuration.
+`/repair <hand~all~armor>`           | `core.command.repair`           | Repears all, hand or armor to full durability.
+`/staffalert <message>`              | `core.command.staffalert`       | Sends a cross server alert to all staff.
+`/staffbroadcast <message>`          | `core.command.staffbroadcast`   | Sends a message to staff of your current server.
+`/sudo <player> <chat~command>`      | `core.command.sudo`             | Talk or executes a command on behalf of another player.
+`/masssay <chat~command>`            | `core.command.masssay`          | Makes everyone say something or execute a command.
+`/teleport <player>`                 | `core.command.teleport`         | Telelports you to a player.
+`/teleporthere <player>`             | `core.command.teleporthere`     | Teleports a player to you.
+`/teleportall`                       | `core.command.teleportall`      | Teleports all players to you.
+`/teleportposition <x> <y> <z>`      | `core.command.teleportposition` | Teleports you to a position.
+`/teleportworld <world>`             | `core.command.teleportworld`    | Teleports you to a world.
+`/top`                               | `core.command.top`              | Teleports you to the highest block above you.
 
 ## Permissions
 

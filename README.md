@@ -2,7 +2,37 @@
 This repository contains the documentation on [Refine's Documentation Website](https://docs.refinedev.xyz) as .mdx files.
 
 ## Contributing
+To aquire the same docusarus setup as us, please message @J4C0B3Y on discord to be added to the repo.
 
-- Read [Template/README.md](https://github.com/RefineDevelopment/Documentation/blob/master/Template/_README.md) for instructions on the layout and conventions.
-- If you want to test your docs using the same software and configuration as us, DM @J4C0B3Y on discord to receive a copy.
-- Once you are finished, make a pull request with your changes and it will be reviewed.
+Alternatively you can just clone this repo and contribute directly without docusaurus,
+you just won't be able to see how your changes look.
+
+### Cloning
+1. Clone `RefineDevelopment/Docusaurus` and cd into the directory.
+2. Clone `RefineDevelopment/Documentation` into the `docs` folder of docusaurus.
+
+### Dependencies
+Using your favorite package, install docusaurus' dependencies.
+
+Example:
+```sh
+bun install
+# OR
+npm install
+```
+
+### Running
+Similar to installing dependencies, here is how you can run the server.
+
+```sh
+bun start
+# OR
+npm start
+```
+
+### Conventions
+Please look at the existing products to see the layout and structure of pages.
+
+### Finally
+Once you are finished, make a pull request with your changes and it will be reviewed.
+You can message @J4C0B3Y on discord once you have done this to speed up the review.

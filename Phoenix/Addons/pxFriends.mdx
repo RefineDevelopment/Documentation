@@ -2,24 +2,35 @@
 sidebar_position: 2
 ---
 
-pxFriends adds a new friends system to Phoenix core,
-It allows you to add friends, view your friends and more.
+pxFriends adds a way for players to add and manage friends in game.
 
-It also adds the ability to join your friends servers.
-It also allows you to view your friends profiles when using the friends menu.
+You can join your friends server and view their profile using the friends menu.
 
+## Friends Menu
+
+View your added friends and perform related actions
+such as viewing their profile or teleporting to them.
+
+<details>
+<summary>Screenshot</summary>
+
+![Friends Menu](./assets/friends-menu.png)
+</details>
 
 ## Commands
 
 `<>` = Required `[]` = Optional
 
-Command                              | Permission                      | Description
------------------------------------- | ------------------------------- | -----------
-`/friend accept <player_name>`       | None                            | Allows your to accept a friend request
-`/friend add <player>`          | None                            | Allows you to send a friend request
-`/friend clear`                      | None                            | Clears your friends list
-`/friend deny <player_name>`         | None                            | Allows you to deny a friend request
-`/friend help [page]`                | None                            | Brings up the help menu for pxFriends
-`/friend list [page]`                | None                            | Allows you to list friends
-`/friend remove <player>`            | None                            | Allows you to remove a friend from your friends list
-`/friend requests [page]`            | None                            | Allows you to review your friend requests
+Command                   | Permission | Description
+------------------------- | ---------- | ---------------------------------------
+`/friend accept <player>` | None       | Accepts a friend request.
+`/friend add <player>`    | None       | Sends a friend request to a player.
+`/friend clear`           | None       | Clears your friend list.
+`/friend deny <player>`   | None       | Denies a friend request.
+`/friend list [page]`     | None       | Lists your friends.
+`/friend remove <player>` | None       | Removes a friend from your friend list.
+`/friend requests [page]` | None       | Lists active incoming friend requests.
+
+## Permissions
+
+This addon has no permissions.

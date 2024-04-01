@@ -1,6 +1,10 @@
 ---
 sidebar_position: 2
 ---
+
+import Flags from "./assets/_flags.mdx"
+import Fawe from "./assets/_fawe.mdx"
+
 Installing CarbonSpigot is extremely straightforward. It can be installed be following the steps below
 
 1. Download the latest Carbon Spigot from our [Store](https://refinedev.xyz/resources/carbonspigot.15/).
@@ -10,16 +14,7 @@ Installing CarbonSpigot is extremely straightforward. It can be installed be fol
 
 
 ## Flags
+<Flags />
 
-:::note
-Please note that the -XX:+DisableExplicitGC flag is NOT recommended with Carbon due to the loader having to do manual GC on startup. This is only for the first startup of Retention and is not needed afterwards. Although it is always recommended to restart carbon after the first start.
-:::
-
-### Java 8 - 11 Recommended Flags
-```bash
-java -Xms**At least 1GB** -Xmx**YOUR MAX RAM** -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxGCPauseMillis=30 -XX:MaxTenuringThreshold=1 -jar server.jar
-```
-### Java 17 Recommended Flags
-```bash
-java -Xms**At least 1GB** -Xmx**YOUR MAX RAM** --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED --add-opens=java.base/jdk.internal.reflect=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -XX:+AlwaysPreTouch -XX:+PerfDisableSharedMem -XX:-ZUncommit -XX:+ParallelRefProcEnabled -noverify -jar server.jar
-```
+## Fast Async World Edit
+<Fawe />

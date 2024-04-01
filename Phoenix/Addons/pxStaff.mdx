@@ -2,36 +2,74 @@
 sidebar_position: 1
 ---
 
-pxStaff adds a new mod system to Phoenix core,
-allowing you to moderate your users with ease.
+pxStaff is an all-in-one moderation system to assist
+staff members in managing players.
+
+Reports, requests, freezing, mod mode and vanish act
+as tools for more practical moderation techniques.
+
+## Vanish
+
+Vanish allows staff to be hidden to players and other staff below their rank.
 
 ## Mod Mode
 
-A staff member can enable staff mode, to freeze,view inventory or teleport to the player,
-through the /staff mode command.
+Mod mode gives staff members staff-related items to help with moderation duty.
 
-## Staff Rollback
+It will also automatically vanish them, if configured.
 
-Allows you to rollback a Staff members punishments.
+<details>
+<summary>Screenshots</summary>
+
+![Mod Mode](./assets/mod-mode.png)
+
+![Staff Online](./assets/staff-online.png)
+</details>
+
+## Reports
+
+<details>
+<summary>Menus</summary>
+
+![Report Menu](./assets/report-menu.png)
+
+![Reports Menu](./assets/reports-menu.png)
+</details>
 
 ## Commands
 
 `<>` = Required `[]` = Optional
 
-Command                              | Permission                      | Description
------------------------------------- | ------------------------------- | -----------
-`/pxstaff reload`                    | pxstaff.command.reload          | Allows you to reload the pxStaff addon
-`/staff chat`                        | N/A                             | Allows you to change your messaging channel to Staff
-`/staff mode/mod mode`               | core.command.modmode            | Allows you to toggle Staff mode/Mod mode
-`/clearchat`                         | core.command.clearchat          | Allows you to clear the chat
-`/mutechat`                          | core.command.mutechat           | Allows you to Mute the chat/lock it
-`/requestmute/unmute <player>`       | core.command.requestmute        | ALlows you to request a mute for user
-`/freeze <player>`                   | core.command.freeze             | Allows you to freeze a specified user
-`/reports <player>`                  | core.command.reports            | Allows you to view reports of a specified user
-`/reports-all`                       | core.command.reportsall         | Allows you to view reports of all users
-`/slowchat <seconds>`                | core.command.slowchat           | Allows you to slow the chat by seconds 
-`/adminreport`                       | core.command.adminreport        | Brings up the help message for creating reports
-`/vanish `                           | core.command.vanish             | Allows you to go to Vanish mode
-`/invsee <player>`                   | core.command.invsee             | Brings up the inventory of the specified user
-`/hidestaff`                         | core.command.hidestaff          | Allows you to hide staff
-`/request <message>`                 | core.command.request            | Allows the user to request help from a Staff member.
+Command                 | Permission                 | Description
+----------------------- | -------------------------- | ---------------------------------
+`/amivanished`          | `core.command.vanish`      | Checks if you are vanished.
+`/freeze <player>`      | `core.command.freeze`      | Freezes a player.
+`/invsee <player>`      | `core.command.invsee`      | Opens a players inventory.
+`/clearchat`            | `core.command.clearchat`   | Clears the chat.
+`/mutechat`             | `core.command.mutechat`    | Mutes the chat.
+`/slowchat <seconds>`   | `core.command.slowchat`    | Slows the chat.
+`/modmode [player]`     | `core.command.modmode`     | Toggles mod mode.
+`/pxstaff reload`       | `pxstaff.command.reload`   | Reloads pxStaff.
+`/request <message>`    | `core.command.request`     | Request help from a staff member.
+`/requestmute <player>` | `core.command.requestmute` | Requests to mute a player.
+`/vanish [player]`      | `core.command.vanish`      | Vanishes yourself or a player.
+`/hidestaff`            | `core.command.hidestaff`   | Hides staff members.
+
+### Report Commands
+
+`<>` = Required `[]` = Optional
+
+Command                                                  | Permission                 | Description
+-------------------------------------------------------- | -------------------------- | -----------------------------------------
+`/report <player>`                                       | `core.command.report`      | Reports a player.
+`/reports <player>`                                      | `core.command.reports`     | View reports towards a player.
+`/reports-all`                                           | `core.command.reportsall`  | View all open reports.
+`/adminreport create <id> <ladder> <material> <display>` | `core.command.adminreport` | Creates a report category.
+`/adminreport delete <category>`                         | `core.command.adminreport` | Deletes a report category.
+`/adminreport displayName <category> [display/ladder]`   | `core.command.adminreport` | Changes a report category's display name.
+`/adminreport material <category> <material>`            | `core.command.adminreport` | Changes a report category's material.
+`/adminreport description <category>`                    | `core.command.adminreport` | Changes a report category's description.
+
+## Permissions
+
+For a complete list of all permissions, please check out [Phoenix/Permissions/pxStaff](/Phoenix/Permissions#pxstaff).

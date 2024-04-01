@@ -2,7 +2,7 @@
 This repository contains the documentation on [Refine's Documentation Website](https://docs.refinedev.xyz) as .mdx files.
 
 ## Contributing
-To aquire the same docusarus setup as us, please message @J4C0B3Y on discord to be added to the repo.
+To aquire the same docusaurus setup as us, please message @J4C0B3Y on discord to be added to the repo.
 
 Alternatively you can just clone this repo and contribute directly without docusaurus,
 you just won't be able to see how your changes look.

@@ -1,0 +1,65 @@
+The methods are pretty self-explanatory. The API access usage is explained below with usages and comments.
+Use this in accordance with PaperSpigot JAR.
+
+## Maven
+```xml
+<repositories>
+   <repository>
+       <id>refine-public</id>
+       <url>https://maven.refinedev.xyz/repository/public-repo/</url>
+   </repository>
+</repositories>
+
+<dependencies>
+   <dependency>
+      <groupId>xyz.refinedev.spigot</groupId>
+      <artifactId>CarbonSpigotAPI</artifactId>
+      <version>1.1</version>
+      <scope>provided</scope>
+   </dependency>
+   <dependency>
+      <groupId>org.github.paperspigot</groupId>
+      <artifactId>PaperSpigot</artifactId>
+      <version>1.8.8</version>
+      <scope>provided</scope>
+   </dependency>
+</dependencies>
+```
+
+## Usage
+```java
+// Packet based API
+PacketAPI packet = PacketAPI.getInstance();
+packet.registerPacketHandler(Plugin, PacketHandler);
+packet.registerMovementHandler(Plugin, PacketHandler);
+
+// Chunk Snapshot API
+ChunkAPI chunk = ChunkAPI.getInstance();
+ChunkSnapshot snapshot = chunk.takeSnapshot();
+
+// Once restored, you have to takeSnapshot again
+chunk.restoreSnapshot(snapshot);
+// Or use true in the method, to allow deep cloning
+chunk.restoreSnapshot(snapshot, true);
+
+// Knockback API
+KnockbackAPI knockback = KnockbackAPI.getInstance();
+// Returns Default profile if no profile is set
+KnockbackProfile profile = knockback.getPlayerProfile(Player);
+knockback.setPlayerProfile(player, profile);
+
+
+Collection<KnockbackValue<?>> values = knockback.getKnockbackValues(profile);
+// You can manually do it like this
+for ( KnockbackValue<?> value : values ) {
+    if (value.getValue() instanceof Double && value.getId().equals("horizontal")) {
+        KnockbackValue<Double> doubleValue = (KnockbackValue<Double>) value;
+        doubleValue.setValue(2.0D);
+        break;
+    }
+}
+// OR this can work too
+KnockbackValue<Double> value = knockback.getDoubleValue(profile, "horizontal");
+if (value == null) return;
+value.setValue(2.0D);
+```

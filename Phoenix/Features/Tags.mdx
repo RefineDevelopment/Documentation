@@ -2,4 +2,55 @@
 sidebar_position: 7
 ---
 
-## Coming Soon
+Tags allow you to add customized player "suffixes" called ChatTags.
+
+Tags allow your users to have more cosmetic options for their characters.
+
+## Categories
+
+You can specify categories for Player Tags
+
+## Price & Priorities
+
+You can set a price for your Player Tags, and a priority for them.
+
+## PlayerTags Creation Commands
+
+`<>` = Required `[]` = Optional
+
+Command                             | Permission                       | Description
+----------------------------------- | -------------------------------- | ---------------------------------------
+`/chattagsadmin create <name>`      | core.command.chattagsadmin       | Allows you to create a Player Tag.
+`/chattagsadmin tag <name> <prefix>`| core.command.chattagsadmin       | Allows you to set the prefix for a Tag.
+`/chattagsadmin delete <name>`      | core.command.chattagsadmin       | Allows you to delete the preferred Tag.
+`/chattagsadmin list [page]`        | core.command.chattagsadmin       | Allows you to list the currently available Tags.
+`/chattagsadmin help [page]`        | core.command.chattagsadmin       | Brings up the help page.
+`/chattagsadmin tools export`       | core.command.chattagsadmin       | Allows you to EXPORT your Tags to a .JSON file.
+`/chattagsadmin tools import`       | core.command.chattagsadmin       | Allows you to IMPORT Tags from a .JSON file.
+
+## PlayerTags Category Commands
+
+`<>` = Required `[]` = Optional
+
+Command                                                       | Permission                       | Description
+------------------------------------------------------------- | -------------------------------- | ---------------------------------------
+`/chattagsadmin category create <name>`                       | core.command.chattagsadmin       | Allows you to create a Tag category.
+`/chattagsadmin category default <category>`                  | core.command.chattagsadmin       | Allows you to set the default category for the Tags menu.
+`/chattagsadmin category delete <category>`                   | core.command.chattagsadmin       | Allows you to delete the Tag category.
+`/chattagsadmin category list [page]`                         | core.command.chattagsadmin       | Allows you to list the available Tag categories.
+`/chattagsadmin priority <category> <priority>`               | core.command.chattagsadmin       | Allows you to set a preferred priority for a Tag category.
+`/chattagsadmin tags add <category> <tag>`                    | core.command.chattagsadmin       | Allows you to add a Tag to a category.
+`/chattagsadmin tags delete <category> <tag>`                 | core.command.chattagsadmin       | Allows you to delete a Tag from a category.
+`/chattagsadmin tags list <category> [page]`                  | core.command.chattagsadmin       | Allows you to list the available Tags on a category.
+`/chattagsadmin tags visible <category> <hidden [true/false]>`| core.command.chattagsadmin       | Allows you to set if the category is visible to the public or not.
+
+## PlayerTags Micellanous Commands
+
+`<>` = Required `[]` = Optional
+
+Command                                                      | Permission                       | Description
+------------------------------------------------------------ | -------------------------------- | ---------------------------------------
+`/chattagsadmin price <tag> <price>`                         | core.command.chattagsadmin       | Allows you to set a price for a Tag.
+`/chattagsadmin priority <name> <weight>`                    | core.command.chattagsadmin       | Allows you to set the preferred priority for a Tag.
+`/chattagsadmin purchasable <tag> <purchasable [true/false]>`| core.command.chattagsadmin       | Allows you to set if the Tag is purchasable or not.
+`/chattagsadmin color <tag> <color>`                         | core.command.chattagsadmin       | Allows you to set the color of the Tag (NOT THE PREFIX).

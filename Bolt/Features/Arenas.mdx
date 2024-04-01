@@ -1,3 +1,41 @@
 ---
 sidebar_position: 1
 ---
+
+:::warning
+This page will be updated!
+:::
+
+## Arena Setup Guide
+
+**NOTE**: If your arenas are bigger than 300x300, go into settings.yml and increase the grid size from 300 to your desired amount. This is the distance between each arena. I recommend doing this BEFORE you make arenas to prevent them pasting into each other.
+
+### How do we setup default arena?
+1. Paste a schematic from World Edit in the **Arena World**.
+2. Do ``/edit`` to go into build mode.
+3. Do ``/arena create <name> <type>``. (Arena types are two, standard and stand alone)
+- Standard arenas are shared, and no build fights can take place here. (You can't duplicate these)
+- Standalone arenas are build arenas, only fight can be taken here at a time. (You can duplicate these)
+1. Set the spawns 
+- **Spawn 1** place a fence and a Player Head on it.
+- **Spawn 2** place a fence and a Player Head on it.
+1. Use the arena wand given in your first slot to select bounds, make sure you select the entire arena as Bolt's Arena System will paste it according to a grid.
+2. Click in chat where it says **CLICK HERE** OR do ``/arena finish``.
+3. You can now add kits to your arena using ``/arena addkit <arena>``.
+4. If your arena is standalone you can now duplicate it using ``/arena scale <amountOfCopies>`` or ``/arena manage``.
+
+### How do we setup Special arena?
+1. Paste a schematic from World Edit in the **Arena World**.
+2. Do ``/edit`` to go into build mode.
+3. Do ``/arena create <name> standalone``. 
+4. Set the spawns 
+- **Blue Spawn** place a blue wool and a Player Head on it.
+- **Red Spawn** place a red wool and a Player Head on it.
+5. For special locations like beds and portals, this is how to set them.
+- Bolt detects special points using a **focal point** or **mid point**
+- For **portals**, go into the middle of the portal, and place Red or Blue wool depending on team color, now on top of it, place a sponge.
+- For **beds**, find the closest block you can find to the bed, place Red or Blue wool depending on team color, now on top of it, place a sponge.
+6. Use the arena wand given in your first slot to select bounds, make sure you select the entire arena as Bolt's Arena System will paste it according to a grid.
+7. Click in chat where it says **CLICK HERE** OR do ``/arena finish``.
+8. You can now add kits to your arena using ``/arena addkit <arena>``.
+9.  If your arena is standalone you can now duplicate it using ``/arena scale <amountOfCopies>`` or ``/arena manage``.

@@ -2,4 +2,23 @@
 sidebar_position: 9
 ---
 
-## Coming Soon
+Notifications allow your users to setup reminders for themselves,
+to check up on what they want to do and what not.
+
+This can be helpful for Staff incase they want to develop and moderate some players actions,
+and do not want to forget it.
+
+## Commands
+
+`<>` = Required `[]` = Optional
+
+Command                                       | Permission                        | Description
+--------------------------------------------- | --------------------------------- | ---------------------------------------
+`/notifications create <id> `                 | core.command.notifications.create | Allows you to create a notification.
+`/notifications delete <notification/id>`     | core.command.notifications.delete | Allows you to delete a notification.
+`/notifications lore <notification/id>`       | core.command.notifications.lore   | Allows you to set the lore of a notification.
+`/notifications stats <Notification/id>`      | core.command.notifications.stats  | Allows you to view the stats of a notifications.
+`/notifications title <notification> <title>` | core.command.notifications.title  | Allows you to set the title of a notification.
+`/notifications list [page]`                  | core.command.notifications.list   | Allows you to list the created notifications.
+`/notifications help [page]`                  | core.command.notifications        | Brings up the help page.
+`/notifications all`                          | core.command.notifications        | Brings up all of the notifications.

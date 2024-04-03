@@ -2,4 +2,25 @@
 sidebar_position: 8
 ---
 
-## Coming Soon
+2FA system allows you and your Staff to be secured from intruders at all Times.
+
+It is a sophisticated system which makes use of Yubikeys and QrCode methods of authentication,
+for the most security for your Staff team.
+
+## Force 2FA
+
+You can Force 2FA on your Staff team using the (core.command.force2fa) permission.
+
+:::warning
+For 2FA to work, the rank should be a Staff rank using the (/rank staff (rank)) command AND with the core.2fa,
+permission. If it does not work PLEASE REJOIN.
+:::
+
+## Commands
+
+`<>` = Required `[]` = Optional
+
+Command                             | Permission | Description
+----------------------------------- | ---------- | ---------------------------------------
+`/setup2fa <type [Qrcode/Yubikey]> `| core.2fa   | Allows you to setup 2FA using Qrcode or Yubikey.
+`/2fa <code>`                       | core.2fa   | Allows you to enter the 2FA code.

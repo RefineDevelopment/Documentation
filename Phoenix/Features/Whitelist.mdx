@@ -6,15 +6,23 @@ The Whitelist system allows you to protect your server against unwanted attentio
 
 It allows you to make your server more private and keep it secure.
 
+## Access
+
+There are two access types, UUID and Rank.
+
+Access Type | Description
+----------- | ---------------------------------------------------------------
+`UUID`      | Uses a list of uuids that should be allowed to join.
+`Rank`      | Ranks with greater then or equal priority will be able to join.
+
 ## Commands
 
 `<>` = Required `[]` = Optional
 
-Command                                           | Permission               | Description
-------------------------------------------------- | ------------------------ | --------------------------------
-`/whitelist access <access [Rank/UUID]> [rank]`   | `core.command.whitelist` | Allows you to choose if ranks(Ranks) or players(UUID) have access.
-`/whitelist add <player> <permanent [true/false]>`| `core.command.whitelist` | Allows you to add a player to whitelist.
-`/whitelist help`                                 | `core.command.whitelist` | Brings up the help menu.
-`/whitelist info`                                 | `core.command.whitelist` | Brings up the info page.
-`/whitelist remove <player>`                      | `core.command.whitelist` | Removes a player from whitelist.
-`/whitelist toggle [true/false]`                  | `core.command.whitelist` | Allows you to toggle whitelist.
+Command                               | Permission               | Description
+------------------------------------- | ------------------------ | ------------------------------------------------------------------
+`/whitelist access <access> [rank]`   | `core.command.whitelist` | Sets the whitelist access type.
+`/whitelist add <player> <permanent>` | `core.command.whitelist` | Adds a player to the whitelist.
+`/whitelist info`                     | `core.command.whitelist` | Displays whitelist information.
+`/whitelist remove <player>`          | `core.command.whitelist` | Removes a player from the whitelist.
+`/whitelist toggle [true/false]`      | `core.command.whitelist` | Toggles the whitelist.

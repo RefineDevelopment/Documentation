@@ -2,3 +2,27 @@
 sidebar_position: 11
 ---
 
+## Maintenance
+
+Maintenance is a whitelist system but for your proxy.
+
+### Access
+
+There are two access types, UUID and Rank.
+
+Access Type | Description
+----------- | ---------------------------------------------------------------
+`UUID`      | Uses a list of uuids that should be allowed to join.
+`Rank`      | Ranks with greater then or equal priority will be able to join.
+
+### Commands
+
+`<>` = Required `[]` = Optional
+
+Command                               | Permission               | Description
+------------------------------------- | ------------------------ | ------------------------------------------------------------------
+`/maintenance access <access> [rank]`   | `core.command.maintenance` | Sets the maintenance access type.
+`/maintenance add <player> <permanent>` | `core.command.maintenance` | Adds a player to the maintenance.
+`/maintenance info`                     | `core.command.maintenance` | Displays maintenance information.
+`/maintenance remove <player>`          | `core.command.maintenance` | Removes a player from the maintenance.
+`/maintenance toggle [true/false]`      | `core.command.maintenance` | Toggles the maintenance.

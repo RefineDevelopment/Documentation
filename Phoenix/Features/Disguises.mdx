@@ -2,30 +2,40 @@
 sidebar_position: 5
 ---
 
-Disguises allow you to disguise/nick yourself to avoid detection by other people
+When disguising, your disguise name, skin and rank can be chosen,
+these changes will be reflected on all servers.
 
-This feature if useful for content creators or celebrities on large servers
+Staff alerts are send when a player disguises, undisguises or redisguises.
 
-## Player Commands
+## Menus
+
+<details>
+<summary>Screenshots</summary>
+
+![Rank Menu](./assets/disguise/rank.png)
+
+![Skin Menu](./assets/disguise/skin.png)
+</details>
+
+## Commands
 
 `<>` = Required `[]` = Optional
 
-Command                   | Permission | Description
-------------------------- | ---------- | ---------------------------------------
-`/disguise(/nick) `       | None       | Allows you to set your nick/disguise.
-`/undisguise(/unnick) `   | None       | Allows you to unnick/undisguise.
-
-
+Command            | Permission                | Description
+------------------ | ------------------------- | ---------------------------------
+`/disguise [name]` | `core.command.disguise`   | Opens the disguise menu.
+`/undisguise`      | `core.command.undisguise` | Removes your current disguise.
+`/redisguise`      | `core.command.redisguise` | Reapplies your previous disguise.
 
 ## Admin Commands
 
 `<>` = Required `[]` = Optional
 
-Command                                                  | Permission                              | Description
--------------------------------------------------------- | --------------------------------------- | ---------------------------------------
-`/disguiseadmin checkdisguise <player>`                  | core.command.disguiseadmin.checkdisguise| Allows you to check a players disguise.
-`/disguiseadmin disguise <rank> <player> <skin> <target>`| core.command.disguiseadmin              | Allows you to set a disguise.
-`/disguiseadmin help [page]`                             | core.command.disguiseadmin              | Brings up the disguiseadmin help menu.
-`/disguiseadmin history <player>`                        | core.command.disguiseadmin.history      | Allows you to check the history of a player.
-`/disguiseadmin listdisguised`                           | core.command.disguiseadmin.listdisguised| Allows you to list disguised players.
-`/disguiseadmin undisguise <player>`                     | core.command.disguiseadmin.undisguise   | Allows you to undisguise a specified player.
+Command                                                   | Permission                                 | Description
+--------------------------------------------------------- | ------------------------------------------ | --------------------------------------------------
+`/user disguise <player> [rank]`                          | `core.command.user.disguise`               | Rank disguises a player, no rank undisguises them.
+`/disguiseadmin disguise <rank> <player> <skin> <target>` | `core.command.disguiseadmin`               | Disguises an online player.
+`/disguiseadmin undisguise <player>`                      | `core.command.disguiseadmin.undisguise`    | Undisguises an online player.
+`/disguiseadmin listdisguised`                            | `core.command.disguiseadmin.listdisguised` | Lists all online disguised players.
+`/disguiseadmin checkdisguise <player>`                   | `core.command.disguiseadmin.checkdisguise` | Checks a player's current disguise.
+`/disguiseadmin history <player>`                         | `core.command.disguiseadmin.history`       | Checks a player's disguise history.

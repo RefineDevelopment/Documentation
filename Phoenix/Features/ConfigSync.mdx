@@ -1,0 +1,49 @@
+---
+sidebar_position: 14
+title: Config Sync
+---
+
+Sync your configs between phoenix instances through redis using commands.
+
+:::danger
+When fetching configs from redis, your local configs will be overwritten, which is not reversable.
+:::
+
+<details>
+<summary>Synced Files</summary>
+
+- messages.yml
+- menus.yml
+- webhooks.yml
+</details>
+
+## Setup
+
+1. Pick a server and put your latest config files on it.
+2. Set the server as the master using `/phoenix config set-master`.
+3. Sync your configs on all other servers using `/phoenix config force-fetch-all`. 
+
+## Changes
+
+If a config file is updated on a server, run `/phoenix config push` to push the updates to redis.
+
+To see changes reflected on other servers, you must reboot or fetch using either of these commands:
+
+- `/phoenix config fetch`
+- `/phoenix config force-fetch-all`
+
+## Commands
+
+:::danger
+Aside from the permission, this requires the player to be a [security user](/Phoenix/Features/Security).
+Only give this to people that you trust as it is very dangerous in the wrong hands.
+:::
+
+`<>` = Required `[]` = Optional
+
+Command                           | Permission                    | Description
+--------------------------------- | ----------------------------- | -----------------------------------------------------------------
+`/phoenix config fetch`           | `core.command.phoenix.config` | Fetch and update local configs from redis.
+`/phoenix config force-fetch-all` | `core.command.phoenix.config` | Forces every server to fetch and update local configs from redis.
+`/phoenix config push`            | `core.command.phoenix.config` | Pushes the local config to redis.
+`/phoenix config set-master`      | `core.command.phoenix.config` | Sets the master config server to the current server.

@@ -1,26 +1,16 @@
 ---
 sidebar_position: 8
-title: 2FA
 ---
 
-<!--
+Two factor authentication provides staff members and players with a way to secure their account.
 
-- timeline
-- adminprofile
-- commandlogs
-- /user
+## Authenication Types
 
--->
-
-The two factor authentication provides a way for staff members and players to secure their account.
-
-:::info
-There are three types of 2FA modes available:
-
-1. QRCode (Google Authenticator)
-2. YubiKey (Requires a [YubiKey](https://www.yubico.com/products/yubikey-5-overview/))
-3. Discord (Requires pxDiscord)
-:::
+Type      | Description                               | Requirements
+--------- | ----------------------------------------- | -----------------------------------------------------------------
+`QRCode`  | Auth using an authenticator app.          | Google Authenticator, Authy, 1Password, etc.
+`YubiKey` | Auth using a USB security key by Yubico.  | A [YubiKey](https://www.yubico.com/products/yubikey-5-overview/).
+`Discord` | Receive a Discord DM with your auth code. | Phoenix's [pxDiscord](https://refinedev.xyz/resources/pxdiscord.23) addon.
 
 ## Force 2FA
 
@@ -30,11 +20,10 @@ You can require players to setup two factor authentication by adding `core.2fa` 
 
 `<>` = Required `[]` = Optional
 
-Command                                     | Permission              | Description
-------------------------------------------- | ----------------------- | ----------------------------------------------------
-`/2fasetup <type [QRCode/YubiKey/Discord]>` | `core.2fa`              | Allows you to setup 2FA.
-`/2fa <code>`                               | `core.2fa`              | Allows you to enter the 2FA code.
-`/2fa request`                              | `core.2fa`              | Requests your discord 2FA code (Requires pxDiscord).
-`/force2fa <player>`                        | `core.command.force2fa` | Forces a player to setup 2FA.
-`/reset2fa <player>`                        | `core.command.reset2fa` | Resets a player's 2FA.
-
+Command              | Permission              | Description
+-------------------- | ----------------------- | ----------------------------------------------------
+`/2fasetup <type>`   | `core.2fa`              | Sets up 2FA using the desired type.
+`/2fa <code>`        | `core.2fa`              | Tries to authenticate using the specified code.
+`/2fa request`       | `core.2fa`              | Requests your discord 2FA code (Requires pxDiscord).
+`/force2fa <player>` | `core.command.force2fa` | Forces a player to setup 2FA.
+`/reset2fa <player>` | `core.command.reset2fa` | Resets a player's 2FA.

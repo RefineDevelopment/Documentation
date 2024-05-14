@@ -1,0 +1,33 @@
+## Creating arenas
+
+1. Set `SETUP-MODE: true` in settings.yml (line 32)
+2. Use `/arena create <name>` to create a new arena
+    - The plugin automatically creates a new empty world with the arena's name
+    - The world will have a stone block at Y = 128, which is also the default spawn location of the world
+3. Paste your schematic in the world
+4. Set the bounds of the arena:
+    - Use `/arena pos1 <arena>` to set the lowest corner of the arena (Required)
+    - Use `/arena pos2 <arena>` to set the highest corner of the arena (Required)
+5. Use `/arena setspawn <arena>` to set the location where players will spawn after joining
+6. Use `/arena setGameHeight <arena>` to set the Y-level where players should be taken as in-game
+    - When player goes below the configured Y-level, they'll automatically receive the kit and will
+      be set as in-game.
+7. Use `/arena setKit <arena> <kit>` to set the kit for the arena
+8. Use `/arena setBuildLimit <arena>` to set the build Y-limit for the arena (Optional)
+    - This step is optional, but if you dont want your players to be able
+      to build to spawn, I recommend setting this.
+9. Use `/arena setDeathHeight <arena>` to set the Y-level where players will die (Optional)
+    - By default, players die at Y-level 0
+10. Use `/arena saveAll` to manually save all arenas (Optional)
+11. Restart the server after creating at least one arena
+    - You do not need to restart after creating every single arena.
+    - Just make sure to restart after you create the first arena to prevent errors
+    (doesnt matter whether you restart after creating all arenas or after creating the first arena)
+
+## Deleting arenas
+
+1. Assure that no players are currently in the arena you want to delete
+2. Use `/arena delete <arena> [deleteWorld]`
+    - deleteWorld: Whether should the arena world be deleted along with the arena (Optional)
+    - Default value: `false`
+3. Use `/arena saveAll` to manually save all arenas (Optional)

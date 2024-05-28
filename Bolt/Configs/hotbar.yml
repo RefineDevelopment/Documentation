@@ -1,0 +1,288 @@
+# Layout Types: LOBBY, QUEUE, PARTY_LEADER (Leader Only), PARTY_MEMBER (Member Only), PARTY (Both), SPECTATING, EVENT, OTHER (For built-in items)
+# ACTION is optional and it's field can be removed if need be. It can also be replaced by COMMAND followed by command without '/'.
+# You need help with the configuration or have any questions related to Bolt?
+# Join us in our Discord: https://dsc.gg/refine
+# 
+# NOTE: All Material IDs are supported from 1.8x-1.20.x. Recommended: https://minecraftitemids.com/
+
+HOTBAR_ITEMS:
+  LOBBY:
+    SOLO_QUEUE:
+      NAME: '&cSolo Queue &7(Right-Click)'
+      ENABLED: true
+      ACTION: JOIN_SOLO
+      MATERIAL: IRON_SWORD
+      DURABILITY: 0
+      SLOT: 0
+      LORE: []
+    DUO_QUEUE:
+      NAME: '&cDuo Queue &7(Right-Click)'
+      ENABLED: true
+      ACTION: JOIN_DUO
+      MATERIAL: DIAMOND_SWORD
+      DURABILITY: 0
+      SLOT: 1
+      LORE: []
+    BOT_DUEL:
+      NAME: '&cFight Bots &7(Right-Click)'
+      ENABLED: true
+      ACTION: BOT_DUEL
+      MATERIAL: GOLDEN_SWORD
+      DURABILITY: 0
+      SLOT: 2
+      LORE: []
+    PARTY_CREATE:
+      NAME: '&cCreate Party &7(Right-Click)'
+      ENABLED: true
+      ACTION: CREATE_PARTY
+      MATERIAL: NAME_TAG
+      DURABILITY: 0
+      SLOT: 4
+      LORE: []
+    PLAY_AGAIN:
+      NAME: '&cPlay Again &7(Right-Click)'
+      ENABLED: true
+      ACTION: PLAY_AGAIN
+      MATERIAL: PAPER
+      DURABILITY: 0
+      SLOT: 6
+      LORE: []
+    KIT_EDITOR:
+      NAME: '&cKit Editor &7(Right-Click)'
+      ENABLED: true
+      ACTION: OPEN_EDITOR
+      MATERIAL: BOOK
+      DURABILITY: 0
+      SLOT: 8
+      LORE: []
+  PARKOUR:
+    PARKOUR_START:
+      NAME: '&cGo to start &7(Right-Click)'
+      ENABLED: true
+      ACTION: PARKOUR_SPAWN
+      MATERIAL: RABBIT_FOOT
+      DURABILITY: 0
+      SLOT: 0
+      LORE: []
+    PARKOUR_CHECKPOINT:
+      NAME: '&cTeleport Checkpoint &7(Right-Click)'
+      ENABLED: true
+      ACTION: PARKOUR_CHECKPOINT
+      MATERIAL: LADDER
+      DURABILITY: 0
+      SLOT: 4
+      LORE: []
+    PARKOUR_QUIT:
+      NAME: '&cQuit Parkour &7(Right-Click)'
+      ENABLED: true
+      ACTION: LEAVE_PARKOUR
+      MATERIAL: RED_DYE
+      DURABILITY: 0
+      SLOT: 8
+      LORE: []
+  PARTY:
+    OTHER_PARTIES:
+      NAME: '&cDuel Other Parties &7(Right-Click)'
+      ENABLED: true
+      ACTION: DUEL_PARTY
+      MATERIAL: REDSTONE_TORCH_ON
+      DURABILITY: 0
+      SLOT: 4
+      LAYOUT_TYPE: PARTY
+      LORE: []
+  PARTY_LEADER:
+    PARTY_EVENTS:
+      NAME: '&cParty Events &7(Right-Click)'
+      ENABLED: true
+      ACTION: EVENTS_PARTY
+      MATERIAL: DIAMOND_AXE
+      DURABILITY: 0
+      SLOT: 0
+      LORE: []
+    DUO_QUEUE:
+      NAME: '&cDuo Queue &7(Right-Click)'
+      ENABLED: true
+      ACTION: JOIN_DUO
+      MATERIAL: IRON_SWORD
+      DURABILITY: 0
+      SLOT: 1
+      LORE: []
+    PARTY_CLASSES:
+      NAME: '&cHCF Roster &7(Right-Click)'
+      ENABLED: true
+      ACTION: SELECT_KIT_PARTY
+      MATERIAL: ENCHANTED_BOOK
+      DURABILITY: 0
+      SLOT: 2
+      LORE: []
+    PARTY_SETTINGS:
+      NAME: '&cParty Settings &7(Right-Click)'
+      ENABLED: true
+      ACTION: SETTINGS_PARTY
+      MATERIAL: ANVIL
+      DURABILITY: 0
+      SLOT: 6
+      LORE: []
+    PARTY_DISBAND:
+      NAME: '&cDisband Party &7(Right-Click)'
+      ENABLED: true
+      ACTION: DISBAND_PARTY
+      MATERIAL: RED_DYE
+      DURABILITY: 0
+      SLOT: 8
+      LORE: []
+  PARTY_MEMBER:
+    PARTY_INFO:
+      NAME: '&cParty Information &7(Right-Click)'
+      ENABLED: true
+      ACTION: INFO_PARTY
+      MATERIAL: PAPER
+      DURABILITY: 0
+      SLOT: 0
+      LORE: []
+    PARTY_CLASSES:
+      NAME: '&cHCF Roster &7(Right-Click)'
+      ENABLED: true
+      ACTION: SELECT_KIT_PARTY
+      MATERIAL: ENCHANTED_BOOK
+      DURABILITY: 0
+      SLOT: 6
+      LORE: []
+    PARTY_LEAVE:
+      NAME: '&cLeave Party &7(Right-Click)'
+      ENABLED: true
+      ACTION: LEAVE_PARTY
+      MATERIAL: RED_DYE
+      DURABILITY: 0
+      SLOT: 8
+      LORE: []
+  QUEUE:
+    QUEUE_LEAVE:
+      NAME: '&cLeave Queue &7(Right-Click)'
+      ENABLED: true
+      ACTION: LEAVE_QUEUE
+      MATERIAL: RED_DYE
+      DURABILITY: 0
+      SLOT: 8
+      LORE: []
+  SPECTATING:
+    SPECTATE_MENU:
+      NAME: '&cView Spectate Menu &7(Right-Click)'
+      ENABLED: true
+      ACTION: OPEN_SPECTATE_MENU
+      MATERIAL: COMPASS
+      DURABILITY: 0
+      SLOT: 0
+      LORE: []
+    VIEW_INVENTORY:
+      NAME: '&aView Inventory &7(Right-Click)'
+      ENABLED: true
+      ACTION: VIEW_INVENTORY
+      MATERIAL: ENCHANTED_BOOK
+      DURABILITY: 0
+      SLOT: 3
+      LORE: []
+    SPECTATOR_SHOW:
+      NAME: '&aShowing Spectators &7(Right-Click)'
+      ENABLED: true
+      ACTION: SHOW_SPECTATORS
+      MATERIAL: LIME_DYE
+      DURABILITY: 0
+      SLOT: 5
+      LORE: []
+    SPECTATOR_HIDE:
+      NAME: '&cHiding Spectators &7(Right-Click)'
+      ENABLED: true
+      ACTION: HIDE_SPECTATORS
+      MATERIAL: GRAY_DYE
+      DURABILITY: 0
+      SLOT: 5
+      LORE: []
+    SPECTATE_STOP:
+      NAME: '&c&lStop Spectating &7(Right-Click)'
+      ENABLED: true
+      ACTION: STOP_SPECTATING
+      MATERIAL: RED_DYE
+      DURABILITY: 0
+      SLOT: 8
+      LORE: []
+  EVENT:
+    EVENT_TEAM:
+      NAME: '&cChoose a Team &7(Right-Click)'
+      ENABLED: true
+      ACTION: SELECT_TEAM_EVENT
+      MATERIAL: COMPASS
+      DURABILITY: 0
+      SLOT: 0
+      LORE: []
+    EVENT_LEAVE:
+      NAME: '&cLeave Event &7(Right-Click)'
+      ENABLED: true
+      ACTION: LEAVE_EVENT
+      MATERIAL: RED_DYE
+      DURABILITY: 0
+      SLOT: 8
+      LORE: []
+    PARKOUR_SPAWN:
+      NAME: '&aBack to Checkpoint &7(Right-Click)'
+      ENABLED: true
+      MATERIAL: ARROW
+      DURABILITY: 0
+      SLOT: 0
+      LORE: []
+    SPLEEF_MATCH:
+      NAME: '&cSpleef Shovel &7(Left-Click)'
+      ENABLED: true
+      MATERIAL: DIAMOND_SHOVEL
+      DURABILITY: 0
+      SLOT: 0
+      LORE: []
+    GULAG_GUN:
+      NAME: '&cGlock 19 &7(Loaded)'
+      ENABLED: true
+      MATERIAL: DIAMOND_HOE
+      DURABILITY: 0
+      SLOT: 0
+      LORE: []
+  OTHER:
+    DEFAULT_KIT:
+      NAME: '&cDefault Kit &7(Right-Click)'
+      ENABLED: true
+      MATERIAL: BOOK
+      DURABILITY: 0
+      SLOT: 0
+      LORE: []
+
+# Custom Items that can be anything and have any command with any layout.
+# This is the format, any and all spaces must be exactly the same to follow indentation.
+# 
+# LAYOUT_TYPE:
+#    ANY_NAME:
+#       NAME: "&cTeleport to Spawn &7(Right-Click)"
+#       ENABLED: true
+#       COMMAND: "spawn" (You can also put a built-in action here)
+#       MATERIAL: DIAMOND
+#       DURABILITY: 0
+#       SLOT: 0
+#       LAYOUT_TYPE: LOBBY
+#       LORE: []
+# 
+CUSTOM_ITEMS:
+  LOBBY:
+    PROFILE_MENU:
+      NAME: '&cProfile Menu &7(Right-Click)'
+      ENABLED: true
+      COMMAND: profile
+      MATERIAL: NETHER_STAR
+      DURABILITY: 0
+      SLOT: 7
+      LORE: []
+  PARTY:
+    KIT_EDITOR:
+      NAME: '&cKit Editor &7(Right-Click)'
+      ENABLED: true
+      COMMAND: kiteditor
+      MATERIAL: BOOK
+      DURABILITY: 0
+      SLOT: 7
+      LORE: []

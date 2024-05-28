@@ -1,0 +1,17 @@
+# This configuration file is part of a Refine Development Project. Purchased at https://dsc.gg/refine
+
+MONGO:
+  URI-MODE: false
+  # Only enable if the username or password contains a colon (:) or an at-sign (@)
+  URL-ENCODE: false
+  NORMAL:
+    HOST: 127.0.0.1
+    PORT: 25568
+    DATABASE: admin
+    AUTHENTICATION:
+      ENABLED: true
+      USERNAME: admin
+      PASSWORD: password
+  URI:
+    DATABASE: Bolt
+    CONNECTION-STRING: mongodb://127.0.0.1:27017/Bolt

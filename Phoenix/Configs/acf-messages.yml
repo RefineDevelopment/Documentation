@@ -1,0 +1,45 @@
+
+error:
+  must-hold-item: "&cYou must be holding an item in your main hand."
+  no-permission: "&cI'm sorry, but you do not have permission to perform this command."
+  generic-error-logged: "&cAn error occurred. This problem has been logged. Sorry for the inconvenience."
+  unknown-command: "&cUnknown Command, please type &e/help"
+  invalid-syntax: "&fUsage: &c<command> &f<syntax>"
+  error-performing-command: "&cI'm sorry, but there was an error performing this command."
+  please-specify-one-of: "&cPlease specify one of (<valid>)."
+  must-be-a-number: "&c<num> &cmust be a number."
+  length-too-large: "&cMust be at least &f<min> &ccharacters long."
+  length-too-small: "&cMust be at most &f<max> &ccharacters long."
+  please-specify-at-most: "&cPlease specify a value at most &f<max>&c."
+  please-specify-at-least: "&cPlease specify a value at least &f<min>&c."
+  player:
+    username-too-short: "&cUsername too short, must be at least three characters."
+    invalid-username: "&c<name> &cis not a valid username."
+    multiple-players-match: "&cMultiple players matched &f<search> &c(<all>), please be more specific."
+    no-online-player-found: "&cNo player matching &f<search> &cis connected to this server."
+    no-offline-player-found: "&cNo player matching &f<search> &ccould be found."
+    no-player-found: "&cNo player matching &f<search> &c&ccould be found."
+    player-not-found: "&cCould not find a player by the name: &f<search>"
+    player-only: "&cConsole may not execute this command."
+  location:
+    invalid-world: "&cThat world does not exists."
+    specify-world: "&cPlease specify world. Example: world:x,y,z."
+    specify-coords: "&cPlease specify the coordinates x, y and z. Example: world:x,y,z."
+    console-relative: "&cConsole may not use relative coordinates for location."
+
+formats:
+  error-message: "&4&lError &7» &c<message>"
+  info-message: "&c<message>"
+
+help:
+  no-commands-matched-search: "&cNo command matched &f<search>&c."
+  no-results: "&cNo more results."
+  header: "&7&m---&f Showing help for &c<commandPrefix><command>&f. &7&m---"
+  search-header: "&7&m---&f Search results for &c<commandPrefix><command> &f<search>. &7&m---"
+  format: "&7■ &c<commandPrefix><command> &f<parameters>"
+  format-with-description: "&7■ &c<commandPrefix><command> &f<parameters> &7(<description>)"
+  footer: "<previousPage> &fShowing page &c<page> &fof &c<totalPages> &7(<results> results)&f. <nextPage>"
+  next-page: "&a»"
+  next-page-hover: "&7Click to go to the next page."
+  previous-page: "&c« "
+  previous-page-hover: "&7Click to go to the previous page."

@@ -1,0 +1,219 @@
+# This configuration file is part of a Refine Development Project. Purchased at https://dsc.gg/refine
+
+DIVISIONS:
+  MASTER+:
+    NAME: '&c&lMaster+'
+    ICON: BLAZE_POWDER
+    DURABILITY: 0
+    MINI-LOGO: '&8[&c⚔&8]'
+    REQUIREMENTS:
+      - EXPERIENCE:200000
+    REWARDS:
+      - COINS:20000
+  MASTER:
+    NAME: '&cMaster'
+    DURABILITY: 0
+    MINI-LOGO: '&8[&c*&8]'
+    ICON: BLAZE_POWDER
+    REQUIREMENTS:
+      - EXPERIENCE:100000
+    REWARDS:
+      - COINS:10000
+  SAPPHIRE3:
+    NAME: '&9Sapphire III'
+    DURABILITY: 0
+    MINI-LOGO: '&8[&9III&8]'
+    ICON: LAPIS_LAZULI
+    REQUIREMENTS:
+      - EXPERIENCE:86000
+    REWARDS:
+      - COINS:8600
+  SAPPHIRE2:
+    NAME: '&9Sapphire II'
+    DURABILITY: 0
+    MINI-LOGO: '&8[&9II&8]'
+    ICON: LAPIS_LAZULI
+    REQUIREMENTS:
+      - EXPERIENCE:76000
+    REWARDS:
+      - COINS:7600
+  SAPPHIRE1:
+    NAME: '&9Sapphire I'
+    DURABILITY: 0
+    MINI-LOGO: '&8[&9I&8]'
+    ICON: LAPIS_LAZULI
+    REQUIREMENTS:
+      - EXPERIENCE:56000
+    REWARDS:
+      - COINS:5600
+  DIAMOND3:
+    NAME: '&bDiamond III'
+    DURABILITY: 0
+    MINI-LOGO: '&8[&bIII&8]'
+    ICON: DIAMOND
+    REQUIREMENTS:
+      - EXPERIENCE:46000
+    REWARDS:
+      - COINS:4600
+  DIAMOND2:
+    NAME: '&bDiamond II'
+    DURABILITY: 0
+    MINI-LOGO: '&8[&bII&8]'
+    ICON: DIAMOND
+    REQUIREMENTS:
+      - EXPERIENCE:36000
+    REWARDS:
+      - COINS:3600
+  DIAMOND1:
+    NAME: '&bDiamond I'
+    DURABILITY: 0
+    MINI-LOGO: '&8[&bI&8]'
+    ICON: DIAMOND
+    REQUIREMENTS:
+      - EXPERIENCE:26000
+    REWARDS:
+      - COINS:2600
+  EMERALD3:
+    NAME: '&aEmerald III'
+    DURABILITY: 0
+    MINI-LOGO: '&7[&aIII&7]'
+    ICON: EMERALD
+    REQUIREMENTS:
+      - EXPERIENCE:24000
+    REWARDS:
+      - COINS:2400
+  EMERALD2:
+    NAME: '&aEmerald II'
+    DURABILITY: 0
+    MINI-LOGO: '&7[&aII&7]'
+    ICON: EMERALD
+    REQUIREMENTS:
+      - EXPERIENCE:20000
+    REWARDS:
+      - COINS:2000
+  EMERALD1:
+    NAME: '&aEmerald I'
+    DURABILITY: 0
+    MINI-LOGO: '&7[&aI&7]'
+    ICON: EMERALD
+    REQUIREMENTS:
+      - EXPERIENCE:16000
+    REWARDS:
+      - COINS:1600
+  PLATINUM3:
+    NAME: '&3Platinum III'
+    DURABILITY: 0
+    MINI-LOGO: '&7[&3III&7]'
+    ICON: QUARTZ
+    REQUIREMENTS:
+      - EXPERIENCE:14000
+    REWARDS:
+      - COINS:1400
+  PLATINUM2:
+    NAME: '&3Platinum II'
+    DURABILITY: 0
+    MINI-LOGO: '&7[&3II&7]'
+    ICON: QUARTZ
+    REQUIREMENTS:
+      - EXPERIENCE:13000
+    REWARDS:
+      - COINS:1300
+  PLATINUM1:
+    NAME: '&3Platinum I'
+    DURABILITY: 0
+    MINI-LOGO: '&7[&3I&7]'
+    ICON: QUARTZ
+    REQUIREMENTS:
+      - EXPERIENCE:12000
+    REWARDS:
+      - COINS:1200
+  GOLD5:
+    NAME: '&6Gold V'
+    DURABILITY: 0
+    MINI-LOGO: '&7[&6V&7]'
+    ICON: GOLD_INGOT
+    REQUIREMENTS:
+      - EXPERIENCE:11000
+    REWARDS:
+      - COINS:1100
+  GOLD4:
+    NAME: '&6Gold IV'
+    DURABILITY: 0
+    MINI-LOGO: '&7[&6IV&7]'
+    ICON: GOLD_INGOT
+    REQUIREMENTS:
+      - EXPERIENCE:10000
+    REWARDS:
+      - COINS:1000
+  GOLD3:
+    NAME: '&6Gold III'
+    DURABILITY: 0
+    MINI-LOGO: '&7[&6III&7]'
+    ICON: GOLD_INGOT
+    REQUIREMENTS:
+      - EXPERIENCE:9000
+    REWARDS:
+      - COINS:900
+  GOLD2:
+    NAME: '&6Gold II'
+    DURABILITY: 0
+    MINI-LOGO: '&7[&6II&7]'
+    ICON: GOLD_INGOT
+    REQUIREMENTS:
+      - EXPERIENCE:8000
+    REWARDS:
+      - COINS:800
+  GOLD1:
+    NAME: '&6Gold I'
+    DURABILITY: 0
+    MINI-LOGO: '&7[&6II&7]'
+    ICON: GOLD_INGOT
+    REQUIREMENTS:
+      - EXPERIENCE:7000
+    REWARDS:
+      - COINS:700
+  SILVER5:
+    NAME: '&7Silver V'
+    DURABILITY: 0
+    MINI-LOGO: '&8[&7V&8]'
+    ICON: IRON_INGOT
+    REQUIREMENTS:
+      - EXPERIENCE:5000
+    REWARDS:
+      - COINS:500
+  SILVER4:
+    NAME: '&7Silver IV'
+    DURABILITY: 0
+    MINI-LOGO: '&8[&7IV&8]'
+    ICON: IRON_INGOT
+    REQUIREMENTS:
+      - EXPERIENCE:4000
+    REWARDS:
+      - COINS:400
+  SILVER3:
+    NAME: '&7Silver III'
+    DURABILITY: 0
+    MINI-LOGO: '&8[&7III&8]'
+    ICON: IRON_INGOT
+    REQUIREMENTS:
+      - EXPERIENCE:3000
+    REWARDS:
+      - COINS:300
+  SILVER2:
+    NAME: '&7Silver II'
+    DURABILITY: 0
+    MINI-LOGO: '&8[&7II&8]'
+    ICON: IRON_INGOT
+    REQUIREMENTS:
+      - EXPERIENCE:2000
+    REWARDS:
+      - COINS:200
+  SILVER1:
+    NAME: '&7Silver I'
+    DURABILITY: 0
+    MINI-LOGO: '&8[&7I&8]'
+    ICON: IRON_INGOT
+    REQUIREMENTS:
+      - EXPERIENCE:0
+    REWARDS:
+      - COINS:0

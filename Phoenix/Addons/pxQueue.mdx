@@ -2,4 +2,42 @@
 sidebar_position: 6
 ---
 
-## Coming Soon
+Advanced server queue proxy plugin for phoenix.
+
+## Installation
+
+1. Download the pxQueue jar from the phoenix resource page.
+2. Upload the jar into your proxy's plugin folder and reboot.
+
+:::danger
+To allow for API usage and bukkit based queue commands (for npcs, etc),
+enable pxQueue in `plugins/Retention/loader.yml` on your spigot server,
+:::
+
+## Logout Permissions
+
+If both `core.queue.logout` is given to a player and a logout duration is specified (`core.time.<rank>.<duration>`),
+the player will remain in the queue after logging out for the duration given by the permission.
+
+### Example Permission
+
+The donator rank will remain in the queue after logging back in at most 1 hour 30 minutes from their logout.
+
+`core.time.donator.1h30m`
+
+## Commands
+
+`<>` = Required `[]` = Optional
+
+Command                  | Permission                        | Description
+------------------------ | --------------------------------- | --------------------------------------------------------
+`/aqueue clear <queue>`  | `queue.command.adminqueue`        | Removes all the players from a queue.
+`/aqueue delete <queue>` | `queue.command.adminqueue`        | Deletes a queue the server of which is currently offline
+`/aqueue info <queue>`   | `queue.command.adminqueue`        | Displays all relevant information to a queue.
+`/aqueue list`           | `queue.command.adminqueue`        | Displays a list of all queues.
+`/aqueue toggle <queue>` | `queue.command.adminqueue`        | Enables/disables a queue.
+`/aqueue reload`         | `queue.command.adminqueue.reload` | Reloads pxQueue.
+
+## Permissions
+
+For a complete list of all permissions, please check out [Phoenix/Permissions/pxQueue](/Phoenix/Permissions#pxqueue).

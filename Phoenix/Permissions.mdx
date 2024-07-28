@@ -6,11 +6,11 @@ A list of permissions for phoenix and all it's addons.
 
 Please take a look at [Features/Ranks/Permissions](/Phoenix/Features/Ranks#permissions) for detailed information on permissions and how you can set them up.
 
-## Phoenix
+# Phoenix
 
 These are the main phoenix permissions, addon permissions can be found below.
 
-### Grants
+## Grants
 
 Visit [Features/Grants](/Phoenix/Features/Grants) for more information regarding grant permissions.
 
@@ -22,7 +22,7 @@ Permission                  | Description
 `core.grant.*`              | Grant & Revoke all ranks.
 `core.grant.<rank>`         | Grant & Revoke specific rank.
 
-### Ranks
+## Ranks
 
 Visit [Features/Ranks](/Phoenix/Features/Ranks) for more information regarding rank permissions.
 
@@ -30,7 +30,7 @@ Permission          | Description
 ------------------- | -----------------------------------
 `core.command.rank` | Access to rank editor and commands.
 
-### Security
+## Security
 
 Visit [Features/Security](/Phoenix/Features/Security) for more information regarding security permissions.
 
@@ -38,15 +38,15 @@ Permission              | Description
 ----------------------- | --------------------------------
 `core.command.security` | Access to manage security users.
 
-### Alts
+## Alts
 
 Visit [Features/Alts](/Phoenix/Features/Alts) for more information regarding alts permissions.
 
-Permission              | Description
------------------------ | --------------------------------
+Permission          | Description
+------------------- | ------------------------
 `core.command.alts` | Access to alts commands.
 
-### Punishments
+## Punishments
 
 Visit [Features/Punishments](/Phoenix/Features/Punishments) for more information regarding punishment permissions.
 
@@ -89,16 +89,14 @@ Permission                                       | Description
 `core.command.punishmentladder.deletepunishment` | Access to /pladder deletepunishment.
 `core.command.punishmentladder.listpunishments`  | Access to /pladder listpunishments.
 
-:::warning
-All below permissions do not have finished feature pages, they will come soon.
+:::warning All below permissions do not have finished feature pages, they will come soon.
 
-They are also not organized.
-:::
+They are also not organized. :::
 
-### Unfinished
+## Unfinished
 
 Permission                                 | Description
------------------------------------------- | -----------
+------------------------------------------ | --------------------------------------------------------
 `core.adminchat`                           | Access to view and talk in admin chat.
 `core.builderchat`                         | Access to view and talk in builder chat.
 `core.globalchat.bypass`                   | Show up in chat when players have global chat disabled.
@@ -152,9 +150,13 @@ Permission                                 | Description
 `core.command.user.cleargrants`            | Clear a user's grants.
 `core.command.user.clearpunishments`       | Clear a user's punishments.
 `core.command.user.info`                   | View information about a user.
+`core.command.user.staffinfo`              | View staff information about a user.
 `core.command.user.addperm`                | Add a permission to a user.
 `core.command.user.removeperm`             | Remove a user's permissions.
 `core.command.user.listperm`               | List a user's permissions.
+`core.command.user.searchperm`             | Search users with a specific permission.
+`core.command.user.clearperm`              | Clear a user's permissions.
+`core.command.user.iplookup`               | Lookup users by their IP Address.
 `core.command.whitelist`                   | Access to /whitelist.
 `core.command.chatsnapshot`                | Access to /chatsnapshot.
 `core.command.chatsnapshot.create`         | Create a chat snapshot.
@@ -172,7 +174,6 @@ Permission                                 | Description
 `core.command.togglestaffmessages`         | Access to /togglestaffmessags.
 `core.command.spawn.others`                | Send other players to spawn.
 `core.command.spawn`                       | Access to /spawn.
-`core.staffchat`                           | Access to view and talk in staffchat.
 `core.command.notes`                       | Access to /notes command.
 `core.command.notes.remove`                | Remove notes from a player.
 `core.command.notes.add`                   | Add notes to a player.
@@ -202,11 +203,11 @@ Permission                                 | Description
 `core.restrictedHub`                       | Access to join restricted hubs.
 `core.media`                               | Show up in /medialist.
 
-## Addons
+# Addons
 
 These are the phoenix addon permissions.
 
-### pxBasic
+## pxBasic
 
 Visit [Addons/Quark](/Phoenix/Addons/pxBasic) for more information regarding punishment permissions.
 
@@ -252,7 +253,7 @@ Permission                      | Description
 `core.command.teleportworld`    | Access to /teleportworld.
 `core.command.top`              | Access to /top
 
-### pxStaff
+## pxStaff
 
 Visit [Addons/pxStaff](/Phoenix/Addons/pxStaff) for more information regarding pxStaff permissions.
 
@@ -277,7 +278,7 @@ Permission                   | Description
 `core.command.vanish.other`  | Vanish another player.
 `core.command.hidestaff`     | Access /hidestaff.
 
-### pxCosmetics
+## pxCosmetics
 
 Visit [Addons/pxCosmetics](/Phoenix/Addons/pxCosmetics) for more information regarding pxCosmetics permissions.
 
@@ -296,7 +297,7 @@ Permission                         | Description
 `core.trails.*`                    | Use any trail.
 `core.trails.<trail>`              | Use specific trail.
 
-### pxLevels
+## pxLevels
 
 Visit [Addons/pxLevels](/Phoenix/Addons/pxLevels) for more information regarding pxLevels permissions.
 
@@ -305,22 +306,22 @@ Permission                | Description
 `core.command.adminexp`   | Access to /adminexp.
 `core.command.adminlevel` | Access to /adminlevel.
 
-### pxQueue
+## pxQueue
 
 Visit [Addons/pxQueue](/Phoenix/Addons/pxQueue) for more information regarding pxQueue permissions.
 
-Permission                                 | Description
------------------------------------------- | -----------
-`core.queue.logout` | Keeps the player in the queue when they log out.
-`core.time.<rank>.<duration>` | The max duration to stay in the queue when logged out.
-`queue.command.adminqueue` | Access to /adminqueue.
+Permission                        | Description
+--------------------------------- | ------------------------------------------------------
+`core.queue.bypass`               | Bypass the Queue
+`core.queue.logout`               | Keeps the player in the queue when they log out.
+`core.time.<rank>.<duration>`     | The max duration to stay in the queue when logged out.
+`queue.command.adminqueue`        | Access to /adminqueue.
 `queue.command.adminqueue.reload` | Access to /adminqueue reload.
 
-
-### Quark
+## Quark
 
 Visit [Addons/Quark](/Phoenix/Addons/Quark) for more information regarding Quark permissions.
 
-Permission                                 | Description
------------------------------------------- | -----------
+Permission        | Description
+----------------- | -----------------
 `hub.command.hub` | Access to /quark.

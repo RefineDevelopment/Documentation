@@ -2,37 +2,29 @@
 sidebar_position: 4
 ---
 
-Punishments allow staff members to take disciplinary action against players behavior.
-The punishment types include blacklists, bans, mutes, shadow mutes, kicks, warns and competative bans.
+Punishments allow staff members to take disciplinary action against players behavior. The punishment types include blacklists, bans, mutes, shadow mutes, kicks, warns and competative bans.
 
-Punishments can be temporary or permanent, they can also be applied to a players IP address,
-so it applies to all of their [alts](/Phoenix/Features/Alts).
+Punishments can be temporary or permanent, they can also be applied to a players IP address, so it applies to all of their [alts](/Phoenix/Features/Alts).
 
-Shadow mutes make a player think other players can see their messages in chat but they cant,
-while a normal mute prevents them from chatting altogether.
+Shadow mutes make a player think other players can see their messages in chat but they cant, while a normal mute prevents them from chatting altogether.
 
-A player can be punished through commands or by using the punish menu
-which allows the use of punishment ladders, this is the recommended way.
+A player can be punished through commands or by using the punish menu which allows the use of punishment ladders, this is the recommended way.
 
-## Punishment Ladders
+# Punishment Ladders
 
-Punishment ladders are a sequential list of punishments that apply to a player
-depending on how many times they have been banned by the ladder.
+Punishment ladders are a sequential list of punishments that apply to a player depending on how many times they have been banned by the ladder.
 
 Punishment ladders can be used with the punish command or through resolving reports as true.
 
-## Proof
+# Proof
 
-The proof menu is where you can attach a link or chat snapshot to a punishment,
-for example a chat snapshot can be attached if the player was muted.
+The proof menu is where you can attach a link or chat snapshot to a punishment, for example a chat snapshot can be attached if the player was muted.
 
-<details>
-<summary>Screenshot</summary>
+<details><summary>Screenshot</summary>
 
-![Proof Menu](./assets/proof-menu.png)
-</details>
+<img src="./assets/proof-menu.png" alt="Proof Menu"></details>
 
-## Punish Menu
+# Punish Menu
 
 The punish menu is where a staff member can punish a player using the punishment ladders.
 
@@ -40,25 +32,21 @@ Permission: `core.command.punish`
 
 The `core.punish.<ladder>` permission is also required for the use of a punishment ladder in the menu.
 
-<details>
-<summary>Screenshot</summary>
+<details><summary>Screenshot</summary>
 
-![Proof Menu](./assets/punish-menu.png)
-</details>
+<img src="./assets/punish-menu.png" alt="Proof Menu"></details>
 
-## History Menu
+# History Menu
 
 The history menu lists all current and past punishments a player has had.
 
 Permission: `core.command.history`
 
-<details>
-<summary>Screenshot</summary>
+<details><summary>Screenshot</summary>
 
-![Menu](./assets/history-menu.png)
-</details>
+<img src="./assets/history-menu.png" alt="Menu"></details>
 
-## Commands
+# Commands
 
 `<>` = Required `[]` = Optional
 
@@ -98,14 +86,16 @@ Command                                             | Permission                
 `/blacklist <player> <reason> [-s]`                 | `core.command.blacklist`      | Blacklists a player.
 `/ban <player> <reason> [-s]`                       | `core.command.ban`            | Bans a player.
 
-### Punishment Ladder
+## Punishment Ladder
 
-Command                                                                     | Permission                                       | Description
---------------------------------------------------------------------------- | ------------------------------------------------ | --------------------------------------
-`/pladder`                                                                  | `core.command.punishmentladder`                  | Allows access to the /pladder command.
-`/pladder punish <player> <ladder> [silent]`                                | `core.command.punishmentladder.punish`           | Punishes a player.
-`/pladder create <id> <requireChatSnapshot> <reason>`                       | `core.command.punishmentladder.create`           | Creates a punishment ladder.
-`/pladder delete <ladder>`                                                  | `core.command.punishmentladder.delete`           | Deletes a punishment ladder.
-`/pladder addpunishment <ladder> <punishmentType> <duration> <ip> <shadow>` | `core.command.punishmentladder.addpunishment`    | Adds a punishment to a ladder.
-`/pladder deletepunishment <ladder> <id>`                                   | `core.command.punishmentladder.deletepunishment` | Deletes a punishment from a ladder.
-`/pladder listpunishments <ladder>`                                         | `core.command.punishmentladder.listpunishments`  | Lists a ladders punishments.
+Command                                                                           | Permission                                       | Description
+--------------------------------------------------------------------------------- | ------------------------------------------------ | --------------------------------------
+`/pladder`                                                                        | `core.command.punishmentladder`                  | Allows access to the /pladder command.
+`/pladder punish <player> <ladder> [silent]`                                      | `core.command.punishmentladder.punish`           | Punishes a player.
+`/pladder create <id> <requireChatSnapshot> <reason>`                             | `core.command.punishmentladder.create`           | Creates a punishment ladder.
+`/pladder delete <ladder>`                                                        | `core.command.punishmentladder.delete`           | Deletes a punishment ladder.
+`/pladder addpunishment <ladder> <punishmentType> <duration> <ip> <shadow>`       | `core.command.punishmentladder.addpunishment`    | Adds a punishment to a ladder.
+`/pladder editpunishment <ladder> <id> <punishmentType> <duration> <ip> <shadow>` | `core.command.punishmentladder.addpunishment`    | Adds a punishment to a ladder.
+`/pladder deletepunishment <ladder> <id>`                                         | `core.command.punishmentladder.deletepunishment` | Deletes a punishment from a ladder.
+`/pladder listpunishments <ladder>`                                               | `core.command.punishmentladder.listpunishments`  | Lists a ladders punishments.
+`/pladder list`                                                                   | `core.command.punishmentladder.list`             | Lists all punishment ladders.

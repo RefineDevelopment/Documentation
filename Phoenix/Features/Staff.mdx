@@ -2,3 +2,24 @@
 sidebar_position: 12
 ---
 
+## User Management Commands
+
+`<>` = Required `[]` = Optional
+
+Command                                                    | Permission                           | Description
+---------------------------------------------------------- | ------------------------------------ | ----------------------------------
+`/user clearalts <player> [recursive]`                     | `core.command.user.clearalts`        | Clear a player's alts.
+`/user clearcooldowns <player>`                            | `core.command.user.clearcooldowns`   | Clear a player's cooldowns.
+`/user cleargrants <player>`                               | `core.command.user.cleargrants`      | Clear a player's grants.
+`/user clearips <player>`                                  | `core.command.user.clearips`         | Clear a player's encrypted IPs.
+`/user clearpunishments <player>`                          | `core.command.user.clearpunishments` | Clear a player's punishments.
+`/user delete <player>`                                    | `core.command.user.delete`           | Delete a users profile.
+`/user disguise <player> [rank]`                           | `core.command.user.disguise`         | Disguise a player as a rank.
+`/user info <player>`                                      | `core.command.user.info`             | View a users information.
+`/user iplookup <ip> [page]`                               | `core.command.user.iplookup`         | Search for players by IP.
+`/user perm add <player> <permission> <duration> [scopes]` | `core.command.user.addperm`          | Add a permission to a player.
+`/user perm clear <player>`                                | `core.command.user.clearperm`        | Clear a player's permissions.
+`/user perm delete <player> <permission>`                  | `core.command.user.deleteperm`       | Remove a permission from a player.
+`/user perm list <player> [page]`                          | `core.command.user.listperm`         | View permissions of player.
+`/user perm search <permission> [page]`                    | `core.command.user.searchperm`       | Search for a permission.
+`/user staffinfo <player>`                                 | `core.command.user.staffinfo`        | View a users staff information.

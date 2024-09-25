@@ -23,7 +23,7 @@ The proof menu is where you can attach a link or chat snapshot to a punishment, 
 <details>
 <summary>Screenshot</summary>
 
-<img src="./assets/proof-menu.png" alt="Proof Menu" />
+![Proof Menu](./assets/proof-menu.png)
 </details>
 
 # Punish Menu
@@ -37,7 +37,7 @@ The `core.punish.<ladder>` permission is also required for the use of a punishme
 <details>
 <summary>Screenshot</summary>
 
-<img src="./assets/punish-menu.png" alt="Proof Menu" />
+![Punish Menu](./assets/punish-menu.png)
 </details>
 
 # History Menu
@@ -49,46 +49,47 @@ Permission: `core.command.history`
 <details>
 <summary>Screenshot</summary>
 
-<img src="./assets/history-menu.png" alt="Menu" />
+![History Menu](./assets/history-menu.png)
 </details>
 
 # Commands
 
-`<>` = Required `[]` = Optional `-s` = Silent
+`<>` = Required `[]` = Optional `-s` = Silent `-p` = Public
 
-Command                                             | Permission                    | Description
---------------------------------------------------- | ----------------------------- | --------------------------------------
-`/punish <player>`                                  | `core.command.punish`         | Opens the punish menu.
-`/lookup <id>`                                      | `core.command.lookup`         | Looks up a punishment.
-`/removewarn <player> <id>`                         | `core.command.removewarn`     | Removes a warn from a player.
-`/checkwarns <player> [page]`                       | `core.command.checkwarns`     | Checks a players warns.
-`/history <player>`                                 | `core.command.history`        | Opens the history menu.
-`/staffhistory <player>`                            | `core.command.staffhistory`   | Opens the staff history menu.
-`/voidbans <message>`                               | Console Only                  | Voids all bans.
-`/voidmutes <message>`                              | Console Only                  | Voids all mutes.
-`/voidblacklists <message>`                         | Console Only                  | Voids all blacklists.
-`/unmute <player> <reason> [-s]`                    | `core.command.unmute`         | Unmutes a player.
-`/unblacklist <player> <reason> [-s]`               | `core.command.unblacklist`    | Unblacklists a player.
-`/unban <player> <reason> [-s]`                     | `core.command.unban`          | Unbans a player.
-`/staffrollback <player> <time> <type>`             | `core.command.staffrollback`  | Rolls back a staff's punishments.
-`/cunban <player> <reason> [-s]`                    | `core.command.cunban`         | Competitive Unbans a player.
-`/tempmute <player> <duration> <reason> [-s]`       | `core.command.tempmute`       | Temporarily mutes a player.
-`/tempipmute <player> <duration> <reason> [-s]`     | `core.command.tempipmute`     | Temporarily ip mutes a player.
-`/tempipban <player> <duration> <reason> [-s]`      | `core.command.tempipban`      | Temporarily ip bans a player.
-`/tempban <player> <duration> <reason> [-s]`        | `core.command.tempban`        | Temporarily bans a player.
-`/shadowtempmute <player> <duration> <reason> [-s]` | `core.command.shadowtempmute` | Temporarily shadow mutes a player.
-`/remute <player> <duration> <reason> [-s]`         | `core.command.remute`         | Remutes a player.
-`/reban <player> <duration> <reason> [-s]`          | `core.command.reban`          | Rebans a player.
-`/ctempban <player> <duration> <reason> [-s]`       | `core.command.ctempban`       | Temporarily competitive bans a player.
-`/warn <player> <reason> [-s]`                      | `core.command.warn`           | Warns a player.
-`/shadowmute <player> <reason> [-s]`                | `core.command.shadowmute`     | Shadow mutes a player.
-`/mute <player> <reason> [-s]`                      | `core.command.mute`           | Mutes a player.
-`/kick <player> <reason> [-s]`                      | `core.command.kick`           | Kicks a player.
-`/ipmute <player> <reason> [-s]`                    | `core.command.ipmute`         | IP mutes a player.
-`/ipban <player> <reason> [-s]`                     | `core.command.ipban`          | IP bans a player.
-`/cban <player> <reason> [-s]`                      | `core.command.cban`           | Competitive bans a player.
-`/blacklist <player> <reason> [-s]`                 | `core.command.blacklist`      | Blacklists a player.
-`/ban <player> <reason> [-s]`                       | `core.command.ban`            | Bans a player.
+Command                                                | Permission                    | Description
+------------------------------------------------------ | ----------------------------- | --------------------------------------
+`/punish <player>`                                     | `core.command.punish`         | Opens the punish menu.
+`/lookup <id>`                                         | `core.command.lookup`         | Looks up a punishment.
+`/removewarn <player> <id>`                            | `core.command.removewarn`     | Removes a warn from a player.
+`/checkwarns <player> [page]`                          | `core.command.checkwarns`     | Checks a players warns.
+`/history <player>`                                    | `core.command.history`        | Opens the history menu.
+`/staffhistory <player>`                               | `core.command.staffhistory`   | Opens the staff history menu.
+`/voidbans <message>`                                  | Console Only                  | Voids all bans.
+`/voidmutes <message>`                                 | Console Only                  | Voids all mutes.
+`/voidblacklists <message>`                            | Console Only                  | Voids all blacklists.
+`/voidpunishment <id> <reason>`                        | `core.command.voidpunishment` | Voids a specific punishment.
+`/unmute <player> <reason> [-s,-p]`                    | `core.command.unmute`         | Unmutes a player.
+`/unblacklist <player> <reason> [-s,-p]`               | `core.command.unblacklist`    | Unblacklists a player.
+`/unban <player> <reason> [-s,-p]`                     | `core.command.unban`          | Unbans a player.
+`/staffrollback <player> <time> <type>`                | `core.command.staffrollback`  | Rolls back a staff's punishments.
+`/cunban <player> <reason> [-s,-p]`                    | `core.command.cunban`         | Competitive Unbans a player.
+`/tempmute <player> <duration> <reason> [-s,-p]`       | `core.command.tempmute`       | Temporarily mutes a player.
+`/tempipmute <player> <duration> <reason> [-s,-p]`     | `core.command.tempipmute`     | Temporarily ip mutes a player.
+`/tempipban <player> <duration> <reason> [-s,-p]`      | `core.command.tempipban`      | Temporarily ip bans a player.
+`/tempban <player> <duration> <reason> [-s,-p]`        | `core.command.tempban`        | Temporarily bans a player.
+`/shadowtempmute <player> <duration> <reason> [-s,-p]` | `core.command.shadowtempmute` | Temporarily shadow mutes a player.
+`/remute <player> <duration> <reason> [-s,-p]`         | `core.command.remute`         | Remutes a player.
+`/reban <player> <duration> <reason> [-s,-p]`          | `core.command.reban`          | Rebans a player.
+`/ctempban <player> <duration> <reason> [-s,-p]`       | `core.command.ctempban`       | Temporarily competitive bans a player.
+`/warn <player> <reason> [-s,-p]`                      | `core.command.warn`           | Warns a player.
+`/shadowmute <player> <reason> [-s,-p]`                | `core.command.shadowmute`     | Shadow mutes a player.
+`/mute <player> <reason> [-s,-p]`                      | `core.command.mute`           | Mutes a player.
+`/kick <player> <reason> [-s,-p]`                      | `core.command.kick`           | Kicks a player.
+`/ipmute <player> <reason> [-s,-p]`                    | `core.command.ipmute`         | IP mutes a player.
+`/ipban <player> <reason> [-s,-p]`                     | `core.command.ipban`          | IP bans a player.
+`/cban <player> <reason> [-s,-p]`                      | `core.command.cban`           | Competitive bans a player.
+`/blacklist <player> <reason> [-s,-p]`                 | `core.command.blacklist`      | Blacklists a player.
+`/ban <player> <reason> [-s,-p]`                       | `core.command.ban`            | Bans a player.
 
 ## Punishment Ladder
 

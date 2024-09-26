@@ -10,19 +10,19 @@ This page is not up to date!
 
 **NOTE**: If your arenas are bigger than 300x300, go into settings.yml and increase the grid size from 300 to your desired amount. This is the distance between each arena. I recommend doing this BEFORE you make arenas to prevent them pasting into each other.
 
-### How do we setup default arena?
-1. Paste a schematic from World Edit in the **Arena World**.
-2. Do ``/edit`` to go into build mode.
-3. Do ``/arena create <name> <type>``. (Arena types are two, standard and stand alone)
-- Standard arenas are shared, and no build fights can take place here. (You can't duplicate these)
-- Standalone arenas are build arenas, only fight can be taken here at a time. (You can duplicate these)
-1. Set the spawns 
-- **Spawn 1** place a fence and a Player Head on it.
-- **Spawn 2** place a fence and a Player Head on it.
-1. Use the arena wand given in your first slot to select bounds, make sure you select the entire arena as Bolt's Arena System will paste it according to a grid.
-2. Click in chat where it says **CLICK HERE** OR do ``/arena finish``.
-3. You can now add kits to your arena using ``/arena addkit <arena>``.
-4. If your arena is standalone you can now duplicate it using ``/arena scale <amountOfCopies>`` or ``/arena manage``.
+## Setting up a default arena
+
+1. Upload an arena schematic to the WorldEdit/schematics folder
+2. Use the command `/arena create <schematic>` to create the arena.
+3. Use `/arena manage` and click on the created arena to access management options.
+4. Teleport to the arena and set the spawns:
+    - Spawn 1: Place a fence and a Zombie Head on it. (Required)
+    - Spawn 2: Place a fence and a Creeper Head on it. (Required)
+    - Spectator: Place a fence and a Skeleton Skull on it. (Optional)
+5. Use `/arena manage` and save the schematic where the spawns are placed.
+6. Use `/arena addkit <arena> <kit>` to add a kit to that arena.
+7.  Use `/arena manage` to create copies of the arena.
+8.  Use `/arena manage` to enable the arena.
 
 ### How do we setup Special arena?
 1. Paste a schematic from World Edit in the **Arena World**.
@@ -39,3 +39,17 @@ This page is not up to date!
 7. Click in chat where it says **CLICK HERE** OR do ``/arena finish``.
 8. You can now add kits to your arena using ``/arena addkit <arena>``.
 9.  If your arena is standalone you can now duplicate it using ``/arena scale <amountOfCopies>`` or ``/arena manage``.
+    
+## Setting up a bridge arena
+
+1. Upload an arena schematic to the WorldEdit/schematics folder.
+2. Use the command `/arena create <schematic>` to create the arena.
+3. Use `/arena manage` and click on the created arena to access management options.
+4. Teleport to the arena and set the spawns:
+   - Red Spawn: Place a fence and a Zombie Head on it. (Required)
+   - Blue Spawn: Place a fence and a Creeper Head on it. (Required)
+   - Spectator: Place a fence and a Skeleton Skull on it. (Optional)
+5. Use `/arena manage` and save the schematic where the spawns are placed.
+6. Use `/arena addkit <arena> <kit>` to add a kit to that arena.
+7.  Use `/arena manage` to create copies of the arena.
+8.  Use `/arena manage` to enable the arena.

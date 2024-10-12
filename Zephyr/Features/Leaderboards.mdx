@@ -1,0 +1,51 @@
+---
+sidebar_position: 0
+---
+
+Leaderboards show the best 10 players for a statistic of your choice in a hologram.
+
+You will also need a supported hologram plugin for this feature to work.
+
+## Supported holoram plugins
+
+- DecentHolograms
+- Holographic Displays
+- CMI Holograms
+- Holograms
+
+## Commands
+
+| Command                                       | Permission          | Description 
+| ----------------------------------------------| ------------------- | ------------------------------------------
+| `/zephyrholo help`                            | zephyr.command.holo | Shows help message for holograms
+| `/zephyrholo create <name> <leaderboardType>` | zephyr.command.holo | Creates a new hologram for a leaderboard
+| `/zephyrholo delete <name>`                   | zephyr.command.holo | Deletes a hologram
+| `/zephyrholo moveHere <name>`                 | zephyr.command.holo | Moves a hologram to your position
+| `/zephyrholo force-update <leaderboardType>`  | zephyr.command.holo | Manually updates a specific leaderboard
+| `/zephyrholo force-update-all`                | zephyr.command.holo | Manually updates all leaderboards
+
+
+## Leaderboard Types
+
+- KILLS
+- DEATHS
+- BEST_STREAK
+- KDR
+
+## Changing hologram design
+You can configure each hologram line in config.yml around line 93
+
+### Available Placeholders
+
+:::tip Rank colored names are supported!
+
+If you have a supported core plugin that supports having colored names based on their rank, you can use the placeholder `<coloredPlayer>` to show the player's colored name in the leaderboard!
+
+:::
+
+| Placeholder       | Description
+| ----------------- | --------------------------------------------------------------------
+| `<type>`          | The leaderboard type's friendly name (e.g. Kills, Deaths, etc...)
+| `<player>`        | The player's name
+| `<coloredPlayer>` | The player's colored name
+| `<value>`         | The value of the statistic

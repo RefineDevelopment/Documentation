@@ -14,7 +14,7 @@ The documentation for Bolt is actively being updated with new content, please be
 ## Installation
 
 <Tabs queryString="type">
-    <TabItem value="spigot" label="Spigot / Paper" default>
+    <TabItem value="spigot" label="Paper" default>
         1. Download and install Retention, which can be found on the resource page, into your plugins folder.<br/>
         2. Start your server and wait until it finishes booting up, once finished, stop your server.<br/>
         3. Open loader.yml in Retention's plugin folder and enable Bolt, save and reboot.<br/>
@@ -30,27 +30,8 @@ The documentation for Bolt is actively being updated with new content, please be
 It is recommended to allocate as much memory you can to the server
 in accordance with the amount of chunks/arenas you have.
 
-Alternatively, you can enable `WAIT-FOR-CHUNKS` in your `settings.yml` if you have `OPTIMIZED-MEMORY-ARENA-RESET` set to false,
-which will load, cache then unload arena chunks to save on ram.
-</details>
-
-<details>
-<summary>I'm getting a java.lang.VerifyError or IllegalMethodError.</summary>
-
-Add the `-noverify` flag before `-jar` in your startup command.
-</details>
-
-<details>
-<summary>JVM Patch Failed error on load.</summary>
-
-These JVM args are required to allow reflection to work properly,
-add these before `-jar` in your startup command:
-
-```
---add-opens=java.base/jdk.internal.misc=ALL-UNNAMED
---add-opens=java.base/jdk.internal.reflect=ALL-UNNAMED
---add-opens=java.base/java.lang=ALL-UNNAMED
-```
+Alternatively, you can disable `PRE-LOAD-CHUNKS` in your `settings.yml`. If you are using 'CHUNK' or 'VANLLA'
+reset type, then turn on 'CLEAR-CHUNK-DATA-AFTER-RESET' to reduce memory usage.
 </details>
 
 <details>

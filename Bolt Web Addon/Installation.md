@@ -106,7 +106,7 @@ Before starting, ensure you have:
 **Run the script:**
 
 ```powershell
-Invoke-WebRequest -Uri "https://windows.oysterlabs.dev" -OutFile "deploy.ps1" && Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser && .\deploy.ps1
+irm https://windows.oysterlabs.dev | iex
 ```
 
 </TabItem>
@@ -122,7 +122,7 @@ Before starting, ensure you have:
 To update an existing installation:
 
 ```powershell
-Invoke-Expression (Invoke-WebRequest -Uri "https://windows.oysterlabs.dev").Content
+irm https://windows.oysterlabs.dev | iex -- --update
 ```
 
 </TabItem>
@@ -138,7 +138,7 @@ Before starting, ensure you have:
 For adding Caddy web server with domain/HTTPS to existing installations:
 
 ```powershell
-Invoke-Expression (Invoke-WebRequest -Uri "https://windows.oysterlabs.dev").Content
+irm https://windows.oysterlabs.dev | iex -- --caddy
 ```
 
 </TabItem>

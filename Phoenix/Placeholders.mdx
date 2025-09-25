@@ -49,14 +49,21 @@ Placeholder                                       | Returns                     
 
 ### Server
 
+:::info
+If you don't specify a server and remove the last _, it will show info for the current server.
+Ex: %phoenix_server_whitelisted%
+:::
+
 Placeholder                             | Returns                             | Example
 --------------------------------------- | ----------------------------------- | --------------
 `%phoenix_server_whitelisted_<server>%` | If a server is whitelisted          | `true`/`false`
 `%phoenix_server_displayname_<server>%` | A server's display name.            | `Practice`
 `%phoenix_server_online_<server>%`      | A server's player count.            | `23`
 `%phoenix_server_max_<server>%`         | A server's max player count.        | `100`
+`%phoenix_server_status_<server>%`      | A server's status.                  | `Offline/Online`
 `%phoenix_group_online_<group>%`        | A server group's player count.      | `142`
 `%phoenix_group_max_<group>%`           | A server groups's max player count. | `500`
+`%phoenix_server_global_online%`        | Whole network online player count.  | `500`
 
 ## Addons
 

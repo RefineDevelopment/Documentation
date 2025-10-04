@@ -82,3 +82,59 @@ Setting up an arena in the latest version is the same process however, all arena
 
 9. You can now add kits to your arena using `/arena addkit <arena>`.
 10. You can now also duplicate it using `/arena scale <amountOfCopies>` or `/arena manage`.
+
+### Commands
+
+`<>` = Required `[]` = Optional
+
+## 🧭 Main Commands
+
+Command                                | Permission         | Description                                 
+---------------------------------------|--------------------|--------------------------------------------
+`/arena list`                          | bolt.arena.admin   | List all arenas                             
+`/arena save`                          | bolt.arena.admin   | Save all arenas                             
+`/arena manage`                        | bolt.arena.admin   | Manage all arenas                           
+`/arena wand`                          | bolt.arena.admin   | Get selection wand                          
+`/arena saveAllChanges [regen]`        | bolt.arena.admin   | Save all changes made to an arena           
+
+
+## ⚙️ Setup Commands
+
+Command                                | Permission         | Description                                 
+---------------------------------------|--------------------|---------------------------------------------
+`/arena create <name> <type>`          | bolt.arena.admin   | Create an arena according to name and type  
+`/arena delete <arena> [deleteBounds]` | bolt.arena.admin   | Delete an arena according to name           
+`/arena cancel`                        | bolt.arena.admin   | Cancel your arena creation                  
+`/arena finish`                        | bolt.arena.admin   | Mark your arena creation as finished        
+
+## 🪄 Edit Commands
+
+Command                                     | Permission       | Description                               
+------------------------------------------- | ---------------- | ------------------------------------------
+`/arena updatePoints <arena>`               | bolt.arena.admin | Re-detect an arena’s spawn-points         
+`/arena updateSpecial <arena>`              | bolt.arena.admin | Re-detect an arena’s special locations    
+`/arena updateCuboid <arena>`               | bolt.arena.admin | Set an arena’s bounds to your selection   
+`/arena setPortalCuboid <arena> <blue/red>` | bolt.arena.admin | Set an arena’s portal bounds              
+`/arena duplicates <arena>`                 | bolt.arena.admin | View an arena’s duplicates                
+`/arena teleport <arena> <duplicate-id>`    | bolt.arena.admin | Teleport to an arena’s mid-spawn          
+`/arena toggle <arena>`                     | bolt.arena.admin | Toggle an arena from being selected       
+`/arena saveChanges <arena>`                | bolt.arena.admin | Save your map changes to arena’s schematic
+`/arena scale <arena> <amount>`             | bolt.arena.admin | Scale an arena’s copies to your liking    
+
+## ℹ️ Information Commands
+
+Command                                     | Permission       | Description                                 
+------------------------------------------- | ---------------- | --------------------------------------------
+`/arena setName <arena> <name>`             | bolt.arena.admin | Set an arena’s display name                 
+`/arena setIcon <arena>`                    | bolt.arena.admin | Set an arena’s icon to the item in your hand
+`/arena setFallDeathHeight <arena> <level>` | bolt.arena.admin | Set an arena’s void death height            
+`/arena setBuildHeight <arena> <level>`     | bolt.arena.admin | Set an arena’s maximum build height         
+
+##🎒 Kit Commands
+
+Command                         | Permission       | Description                            
+------------------------------- | ---------------- | ---------------------------------------
+`/arena kits <arena>`           | bolt.arena.admin | View an arena’s kits                   
+`/arena addKit <arena> <kit>`   | bolt.arena.admin | Whitelist a kit to an arena            
+`/arena removeKit <arena>`      | bolt.arena.admin | Un-whitelist a kit from an arena       
+`/arena copyKit <src> <target>` | bolt.arena.admin | Copy all kits from one arena to another

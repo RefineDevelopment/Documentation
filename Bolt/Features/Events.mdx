@@ -5,17 +5,34 @@ sidebar_position: 2
 Events allow you to host and manage events on your server,
 They allow your players to host events, that allow your ranked players to have fun.
 
-## Base Commands
+### Commands
 
-| Command           | Description                 | Permissions     |
-|-------------------|-----------------------------|-----------------|
-| /event help       | Creates a new event         | bolt.event.admin|
-| /event host       | Joins an existing event     | bolt.event.admin|
-| /event info       | Leaves a joined event       | bolt.event.admin|
-| /event join       | Starts a created event      | bolt.event.admin|
-| /event leave      | Ends a created event        | bolt.event.admin|
-| /event forcestart | Lists all events            | bolt.event.admin|
-| /event cancel     | Cancel the current event    | bolt.event.admin|
+`<>` = Required `[]` = Optional
+
+## 🎉 Event Commands
+
+Command                   | Permission        | Description                                    
+--------------------------|-------------------|---------------------------------------------
+`/event help`             | bolt.event.admin  | Displays the help message                   
+`/event host <type>`      | bolt.event.admin  | Host a tournament                           
+`/event info`             | bolt.event.admin  | Displays information about the current event
+`/event join`             | bolt.event.admin  | Join the current event                      
+`/event leave`            | bolt.event.admin  | Leave the current event                     
+`/event forcestart`       | bolt.event.admin  | Force start the current event               
+`/event cancel`           | bolt.event.admin  | Cancel the current event                    
+
+
+## 🎉 Event Arena Commands
+
+Command                                         | Permission        | Description                                      
+------------------------------------------------|-------------------|--------------------------------------------------
+`/event arena create <eventType>`               | bolt.event.admin  | Create an arena for the given event type         
+`/event arena updatePoints <eventType>`         | bolt.event.admin  | Scan arena spawn points for the given event type 
+`/event arena updateBounds <eventType>`         | bolt.event.admin  | Update arena bounds for the given event type     
+`/event arena setFallDeathHeight <eventType>`   | bolt.event.admin  | Set an arena’s void death height                 
+`/event arena setBuildHeight <eventType>`       | bolt.event.admin  | Set an arena’s maximum build height              
+
+
 ## Creating Event Arenas
 
 To create an event arena, you need to use the command,

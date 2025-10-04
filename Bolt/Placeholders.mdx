@@ -10,7 +10,25 @@ which are used in the scoreboard and tablist.
 These are PlaceholderAPI placeholders and can be used in messages, menus, etc.
 They also let you display information in other plugins.
 
-### Match
+
+#### 🌍 Global
+
+Can be used for leaderboards, Bolt has one built in. See 
+
+Placeholder                     | Returns                           | Example
+------------------------------- | --------------------------------- | --------
+`%bolt_stats_globalelo%`        | A player's global ELO.            | `1120`
+`%bolt_stats_kills%`            | A player's kills.                 | `57`
+`%bolt_stats_wins%`             | A player's wins                   | `8`
+`%bolt_stats_winstreak%`        | A player's current winstreak.     | `3`
+`%bolt_stats_highestwinstreak%` | A player's highest winstreak.     | `4`
+`%bolt_stats_wlr%`              | A player's win loss ratio.        | `2.67`
+`%bolt_stats_kdr%`              | A player's kill death ratio.      | `3.35`
+`%bolt_stats_division%`         | A player's division display name. | `&6Gold`
+
+### ⚔️ Match
+
+You must be in a match for these placeholders to be available.
 
 Placeholder                | Returns                                | Example
 -------------------------- | -------------------------------------- | --------------
@@ -33,23 +51,30 @@ Placeholder                | Returns                                | Example
 `%bolt_match_bedfight%`    | If the match is bedfight.              | `true`/`false`
 `%bolt_match_pearlfight%`  | If the match is pearlfight.            | `true`/`false`
 `%bolt_match_mlgrush%`     | If the match is mlgrush.               | `true`/`false`
+`%bolt_match_team-name%`   | Player's team name (Red / Blue)        | `Red`/`Blue`
+`%bolt_match_team-color%`  | Team color code                        | `&c`/`&9`
+`%bolt_match_team-letter%` | Team letter                            | `A`/`B`
 
-### Stats
+### 🎨 Colors 
 
-#### Global
+These are grabbed from `settings.yml`
 
-Placeholder                     | Returns                           | Example
-------------------------------- | --------------------------------- | --------
-`%bolt_stats_globalelo%`        | A player's global ELO.            | `1120`
-`%bolt_stats_kills%`            | A player's kills.                 | `57`
-`%bolt_stats_wins%`             | A player's wins                   | `8`
-`%bolt_stats_winstreak%`        | A player's current winstreak.     | `3`
-`%bolt_stats_highestwinstreak%` | A player's highest winstreak.     | `4`
-`%bolt_stats_wlr%`              | A player's win loss ratio.        | `2.67`
-`%bolt_stats_kdr%`              | A player's kill death ratio.      | `3.35`
-`%bolt_stats_division%`         | A player's division display name. | `&6Gold`
+Placeholder                | Returns                                | Example
+-------------------------- | -------------------------------------- | --------------
+`%bolt_main%`              | Main Color from Config.                | `01:20`
+`%bolt_second%`            | Secondary Color.                       | `NotDrizzy vs J4C0B3Y (Unranked Fireball Fight)`
+`%bolt_third%`             | Tertiary Color.                        | `4ff9a32e-3f9c-4326-ad77-79be0e1dd12c`
+`%bolt_theme%`             | Theme Color.                           | `4ff9a32e-3f9c-4326-ad77-79be0e1dd12c`
 
-#### Kit Specific
+### 📝 Profile
+
+Placeholder                | Returns                                | Example
+-------------------------- | -------------------------------------- | --------------
+`%bolt_profile_state%`     | Player's current state.                | `LOBBY, MATCH`
+`%bolt_profile_parkour%`   | Whether the player is in parkour.      | `true`/`false`
+`%bolt_profile_slient%`     | Whether the player is in silent mode. | `true`/`false`
+
+### Kit Specific
 
 Placeholder                                 | Returns                                  | Example
 ------------------------------------------- | ---------------------------------------- | -------

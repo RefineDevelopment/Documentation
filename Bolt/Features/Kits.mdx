@@ -8,33 +8,69 @@ Kits in bolt support the following gamemodes,
 Sumo, Bridges, Fireball Fight, Pearl Fight, Battle Rush, Spleef,
 CrystalPVP, Bed Fight, Boxing, TopFight, MLGRush, Stick Fight, Combo and many more.
 
-
-
 ## Commands
 
 `<>` = Required `[]` = Optional
 
+# 🧭 Main Commands
+
 Command                             | Permission             | Description
 ----------------------------------- | ---------------------- | -------------------------------------
-`/kit addEndCMD <kit> <text>`       | bolt.kit.admin         | Adds a match end command.
-`/kit addStartCMD <kit> <text>`     | bolt.kit.admin         | Adds a match start command.
-`/kit create <name>`                | bolt.kit.admin         | Creates a kit.
-`/kit delete <kit>`                 | bolt.kit.admin         | Deletes a kit.
-`/kit deleteAll`                    | bolt.kit.admin         | Deletes all kits.
-`/kit editor`                       | bolt.kit.admin         | Opens the kit editor.
-`/kit getEditInv <kit>`             | bolt.kit.admin         | Loads a kit's edit inventory.
-`/kit getInv <kit>`                 | bolt.kit.admin         | Loads a kit's inventory.
-`/kit help [page]`                  | bolt.kit.admin         | Displays the help menu.
-`/kit info <kit>`                   | bolt.kit.admin         | Displays information about a kit.
 `/kit list [page]`                  | bolt.kit.admin         | Lists all kits.
 `/kit manage`                       | bolt.kit.admin         | Opens the kit manage menu.
 `/kit save`                         | bolt.kit.admin         | Saves all kits.
+`/kit editor`                       | bolt.kit.admin         | Edit a certain kit.
+
+# ⚙️ Setup Commands
+
+Command                             | Permission             | Description
+----------------------------------- | ---------------------- | -------------------------------------
+`/kit create <name>`                | bolt.kit.admin         | Creates a kit.
+`/kit delete <kit>`                 | bolt.kit.admin         | Deletes a kit.
+`/kit deleteAll`                    | bolt.kit.admin         | Deletes all kits.
+`/kit toggle <kit>`                 | bolt.kit.admin         | Enable or Disable a kit from being included.
+`/kit info <kit>`                   | bolt.kit.admin         | Displays information about a kit.
+
+# 🧰 Edit Commands
+
+Command                             | Permission             | Description
+----------------------------------- | ---------------------- | -----------------------------------
 `/kit setBotKb <kit> <profile>`     | bolt.kit.admin         | Sets a kit's bot knockback profile.
 `/kit setEditInv <kit>`             | bolt.kit.admin         | Sets a kit's edit inventory.
 `/kit setIcon <kit>`                | bolt.kit.admin         | Sets a kit's icon.
-`/kit setInv <kit>`                 | bolt.kit.admin         | Sets a kit's inventory.
+`/kit setQueueSlot <kit>`           | bolt.kit.admin         | Sets a kit's queue slot.
 `/kit setKb <kit> <profile>`        | bolt.kit.admin         | Sets a kit's knockback profile.
 `/kit setName <kit> <name>`         | bolt.kit.admin         | Sets a kit's display name.
 `/kit setPriority <kit> <priority>` | bolt.kit.admin         | Sets a kit's priority.
+`/kit setDescription <kit>`         | bolt.kit.admin         | Sets a kit's description.
+
+# 🧱 Block Management Commands
+
+Command                                      | Permission             | Description
+-------------------------------------------- | ---------------------- | -------------------------------------
+`/kit addAllowedBlock <kit> <block>`         | bolt.kit.admin         | Add a block to a kit's allowed blocks
+`/kit removeAllowedBlock <kit> <block>`      | bolt.kit.admin         | Remove a block to a kit's allowed blocks
+`/kit addDisallowedBlock <kit> <block>`      | bolt.kit.admin         | Add a block to a kit's disallowed blocks
+`/kit removeDisallowedBlock <kit> <block>`   | bolt.kit.admin         | Remove a block to a kit's disallowed blocks
+`/kit addExplosionBlacklist <kit> <block>`   | bolt.kit.admin         | Add a block to a kit's explosion blacklist
+`/kit removeExplosionBlacklist <kit> <block>`| bolt.kit.admin         | Remove a block to a kit's explosion blacklist
+
+# 🎒 Inventory Commands
+
+Command                             | Permission             | Description
+----------------------------------- | ---------------------- | -------------------------------------
+`/kit getEditInv <kit>`             | bolt.kit.admin         | Loads a kit's edit inventory.
+`/kit getInv <kit>`                 | bolt.kit.admin         | Loads a kit's inventory.
+`/kit setEditInv <kit>`             | bolt.kit.admin         | Sets a kit's edit inventory.
+`/kit setInv <kit>`                 | bolt.kit.admin         | Sets a kit's inventory.
 `/kit wipeKits kit <kit>`           | bolt.kit.admin         | Wipes everyones kit editor for a kit.
 `/kit wipekits player <player>`     | bolt.kit.admin         | Wipes a players kit editor.
+
+# ⚔️ Match Commands
+
+Command                              | Permission             | Description
+------------------------------------ | ---------------------- | -------------------------------------
+`/kit addEndCMD <kit> <command>`     | bolt.kit.admin         | Adds a match end command.
+`/kit addStartCMD <kit> <command>`   | bolt.kit.admin         | Adds a match start command.
+`/kit removeEndCMD <kit> <command>`  | bolt.kit.admin         | Remove a match end command.
+`/kit removeStartCMD <kit> <command>`| bolt.kit.admin         | Remove a match start command.

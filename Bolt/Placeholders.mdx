@@ -10,21 +10,57 @@ which are used in the scoreboard and tablist.
 These are PlaceholderAPI placeholders and can be used in messages, menus, etc.
 They also let you display information in other plugins.
 
+### 🌍 Global
 
-#### 🌍 Global
+Can be used for leaderboards, Bolt has one built in. 
 
-Can be used for leaderboards, Bolt has one built in. See 
+Placeholder                           | Returns                                  |  Example      
+------------------------------------- | ---------------------------------------- | --------------
+%bolt_stats_level%                    | Player level                             |  `15`         
+%bolt_stats_globalelo%                | A player's global ELO.                   |  `1120`       
+%bolt_stats_kills%                    | Total kills                              |  `57`         
+%bolt_stats_deaths%                   | Total deaths                             |  `22`         
+%bolt_stats_wins%                     | A player's wins                          |  `8`          
+%bolt_stats_losses%                   | Total losses                             |  `5`          
+%bolt_stats_unranked-wins%            | Unranked wins                            |  `12`         
+%bolt_stats_unranked-losses%          | Unranked losses                          |  `7`          
+%bolt_stats_ranked-wins%              | Ranked wins                              |  `4`          
+%bolt_stats_ranked-losses%            | Ranked losses                            |  `6`          
+%bolt_stats_total-matches%            | Total matches played                     |  `42`         
+%bolt_stats_winstreak%                | A player's current winstreak             |  `3`          
+%bolt_stats_highestwinstreak%         | A player's highest winstreak             |  `4`          
+%bolt_stats_wlr%                      | A player's win/loss ratio                |  `2.67`       
+%bolt_stats_kdr%                      | A player's kill/death ratio              |  `3.35`       
+%bolt_stats_tournaments-hosted%       | Tournaments hosted                       |  `2`          
+%bolt_stats_events-hosted%            | Events hosted                            |  `5`          
+%bolt_stats_event-wins%               | Event wins                               |  `1`          
+%bolt_stats_tournament-wins%          | Tournament wins                          |  `1`          
+%bolt_stats_experience%               | Experience points                        |  `1845`       
+%bolt_stats_coins%                    | Coins                                    |  `950`        
+%bolt_stats_event-tokens%             | Event tokens                             |  `23`         
+%bolt_stats_division%                 | A player's division display name         |  `&6Gold`     
+%bolt_stats_division-color%           | Division color code                      |  `&6`         
+%bolt_stats_division-logo%            | Division mini logo                       |  `⭐`          
+%bolt_stats_next-division%            | Next division name                       |  `&eDiamond`  
+%bolt_stats_division-percentage%      | % progress to next division              |  `75%`        
+%bolt_stats_division-progress%        | Progress bar to next division            |  `██████░░░░` 
+%bolt_stats_required-wins%            | Wins needed to unlock ranked             |  `10`         
 
-Placeholder                     | Returns                           | Example
-------------------------------- | --------------------------------- | --------
-`%bolt_stats_globalelo%`        | A player's global ELO.            | `1120`
-`%bolt_stats_kills%`            | A player's kills.                 | `57`
-`%bolt_stats_wins%`             | A player's wins                   | `8`
-`%bolt_stats_winstreak%`        | A player's current winstreak.     | `3`
-`%bolt_stats_highestwinstreak%` | A player's highest winstreak.     | `4`
-`%bolt_stats_wlr%`              | A player's win loss ratio.        | `2.67`
-`%bolt_stats_kdr%`              | A player's kill death ratio.      | `3.35`
-`%bolt_stats_division%`         | A player's division display name. | `&6Gold`
+### 🥊 Kit Specific Placeholders
+
+Placeholder                                | Returns                                        | Example   
+------------------------------------------ | ---------------------------------------------- | ----------
+%bolt_stats_<kit>_elo%                     | Player's ELO for the specific kit              | `1240`    
+%bolt_stats_<kit>_wins%                    | Total wins for the specific kit                | `15`      
+%bolt_stats_<kit>_losses%                  | Total losses for the specific kit              | `8`       
+%bolt_stats_<kit>_kills%                   | Total kills for the specific kit               | `42`      
+%bolt_stats_<kit>_deaths%                  | Total deaths for the specific kit              | `27`      
+%bolt_stats_<kit>_winstreak%               | Current winstreak for the specific kit         | `5`       
+%bolt_stats_<kit>_highestWinstreak%        | Highest winstreak for the specific kit         | `12`      
+%bolt_stats_<kit>_rankedWins%              | Ranked wins for the specific kit               | `6`       
+%bolt_stats_<kit>_rankedLosses%            | Ranked losses for the specific kit             | `4`       
+%bolt_stats_<kit>_rankedWinstreak%         | Current ranked winstreak for the specific kit  | `3`       
+%bolt_stats_<kit>_rankedHighestWinstreak%  | Highest ranked winstreak for the specific kit  | `7`       
 
 ### ⚔️ Match
 
@@ -66,37 +102,61 @@ Placeholder                | Returns                                | Example
 `%bolt_third%`             | Tertiary Color.                        | `4ff9a32e-3f9c-4326-ad77-79be0e1dd12c`
 `%bolt_theme%`             | Theme Color.                           | `4ff9a32e-3f9c-4326-ad77-79be0e1dd12c`
 
-### 📝 Profile
+### 📝 Profile Placeholders
 
 Placeholder                | Returns                                | Example
 -------------------------- | -------------------------------------- | --------------
 `%bolt_profile_state%`     | Player's current state.                | `LOBBY, MATCH`
 `%bolt_profile_parkour%`   | Whether the player is in parkour.      | `true`/`false`
-`%bolt_profile_slient%`     | Whether the player is in silent mode. | `true`/`false`
+`%bolt_profile_slient%`    | Whether the player is in silent mode.  | `true`/`false`
 
-### Kit Specific
+### ⚙️ Profile Settings
 
-Placeholder                                 | Returns                                  | Example
-------------------------------------------- | ---------------------------------------- | -------
-`%bolt_stats_<kit>_elo%`                    | A player's kit elo.                      | `1012`
-`%bolt_stats_<kit>_wins%`                   | A player's kit wins.                     | `1`
-`%bolt_stats_<kit>_kills%`                  | A player's kit kills.                    | `3`
-`%bolt_stats_<kit>_losses%`                 | A player's kit losses.                   | `0`
-`%bolt_stats_<kit>_deaths%`                 | A player's kit deaths.                   | `2`
-`%bolt_stats_<kit>_winstreak%`              | A player's current kit winstreak.        | `1`
-`%bolt_stats_<kit>_highestWinstreak%`       | A player's highest kit winstreak.        | `3`
-`%bolt_stats_<kit>_rankedWins%`             | A player's ranked kit wins.              | `2`
-`%bolt_stats_<kit>_rankedLosses%`           | A player's ranked kit losses.            | `3`
-`%bolt_stats_<kit>_rankedWinstreak%`        | A player's current ranked kit winstreak. | `1`
-`%bolt_stats_<kit>_rankedHighestWinstreak%` | A player's highest ranked kit winstreak  | `4`
+You can use these placeholders for custom menus, e.g DeluxeMenus, etc...
 
-### Leaderboard
+Placeholder                                | Returns          
+-------------------------------------------|------------------
+%bolt_profile_settings_ping-range%         | `true/false` 
+%bolt_profile_settings_fly-mode%           | `true/false` 
+%bolt_profile_settings_death-animation%    | `true/false` 
+%bolt_profile_settings_silent%             | `true/false` 
+%bolt_profile_settings_drop-items%         | `true/false` 
+%bolt_profile_settings_clear-inventory%    | `true/false` 
+%bolt_profile_settings_show-players%       | `true/false` 
+%bolt_profile_settings_vanilla-tab%        | `true/false` 
+%bolt_profile_settings_duel-requests%      | `true/false` 
+%bolt_profile_settings_duel-sounds%        | `true/false` 
+%bolt_profile_settings_party-requests%     | `true/false` 
+%bolt_profile_settings_tournament-messages%| `true/false` 
+%bolt_profile_settings_spectator-messages% | `true/false` 
+%bolt_profile_settings_allow-spectators%   | `true/false` 
+%bolt_profile_settings_sidebar-enabled%    | `true/false` 
+%bolt_profile_settings_play-again%         | `true/false` 
+%bolt_profile_settings_play-again-rematch% | `true/false` 
+%bolt_profile_settings_time%               | `true/false` 
+%bolt_profile_settings_edit-mode%          | `true/false` 
 
-Placeholder                                             | Returns                       | Example
-------------------------------------------------------- | ----------------------------- | ----------------------------------
-`%bolt_lb_global_<elo/wins/winstreak/kills>_pos%`       | The leaderboard entry.        | `&c#1 &fCreaxx &7- &c3 &7- &6Gold`
-`%bolt_lb_global_<elo/wins/winstreak/kills>_pos_name%`  | The leaderboard entry's name. | `Creaxx`
-`%bolt_lb_global_<elo/wins/winstreak/kills>_pos_value%` | The leaderboard entry's value | `3`
+### 🎮 Queue Placeholders
+
+Can be used to create your own custom queue menu.
+
+Placeholder                                  | Returns                                   | Example   
+---------------------------------------------|-------------------------------------------|-----------
+%bolt_queue_profile_queueing%                | Total solo players in queue               | `12`      
+%bolt_queue_profile_playing%                 | Total solo players in matches             | `8`       
+%bolt_queue_duo_queueing%                    | Total duo teams in queue                  | `5`       
+%bolt_queue_duo_playing%                     | Total duo teams in matches                | `3`       
+%bolt_queue_<queue_type>_<kit>_queueing%     | Players in specific queue type and kit    | `7`
+%bolt_queue_<queue_type>_<kit>_playing%      | Players fighting in specific queue type and kit | `2`
+
+### 🏆 Leaderboard
+
+Placeholder                                                | Returns                          | Example
+---------------------------------------------------------- | -------------------------------- | ----------------------------------
+`%bolt_lb_global_<elo/wins/winstreak/kills>_<pos>%`        | The leaderboard entry.           | `&c#1 &fCreaxx &7- &c3 &7- &6Gold`
+`%bolt_lb_global_<elo/wins/winstreak/kills>_<pos>_name%`   | The leaderboard entry's name.    | `Creaxx`
+`%bolt_lb_global_<elo/wins/winstreak/kills>_<pos>_value%`  | The leaderboard entry's value    | `3`
+`%bolt_lb_global_<elo/wins/winstreak/kills>_<pos>_divison%`| The leaderboard entry's division | `Diamond`
 
 <!-- ## Included
 

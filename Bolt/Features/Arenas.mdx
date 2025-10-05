@@ -12,7 +12,7 @@ sidebar_position: 1
 
 ## Setting up a default arena for 1.8-1.12
 
-# How do we setup default arena?
+### How do we setup default arena?
 1. Paste a schematic from WorldEdt
 2. Do `/edit` to go into build mode.
 3. Do `/arena create <name> <type>`. (Arena types are two, standard and stand alone)
@@ -26,7 +26,7 @@ sidebar_position: 1
 7. You can now add kits to your arena using `/arena addkit <arena>`.
 8. If your arena is standalone you can now duplicate it using `/arena scale <amountOfCopies>` or `/arena manage`.
 
-# How do we setup Bridge arena?
+### How do we setup Bridge arena?
 1. Paste a schematic from World Edit in the **Arena World**.
 2. Do `/edit` to go into build mode.
 3. Do `/arena create <name>` standalone.
@@ -40,7 +40,7 @@ sidebar_position: 1
 9. You can now add kits to your arena using `/arena addkit <arena>`.
 10. You can now also duplicate it using `/arena scale <amountOfCopies>` or `/arena manage`.
     
-# How do we setup a Bed-based arena?
+### How do we setup a Bed-based arena?
 1. Paste a schematic from World Edit in the **Arena World**.
 2. Do `/edit` to go into build mode.
 3. Do `/arena create <name>` standalone.
@@ -59,17 +59,17 @@ sidebar_position: 1
 
 Setting up an arena in the latest version is the same process however, all arenas are created in standalone mode, meaning they have to be duplicated.
 
-# How do we setup default arena?
+### How do we setup default arena?
 1. Paste a schematic from WorldEdt
 2. Do `/edit` to go into build mode.
 3. Do `/arena create <name>` standalone
 
-### For normal arenas, e.g NoDebuff, Boxing
+#### For normal arenas, e.g NoDebuff, Boxing
 4. Set the spawns:
 - Spawn 1 place a fence and a Player Head on top of it.
 - Spawn 2 place a fence and a Player Head on top of it.
 
-### For Beds and Portals (Skip this if your just setting a normal arena)
+#### For Beds and Portals (Skip this if your just setting a normal arena)
 5. For special locations like beds and portals, this is how to set them.
 - Bolt detects special points using a **focal point** or **mid point**
 - Find the closest block you can find to the bed, place Red or Blue wool depending on team color, now on top of it, place a sponge.
@@ -77,17 +77,17 @@ Setting up an arena in the latest version is the same process however, all arena
 6. Use the arena wand given in your first slot to select bounds, make sure you select the entire arena as Bolt's Arena System will paste it according to a grid.
 7. Click in chat where it says **CLICK HERE** OR do `/arena finish`.
 
-# Do this step if your having issues with portals not working properly.
+#### Do this step if your having issues with portals not working properly.
 8. Select cuboid for portals using `/arena wand` and set them using `/arena setSpecialCuboid <arena> <red/blue>`.
 
 9. You can now add kits to your arena using `/arena addkit <arena>`.
 10. You can now also duplicate it using `/arena scale <amountOfCopies>` or `/arena manage`.
 
-### Commands
+## Commands
 
 `<>` = Required `[]` = Optional
 
-## 🧭 Main Commands
+### 🧭 Main Commands
 
 Command                                | Permission         | Description                                 
 ---------------------------------------|--------------------|--------------------------------------------
@@ -97,7 +97,7 @@ Command                                | Permission         | Description
 `/arena wand`                          | bolt.arena.admin   | Get selection wand                          
 `/arena saveAllChanges [regen]`        | bolt.arena.admin   | Save all changes made to an arena           
 
-## ⚙️ Setup Commands
+### ⚙️ Setup Commands
 
 Command                                | Permission         | Description                                 
 ---------------------------------------|--------------------|---------------------------------------------
@@ -106,7 +106,7 @@ Command                                | Permission         | Description
 `/arena cancel`                        | bolt.arena.admin   | Cancel your arena creation                  
 `/arena finish`                        | bolt.arena.admin   | Mark your arena creation as finished        
 
-## 🪄 Edit Commands
+### 🪄 Edit Commands
 
 Command                                     | Permission       | Description                               
 ------------------------------------------- | ---------------- | ------------------------------------------
@@ -120,7 +120,7 @@ Command                                     | Permission       | Description
 `/arena saveChanges <arena>`                | bolt.arena.admin | Save your map changes to arena’s schematic
 `/arena scale <arena> <amount>`             | bolt.arena.admin | Scale an arena’s copies to your liking    
 
-## ℹ️ Information Commands
+### ℹ️ Information Commands
 
 Command                                     | Permission       | Description                                 
 ------------------------------------------- | ---------------- | --------------------------------------------
@@ -129,7 +129,7 @@ Command                                     | Permission       | Description
 `/arena setFallDeathHeight <arena> <level>` | bolt.arena.admin | Set an arena’s void death height            
 `/arena setBuildHeight <arena> <level>`     | bolt.arena.admin | Set an arena’s maximum build height         
 
-##🎒 Kit Commands
+### 🎒 Kit Commands
 
 Command                         | Permission       | Description                            
 ------------------------------- | ---------------- | ---------------------------------------

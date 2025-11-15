@@ -12,7 +12,6 @@ const config: Config = {
     baseUrl: "/",
 
     onBrokenLinks: "warn",
-    onBrokenMarkdownLinks: "warn",
 
     i18n: {
         defaultLocale: "en",

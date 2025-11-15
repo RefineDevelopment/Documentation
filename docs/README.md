@@ -1,5 +1,5 @@
 # Refine Documentation
-This repository contains the documentation on [Refine's Documentation Website](https://docs.refinedev.xyz) as .mdx files.
+This repository contains the documentation on [Refine's Documentation Website](https://docs.refinedev.org) as .mdx files.
 
 ## Contributing
 To aquire the same docusaurus setup as us, please message @J4C0B3Y on discord to be added to the repo.

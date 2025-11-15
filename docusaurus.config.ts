@@ -7,7 +7,7 @@ const config: Config = {
     tagline: "Quality products without breaking the bank",
     favicon: "logo.png",
 
-    url: "https://docs.refinedev.xyz",
+    url: "https://docs.refinedev.org",
     trailingSlash: true,
     baseUrl: "/",
 
@@ -86,7 +86,7 @@ const config: Config = {
                     activeBaseRegex: "/Bolt%20Web%20Addon/Introduction"
                 },
                 {
-                    href: "https://refinedev.xyz",
+                    href: "https://refinedev.org",
                     label: "Main Website",
                     position: "right"
                 }
@@ -100,7 +100,7 @@ const config: Config = {
                     items: [
                         {
                             label: "Discord",
-                            href: "https://discord.refinedev.xyz"
+                            href: "https://discord.refinedev.org"
                         }
                     ]
                 },
@@ -109,7 +109,7 @@ const config: Config = {
                     items: [
                         {
                             label: "Main Site",
-                            href: "https://refinedev.xyz"
+                            href: "https://refinedev.org"
                         }
                     ]
                 }

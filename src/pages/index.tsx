@@ -1,8 +1,7 @@
 import React, { useRef } from 'react';
 import OriginalLayout from '@theme/Layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faRocket } from '@fortawesome/free-solid-svg-icons';
-import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faRocket, faShield, faBolt, faMicrochip, faWind, faGlobe } from '@fortawesome/free-solid-svg-icons';
 import ProductCard from '../components/ProductCard';
 import ScrollAnimationWrapper from '../components/ScrollAnimationWrapper';
 import clsx from 'clsx';
@@ -19,76 +18,40 @@ const products = [
     title: "Phoenix",
     description: "The ultimate network management suite for security, ranks, and staff tools.",
     href: "/Phoenix/Introduction",
-    
     colorClass: "bg-red-600",
-    logoSrc: "/logo.png",
+    icon: faShield,
   },
   {
     title: "Bolt",
     description: "High-performance PvP practice plugin with advanced ELO and match tracking.",
     href: "/Bolt/Introduction",
-    
     colorClass: "bg-yellow-600",
-    logoSrc: "/logo.png",
+    icon: faBolt,
   },
   {
     title: "CarbonSpigot",
     description: "Optimized Minecraft server fork for superior performance and stability.",
     href: "/CarbonSpigot/Introduction",
-    
     colorClass: "bg-gray-600",
-    logoSrc: "/logo.png",
+    icon: faMicrochip,
   },
   {
     title: "Zephyr",
     description: "Lightweight and efficient hub management system.",
     href: "/Zephyr/Introduction",
-    
     colorClass: "bg-blue-600",
-    logoSrc: "/logo.png",
+    icon: faWind,
   },
   {
     title: "Bolt Web Addon",
     description: "A sleek web interface for displaying Bolt leaderboards and player statistics.",
     href: "/BoltWebAddon/Introduction",
-    
     colorClass: "bg-primary",
-    logoSrc: "/logo.png",
+    icon: faGlobe,
   },
 ];
 
-const team = [
-  {
-    name: 'Amaan',
-    role: 'Founder',
-    bio: 'Visionary leader and core architect of Refine Development.',
-    img: 'https://cdn.discordapp.com/avatars/730736805019648060/4e52bfeeafb903e8b49de8f1c04eab01.webp?size=1024'
-  },
-  {
-    name: 'Creaxx',
-    role: 'Owner',
-    bio: 'Overseeing operations and strategic direction of the studio.',
-    img: 'https://cdn.discordapp.com/avatars/828492247795236866/111485fd4810466bb586c556c97f8876.webp?size=1024'
-  },
-  {
-    name: 'Bermine',
-    role: 'Manager',
-    bio: 'Specializing in high-performance Java and server optimization.',
-    img: 'https://cdn.discordapp.com/avatars/211482864988979200/c77185277a42b823868aa595420b6ae6.webp?size=1024'
-  },
-  {
-    name: 'J4COB3Y',
-    role: 'Manager',
-    bio: 'Handling technical support and infrastructure management.',
-    img: 'https://cdn.discordapp.com/avatars/504532149077016606/4b48d1df5e7a1592e18d010ed0f74fce.webp?size=1024'
-  },
-  {
-    name: 'Meng',
-    role: 'Manager',
-    bio: 'Focusing on community engagement and quality assurance.',
-    img: 'https://cdn.discordapp.com/avatars/599162609563992065/58c1b4f7cf807b7a219ebb86c8e6c875.webp?size=1024'
-  }
-];
+
 
 
 
@@ -166,19 +129,19 @@ const Home: React.FC = () => {
 
               <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 md:gap-4">
                 <DocusaurusLink 
+                  to="#products" 
+                  onClick={handleScrollToProducts}
+                  className={SecondaryButton}
+                >
+                  View Documentation
+                </DocusaurusLink>
+                <DocusaurusLink 
                   to="https://refinedev.org" 
                   target="_blank"
                   rel="noopener noreferrer"
                   className={PrimaryButton}
                 >
                   Main Website
-                </DocusaurusLink>
-                <DocusaurusLink 
-                  to="#products" 
-                  onClick={handleScrollToProducts}
-                  className={SecondaryButton}
-                >
-                  Explore Products
                 </DocusaurusLink>
                 <DocusaurusLink 
                   to="https://discord.refinedev.org" 
@@ -220,45 +183,7 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        <section className="py-16 md:py-24 bg-background" id="team">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto mb-12 md:mb-16 text-center">
-              <ScrollAnimationWrapper delay={0}>
-                <div className="inline-flex items-center justify-center mb-4">
-                  <FAIcon icon={faUsers} className="h-6 w-6 text-primary mr-2" />
-                  <span className="text-sm font-semibold text-primary uppercase tracking-wider">Our Team</span>
-                </div>
-                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 text-center">
-                  Meet Our <span className="text-primary">Team</span>
-                </h2>
-                <p className="text-base md:text-xl text-muted-foreground text-center max-w-2xl mx-auto leading-relaxed">
-                  We are a dedicated team of developers with years of experience creating high-performance, scalable solutions.
-                </p>
-              </ScrollAnimationWrapper>
-            </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:gap-8 max-w-7xl mx-auto">
-              {team.map((member, index) => (
-                <ScrollAnimationWrapper key={index} delay={index * 0.15}>
-                  <div className="flex flex-col items-center text-center p-4 md:p-6 rounded-xl border border-border/50 hover:border-primary/50 transition-all hover:scale-105 bg-card/50 backdrop-blur-sm">
-                    <img src={member.img} alt={member.name} className="w-20 h-20 md:w-24 md:h-24 rounded-full mb-3 md:mb-4 border-2 border-primary/20 object-cover" />
-                    <h3 className="text-lg md:text-xl font-bold mb-1">{member.name}</h3>
-                    <p className="text-xs md:text-sm text-primary mb-2 md:mb-3 font-semibold">{member.role}</p>
-                    <p className="text-xs md:text-sm text-muted-foreground mb-3 md:mb-4 leading-relaxed min-h-[3rem]">{member.bio}</p>
-                    <div className="flex gap-3">
-                      <a href="javascript:void(0)" className="text-muted-foreground hover:text-primary transition-colors">
-                        <FAIcon icon={faGithub} className="h-4 w-4 md:h-5 md:w-5" />
-                      </a>
-                      <a href="javascript:void(0)" className="text-muted-foreground hover:text-primary transition-colors">
-                        <FAIcon icon={faTwitter} className="h-4 w-4 md:h-5 md:w-5" />
-                      </a>
-                    </div>
-                  </div>
-                </ScrollAnimationWrapper>
-              ))}
-            </div>
-          </div>
-        </section>
 
         <section className="py-16 md:py-24 bg-background" id="cta">
           <ScrollAnimationWrapper delay={0}>

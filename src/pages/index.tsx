@@ -131,7 +131,7 @@ const Home: React.FC = () => {
                 <DocusaurusLink 
                   to="#products" 
                   onClick={handleScrollToProducts}
-                  className={SecondaryButton}
+                  className={PrimaryButton}
                 >
                   View Documentation
                 </DocusaurusLink>
@@ -139,7 +139,7 @@ const Home: React.FC = () => {
                   to="https://refinedev.org" 
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={PrimaryButton}
+                  className={SecondaryButton}
                 >
                   Main Website
                 </DocusaurusLink>

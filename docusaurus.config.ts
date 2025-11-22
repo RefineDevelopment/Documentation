@@ -66,10 +66,9 @@ const config: Config = {
 
     themeConfig: {
         image: "banner.png",
-        // Tema değiştirme özelliğini kaldırıyoruz
         colorMode: {
-            disableSwitch: true, // Tema değiştirme düğmesini devre dışı bırak
-            defaultMode: "dark", // Varsayılan modu dark olarak tutuyoruz (custom.css'deki dark mode renkleri daha iyi)
+            disableSwitch: true,
+            defaultMode: "dark",
             respectPrefersColorScheme: false,
         },
         navbar: {

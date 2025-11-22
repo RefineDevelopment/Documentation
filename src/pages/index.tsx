@@ -77,7 +77,7 @@ const team = [
     img: 'https://cdn.discordapp.com/avatars/211482864988979200/c77185277a42b823868aa595420b6ae6.webp?size=1024'
   },
   {
-    name: 'J4cob3y',
+    name: 'J4COB3Y',
     role: 'Manager',
     bio: 'Handling technical support and infrastructure management.',
     img: 'https://cdn.discordapp.com/avatars/504532149077016606/4b48d1df5e7a1592e18d010ed0f74fce.webp?size=1024'
@@ -85,7 +85,7 @@ const team = [
   {
     name: 'Meng',
     role: 'Manager',
-    bio: 'Focusing on community engagement and quality assurance. (Chinese Spy)',
+    bio: 'Focusing on community engagement and quality assurance.',
     img: 'https://cdn.discordapp.com/avatars/599162609563992065/58c1b4f7cf807b7a219ebb86c8e6c875.webp?size=1024'
   }
 ];

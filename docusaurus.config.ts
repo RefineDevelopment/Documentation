@@ -70,7 +70,7 @@ const config: Config = {
                 {
                     to: "CarbonSpigot/Introduction",
                     position: "left",
-                    label: "CarbonSpigot",
+                    label: "Carbon",
                     activeBaseRegex: "/CarbotSpigot"
                 },
                 {

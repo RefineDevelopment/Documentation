@@ -3,7 +3,7 @@ import type { Config } from "@docusaurus/types"
 import type * as Preset from "@docusaurus/preset-classic"
 
 const config: Config = {
-    title: "Refine Documentation",
+    title: "Refine Development",
     tagline: "Quality products without breaking the bank",
     favicon: "logo.png",
 
@@ -12,6 +12,10 @@ const config: Config = {
     baseUrl: "/",
 
     onBrokenLinks: "warn",
+
+    markdown: {
+        mermaid: true,
+    },
 
     i18n: {
         defaultLocale: "en",
@@ -25,7 +29,15 @@ const config: Config = {
                 docs: {
                     routeBasePath: "/",
                     sidebarPath: "./sidebars.ts",
-                    exclude: ["README.md", "**/_*", "Template"],
+                    exclude: [
+                        "README.md",
+                        "**/_*",
+                        "Template",
+                        "Phoenix/Phoenix.mdx",
+                        "Bolt/Bolt.mdx",
+                        "CarbonSpigot/CarbonSpigot.mdx",
+                        "Zephyr/Zephyr.mdx"
+                    ],
                     editUrl: (params) => `https://github.com/RefineDevelopment/Documentation/edit/master/${params.docPath}`
                 },
                 blog: false,
@@ -36,11 +48,29 @@ const config: Config = {
         ]
     ],
 
+    plugins: [
+        [
+            "@easyops-cn/docusaurus-search-local",
+            {
+                hashed: true,
+                indexPages: true,
+                docsRouteBasePath: "/",
+            }
+        ]
+    ],
+
+    scripts: [
+        { src: "https://cdn.tailwindcss.com" },
+        { src: "/tailwind-config.js" }
+    ],
+
     themeConfig: {
         image: "banner.png",
+        // Tema değiştirme özelliğini kaldırıyoruz
         colorMode: {
-            defaultMode: "dark",
-            respectPrefersColorScheme: true
+            disableSwitch: true, // Tema değiştirme düğmesini devre dışı bırak
+            defaultMode: "dark", // Varsayılan modu dark olarak tutuyoruz (custom.css'deki dark mode renkleri daha iyi)
+            respectPrefersColorScheme: false,
         },
         navbar: {
             title: "Refine Development",
@@ -48,6 +78,7 @@ const config: Config = {
                 alt: "Refine Logo",
                 src: "logo.png"
             },
+            style: "dark",
             items: [
                 {
                     to: "/",
@@ -71,7 +102,7 @@ const config: Config = {
                     to: "CarbonSpigot/Introduction",
                     position: "left",
                     label: "Carbon",
-                    activeBaseRegex: "/CarbotSpigot"
+                    activeBaseRegex: "/CarbonSpigot"
                 },
                 {
                     to: "Zephyr/Introduction/",
@@ -80,41 +111,23 @@ const config: Config = {
                     activeBaseRegex: "/Zephyr/Introduction"
                 },
                 {
-                    to: "Bolt%20Web%20Addon/Introduction/",
+                    to: "BoltWebAddon/Introduction/",
                     position: "left",
                     label: "Bolt Web Addon",
-                    activeBaseRegex: "/Bolt%20Web%20Addon/Introduction"
+                    activeBaseRegex: "/BoltWebAddon/Introduction"
                 },
                 {
-                    href: "https://refinedev.org",
-                    label: "Main Website",
-                    position: "right"
+                    type: 'search',
+                    position: 'right'
+                },
+                {
+                    href: 'https://refinedev.org',
+                    label: 'Main Website',
+                    position: 'right',
+                    className: 'button button--primary navbar-button',
+                    target: '_blank'
                 }
             ]
-        },
-        footer: {
-            style: "dark",
-            links: [
-                {
-                    title: "Community",
-                    items: [
-                        {
-                            label: "Discord",
-                            href: "https://discord.refinedev.org"
-                        }
-                    ]
-                },
-                {
-                    title: "More",
-                    items: [
-                        {
-                            label: "Main Site",
-                            href: "https://refinedev.org"
-                        }
-                    ]
-                }
-            ],
-            copyright: `Copyright © ${new Date().getFullYear()} Refine Development. Built with Docusaurus.`,
         },
         prism: {
             theme: prismThemes.github,

@@ -51,8 +51,7 @@ const Footer: React.FC = () => {
       items: [
         { label: "Home", href: "/", Icon: faLink },
         { label: "Main Website", href: "https://refinedev.org", Icon: faLink },
-        { label: "Resources", href: "https://refinedev.org/#plugins", Icon: faLink },
-        { label: "Features", href: "https://refinedev.org/#features", Icon: faLink },
+        { label: "Resources", href: "https://refinedev.org/resources", Icon: faLink },
       ],
     },
     {

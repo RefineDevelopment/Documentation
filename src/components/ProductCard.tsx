@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import Link from '@docusaurus/Link';
 const DocusaurusLink = Link as unknown as React.ComponentType<any>;
@@ -11,10 +12,10 @@ interface ProductCardProps {
   description: string;
   href: string;
   colorClass: string;
-  logoSrc?: string;
+  icon?: IconDefinition;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ title, description, href, colorClass, logoSrc = '/logo.png' }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ title, description, href, colorClass, icon }) => {
   return (
     <DocusaurusLink
       to={href}
@@ -25,7 +26,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ title, description, href, col
       )}
     >
       <div className="flex items-center space-x-4 mb-4">
-        <img src={logoSrc} alt={`${title} Logo`} className="h-10 w-10 rounded-lg shadow-md" />
+        {icon && <FAIcon icon={icon} className="h-10 w-10 text-primary" />}
         <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
           {title}
         </h3>

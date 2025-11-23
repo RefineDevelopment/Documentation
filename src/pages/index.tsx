@@ -40,7 +40,7 @@ const products: Product[] = [
   },
   {
     title: "Zephyr",
-    description: "Lightweight and efficient hub management system.",
+    description: "Simple and modern FFA plugin.",
     href: "/Zephyr/Introduction",
     colorClass: "bg-blue-600",
     icon: faWind,

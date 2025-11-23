@@ -48,17 +48,6 @@ const config: Config = {
         ]
     ],
 
-    plugins: [
-        [
-            "@easyops-cn/docusaurus-search-local",
-            {
-                hashed: true,
-                indexPages: true,
-                docsRouteBasePath: "/",
-            }
-        ]
-    ],
-
     scripts: [
         { src: "https://cdn.tailwindcss.com" },
         { src: "/tailwind-config.js" }

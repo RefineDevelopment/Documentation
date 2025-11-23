@@ -1,19 +1,22 @@
 import React, { useRef } from 'react';
-import OriginalLayout from '@theme/Layout';
+import Layout from '@theme/Layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faRocket, faShield, faBolt, faMicrochip, faWind, faGlobe } from '@fortawesome/free-solid-svg-icons';
 import ProductCard from '../components/ProductCard';
 import ScrollAnimationWrapper from '../components/ScrollAnimationWrapper';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 
-const FAIcon = FontAwesomeIcon as unknown as React.ComponentType<any>;
-const DocusaurusLink = Link as unknown as React.ComponentType<any>;
+interface Product {
+  title: string;
+  description: string;
+  href: string;
+  colorClass: string;
+  icon: IconDefinition;
+}
 
-const ThemedLayout = OriginalLayout as unknown as React.ComponentType<any>;
-
-
-const products = [
+const products: Product[] = [
   {
     title: "Phoenix",
     description: "The ultimate network management suite for security, ranks, and staff tools.",
@@ -51,16 +54,15 @@ const products = [
   },
 ];
 
-
-
-
-
-const HeroBackground = () => (
+const HeroBackground: React.FC = () => (
   <div className="absolute inset-0 overflow-hidden">
     <div className="hero-grid"></div>
     <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-primary/5"></div>
     <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent animate-pulse"></div>
-    <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent animate-pulse" style={{ animationDelay: '1s' }}></div>
+    <div 
+      className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent animate-pulse" 
+      style={{ animationDelay: '1s' }}
+    ></div>
   </div>
 );
 
@@ -69,13 +71,21 @@ const Home: React.FC = () => {
   const description = 'Here, you can find Documentation for all of our products with up-to-date information, if you have any questions please create a ticket on our Discord.';
   const productSectionRef = useRef<HTMLElement>(null);
 
-  const handleScrollToProducts = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleScrollToProducts = (e: React.MouseEvent<HTMLAnchorElement>): void => {
     e.preventDefault();
     if (productSectionRef.current) {
       productSectionRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>): void => {
+    const target = e.currentTarget;
+    const rect = target.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    target.style.setProperty('--mouse-x', `${x}px`);
+    target.style.setProperty('--mouse-y', `${y}px`);
+  };
 
   const ButtonStyle = clsx(
     "px-6 py-2 md:px-8 md:py-3 text-base md:text-lg font-semibold rounded-md transition-colors duration-200",
@@ -92,24 +102,15 @@ const Home: React.FC = () => {
     "bg-black text-white hover:bg-gray-900 border border-gray-800"
   );
 
-
   return (
-    <ThemedLayout
+    <Layout
       title={title}
       description={description}
     >
       <main className="relative overflow-hidden">
-        
         <section 
           className="relative min-h-screen flex items-center justify-center overflow-hidden bg-transparent group cta-spotlight"
-          onMouseMove={(e) => {
-            const target = e.currentTarget;
-            const rect = target.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            target.style.setProperty('--mouse-x', `${x}px`);
-            target.style.setProperty('--mouse-y', `${y}px`);
-          }}
+          onMouseMove={handleMouseMove}
         >
           <HeroBackground />
           
@@ -128,37 +129,37 @@ const Home: React.FC = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 md:gap-4">
-                <DocusaurusLink 
+                <Link 
                   to="#products" 
                   onClick={handleScrollToProducts}
                   className={PrimaryButton}
                 >
                   View Documentation
-                </DocusaurusLink>
-                <DocusaurusLink 
+                </Link>
+                <Link 
                   to="https://refinedev.org" 
                   target="_blank"
                   rel="noopener noreferrer"
                   className={SecondaryButton}
                 >
                   Main Website
-                </DocusaurusLink>
-                <DocusaurusLink 
+                </Link>
+                <Link 
                   to="https://discord.refinedev.org" 
                   target="_blank"
                   rel="noopener noreferrer"
                   className={SecondaryButton}
                 >
                   Join Discord
-                </DocusaurusLink>
-                <DocusaurusLink 
+                </Link>
+                <Link 
                   to="https://github.com/RefineDevelopment/Documentation" 
                   target="_blank"
                   rel="noopener noreferrer"
                   className={SecondaryButton}
                 >
                   GitHub
-                </DocusaurusLink>
+                </Link>
               </div>
             </div>
           </div>
@@ -174,7 +175,7 @@ const Home: React.FC = () => {
               </ScrollAnimationWrapper>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 {products.map((product, index) => (
-                  <ScrollAnimationWrapper key={index} delay={index * 0.1}>
+                  <ScrollAnimationWrapper key={product.title} delay={index * 0.1}>
                     <ProductCard {...product} />
                   </ScrollAnimationWrapper>
                 ))}
@@ -183,26 +184,17 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-
-
         <section className="py-16 md:py-24 bg-background" id="cta">
           <ScrollAnimationWrapper delay={0}>
             <div className="container mx-auto px-4">
               <div className="max-w-5xl mx-auto">
                 <div 
                   className="relative p-8 md:p-16 rounded-2xl bg-card/50 border border-primary/20 overflow-hidden group cta-spotlight"
-                  onMouseMove={(e) => {
-                    const target = e.currentTarget;
-                    const rect = target.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    target.style.setProperty('--mouse-x', `${x}px`);
-                    target.style.setProperty('--mouse-y', `${y}px`);
-                  }}
+                  onMouseMove={handleMouseMove}
                 >
                   <div className="relative z-10 text-center">
                     <div className="inline-flex items-center justify-center mb-4">
-                      <FAIcon icon={faRocket} className="h-6 w-6 text-primary mr-2" />
+                      <FontAwesomeIcon icon={faRocket} className="h-6 w-6 text-primary mr-2" />
                       <span className="text-sm font-semibold text-primary uppercase tracking-wider">Get Started</span>
                     </div>
                     <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-center mb-4 md:mb-6">
@@ -212,14 +204,14 @@ const Home: React.FC = () => {
                       Browse our premium collection of plugins and resources designed for performance and reliability.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
-                      <DocusaurusLink 
+                      <Link 
                         to="https://refinedev.org/resources" 
                         target="_blank"
                         rel="noopener noreferrer"
                         className={PrimaryButton}
                       >
                         Browse All Products
-                      </DocusaurusLink>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -227,9 +219,8 @@ const Home: React.FC = () => {
             </div>
           </ScrollAnimationWrapper>
         </section>
-
       </main>
-    </ThemedLayout>
+    </Layout>
   );
 };
 

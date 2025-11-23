@@ -1,27 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from '@docusaurus/router';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-const Root = ({ children }) => {
+interface RootProps {
+  children: React.ReactNode;
+}
+
+const Root: React.FC<RootProps> = ({ children }) => {
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
+
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
 
   return (
-    <TransitionGroup className="page-transition-container">
-      <CSSTransition
-        key={location.pathname}
-        timeout={300}
-        classNames={{
-          enter: 'page-transition-enter',
-          enterActive: 'page-transition-enter-active',
-          exit: 'page-transition-exit',
-          exitActive: 'page-transition-exit-active',
+    <>
+
+      <div 
+        className={`fixed top-0 left-0 h-1 bg-primary transition-all duration-300 ease-out z-[9999] ${
+          isLoading ? 'w-full' : 'w-0'
+        }`}
+        style={{
+          boxShadow: isLoading ? '0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary))' : 'none'
         }}
-      >
-        <div className="page-transition-content">
-          {children}
-        </div>
-      </CSSTransition>
-    </TransitionGroup>
+      />
+
+      <div key={location.pathname}>
+        {children}
+      </div>
+    </>
   );
 };
 

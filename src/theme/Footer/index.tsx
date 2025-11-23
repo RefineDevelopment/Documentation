@@ -1,12 +1,10 @@
 import React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faComment, faLink, faShield, faBolt, faMicrochip, faWind, faGlobe } from '@fortawesome/free-solid-svg-icons';
-import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { faLink, faShield, faBolt, faMicrochip, faWind, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faGithub, faTwitter, faDiscord } from '@fortawesome/free-brands-svg-icons';
 import clsx from 'clsx';
-
-const FAIcon = FontAwesomeIcon as unknown as React.ComponentType<any>;
 
 interface FooterLinkProps {
   href: string;
@@ -21,21 +19,32 @@ const FooterLink: React.FC<FooterLinkProps> = ({ href, label, Icon }) => (
     rel="noopener noreferrer"
     className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 text-sm"
   >
-    {Icon && <FAIcon icon={Icon} className="w-4 h-4" />}
+    {Icon && <FontAwesomeIcon icon={Icon} className="w-4 h-4" />}
     {label}
   </a>
 );
+
+interface FooterItem {
+  label: string;
+  href: string;
+  Icon: IconDefinition;
+}
+
+interface FooterSection {
+  title: string;
+  items: FooterItem[];
+}
 
 const Footer: React.FC = () => {
   const { siteConfig } = useDocusaurusContext();
   const { title } = siteConfig;
 
-  const currentYear = new Date().getFullYear();
+  const currentYear: number = new Date().getFullYear();
 
-  const logoSrc = "/logo.png";
-  const logoAlt = "/logo.png";
+  const logoSrc: string = "/logo.png";
+  const logoAlt: string = "Refine Development Logo";
 
-  const footerSections = [
+  const footerSections: FooterSection[] = [
     {
       title: "Products",
       items: [
@@ -57,24 +66,20 @@ const Footer: React.FC = () => {
     {
       title: "Connect",
       items: [
-        { label: "Discord", href: "https://discord.refinedev.org", Icon: faComment },
+        { label: "Discord", href: "https://discord.refinedev.org", Icon: faDiscord },
         { label: "GitHub", href: "https://github.com/RefineDevelopment", Icon: faGithub },
         { label: "Twitter", href: "https://twitter.com/RefineDev", Icon: faTwitter },
       ],
     },
   ];
 
-
   return (
     <footer className={clsx(
-
       "bg-background backdrop-blur-sm border-t border-border/40 py-12 md:py-16 mt-auto",
       "text-foreground"
     )}>
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left border-b border-border/40 pb-8 mb-8">
-          
-          {/* Company Info (Refine Development Logo & Text) */}
           <div className="col-span-2 md:col-span-1 space-y-4">
             <div className="flex items-center justify-center md:justify-start space-x-3 mb-2">
               <img src={logoSrc} alt={logoAlt} className="h-8 w-auto" />
@@ -85,7 +90,6 @@ const Footer: React.FC = () => {
             </p>
           </div>
 
-          {/* Links Sections */}
           {footerSections.map((section, index) => (
             <div key={index} className="space-y-3">
               <h4 className="text-sm font-semibold text-foreground">{section.title}</h4>
@@ -100,13 +104,19 @@ const Footer: React.FC = () => {
           ))}
         </div>
 
-        {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-center md:justify-between items-center text-xs text-muted-foreground">
-          <p className="text-center md:text-left mb-2 md:mb-0">&copy; {currentYear} Refine Development. All rights reserved.</p>
+          <p className="text-center md:text-left mb-2 md:mb-0">
+            &copy; {currentYear} Refine Development. All rights reserved.
+          </p>
           
           <div className="flex flex-wrap items-center justify-center gap-4 mt-2 md:mt-0">
             <span className="text-xs">Made with Docusaurus</span>
-            <a href="https://shedux.dev" target="_blank" rel="noopener noreferrer" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+            <a 
+              href="https://shedux.dev" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-xs text-muted-foreground hover:text-primary transition-colors"
+            >
               Theme by shedux.dev
             </a>
           </div>

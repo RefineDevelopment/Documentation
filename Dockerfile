@@ -4,4 +4,4 @@ COPY . /opt/documentation
 EXPOSE 3000
 RUN bun install --production
 RUN bun run build
-CMD bun run serve --host 0.0.0.0 --port 3000 --no-open
+CMD bun run serve --port 3000 --no-open

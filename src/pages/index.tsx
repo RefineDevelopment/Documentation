@@ -54,15 +54,22 @@ const products: Product[] = [
   },
 ];
 
+import Silk from '../components/Silk';
+
 const HeroBackground: React.FC = () => (
   <div className="absolute inset-0 overflow-hidden">
-    <div className="hero-grid"></div>
-    <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-primary/5"></div>
-    <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent animate-pulse"></div>
-    <div 
-      className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent animate-pulse" 
-      style={{ animationDelay: '1s' }}
-    ></div>
+    <div className="absolute inset-0 z-0">
+      <Silk
+        speed={5}
+        scale={1}
+        color="#ef2375"
+        noiseIntensity={1.5}
+        rotation={0}
+      />
+    </div>
+    <div className="absolute inset-0 z-1 bg-black/40 pointer-events-none"></div>
+    <div className="hero-grid relative z-10 opacity-30"></div>
+    <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-primary/5 z-20 pointer-events-none"></div>
   </div>
 );
 
@@ -94,7 +101,7 @@ const Home: React.FC = () => {
 
   const PrimaryButton = clsx(
     ButtonStyle,
-    "bg-white text-black hover:bg-gray-100"
+    "bg-gradient-to-br from-white to-gray-200 text-black hover:to-white hover:text-black hover:shadow-cyan-500/20"
   );
 
   const SecondaryButton = clsx(
@@ -108,52 +115,52 @@ const Home: React.FC = () => {
       description={description}
     >
       <main className="relative overflow-hidden">
-        <section 
+        <section
           className="relative min-h-screen flex items-center justify-center overflow-hidden bg-transparent group cta-spotlight"
           onMouseMove={handleMouseMove}
         >
           <HeroBackground />
-          
+
           <div className="container mx-auto relative z-10 py-24 md:py-32 px-4">
             <div className="max-w-5xl mx-auto text-center">
-              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 md:mb-6 text-center">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 md:mb-6 text-center text-white drop-shadow-sm">
                 Refine Development <span className="text-primary">Documentation</span>
               </h1>
-              
-              <p className="text-lg md:text-2xl text-muted-foreground mb-4 md:mb-6 text-center max-w-3xl mx-auto leading-relaxed">
+
+              <p className="text-lg md:text-2xl text-gray-200 mb-4 md:mb-6 text-center max-w-3xl mx-auto leading-relaxed font-medium">
                 {description}
               </p>
-              
-              <p className="text-base md:text-lg text-muted-foreground mb-8 md:mb-10 text-center max-w-3xl mx-auto leading-relaxed">
+
+              <p className="text-base md:text-lg text-gray-400 mb-8 md:mb-10 text-center max-w-3xl mx-auto leading-relaxed">
                 If you would like to change anything in this Documentation, please make a Pull Request in our GitHub.
               </p>
 
               <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 md:gap-4">
-                <Link 
-                  to="#products" 
+                <Link
+                  to="#products"
                   onClick={handleScrollToProducts}
                   className={PrimaryButton}
                 >
                   View Documentation
                 </Link>
-                <Link 
-                  to="https://refinedev.org" 
+                <Link
+                  to="https://refinedev.org"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={SecondaryButton}
                 >
                   Main Website
                 </Link>
-                <Link 
-                  to="https://discord.refinedev.org" 
+                <Link
+                  to="https://discord.refinedev.org"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={SecondaryButton}
                 >
                   Join Discord
                 </Link>
-                <Link 
-                  to="https://github.com/RefineDevelopment/Documentation" 
+                <Link
+                  to="https://github.com/RefineDevelopment/Documentation"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={SecondaryButton}
@@ -188,7 +195,7 @@ const Home: React.FC = () => {
           <ScrollAnimationWrapper delay={0}>
             <div className="container mx-auto px-4">
               <div className="max-w-5xl mx-auto">
-                <div 
+                <div
                   className="relative p-8 md:p-16 rounded-2xl bg-card/50 border border-primary/20 overflow-hidden group cta-spotlight"
                   onMouseMove={handleMouseMove}
                 >
@@ -204,8 +211,8 @@ const Home: React.FC = () => {
                       Browse our premium collection of plugins and resources designed for performance and reliability.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
-                      <Link 
-                        to="https://refinedev.org/resources" 
+                      <Link
+                        to="https://refinedev.org/resources"
                         target="_blank"
                         rel="noopener noreferrer"
                         className={PrimaryButton}

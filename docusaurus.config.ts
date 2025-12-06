@@ -34,11 +34,10 @@ const config: Config = {
                         "**/_*",
                         "Template",
                         "Phoenix/Phoenix.mdx",
-                        "Bolt/Bolt.mdx",
                         "CarbonSpigot/CarbonSpigot.mdx",
                         "Zephyr/Zephyr.mdx"
                     ],
-                    editUrl: (params) => `https://github.com/RefineDevelopment/Documentation/edit/master/${params.docPath}`
+                    editUrl: (params) => `https://github.com/RefineDevelopment/Documentation/blob/master/docs/${params.docPath}`
                 },
                 blog: false,
                 theme: {
@@ -84,7 +83,7 @@ const config: Config = {
                     to: "Bolt/Introduction",
                     position: "left",
                     label: "Bolt",
-                    activeBaseRegex: "/Bolt"
+                    activeBaseRegex: "^/Bolt/"
                 },
                 {
                     to: "CarbonSpigot/Introduction",

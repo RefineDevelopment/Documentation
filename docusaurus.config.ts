@@ -35,7 +35,8 @@ const config: Config = {
                         "Template",
                         "Phoenix/Phoenix.mdx",
                         "CarbonSpigot/CarbonSpigot.mdx",
-                        "Zephyr/Zephyr.mdx"
+                        "Zephyr/Zephyr.mdx",
+                        "Bolt/Bolt.mdx"
                     ],
                     editUrl: (params) => `https://github.com/RefineDevelopment/Documentation/blob/master/docs/${params.docPath}`
                 },

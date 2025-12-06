@@ -54,22 +54,11 @@ const products: Product[] = [
   },
 ];
 
-import Silk from '../components/Silk';
 
 const HeroBackground: React.FC = () => (
   <div className="absolute inset-0 overflow-hidden">
-    <div className="absolute inset-0 z-0">
-      <Silk
-        speed={5}
-        scale={1}
-        color="#ef2375"
-        noiseIntensity={1.5}
-        rotation={0}
-      />
-    </div>
-    <div className="absolute inset-0 z-1 bg-black/40 pointer-events-none"></div>
-    <div className="hero-grid relative z-10 opacity-30"></div>
-    <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-primary/5 z-20 pointer-events-none"></div>
+    <div className="hero-grid"></div>
+    <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-primary/5"></div>
   </div>
 );
 

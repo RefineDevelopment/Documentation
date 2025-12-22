@@ -1,3 +1,26 @@
+@import "tailwindcss/theme";
+@import "tailwindcss/utilities";
+
+@theme {
+  --color-primary: hsl(340 82% 56%);
+  /* Add other custom colors from tailwind.config.js if needed */
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-destructive: hsl(var(--destructive));
+  --color-muted: hsl(var(--muted));
+  --color-accent: hsl(var(--accent));
+  --color-popover: hsl(var(--popover));
+  --color-card: hsl(var(--card));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
 :root {
   --background: 240 10% 3.9%;
   --foreground: 0 0% 98%;
@@ -70,6 +93,48 @@ a {
   text-decoration: none !important;
 }
 
+/* Hide "Skip to main content" link unless focused */
+[class*='skipToContent'],
+.skipToContent_fXgn,
+a.skipToContent_fXgn {
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: 9999;
+}
+
+[class*='skipToContent']:focus,
+.skipToContent_fXgn:focus,
+a.skipToContent_fXgn:focus {
+  position: fixed !important;
+  top: 10px !important;
+  left: 10px !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  background: hsl(var(--primary)) !important;
+  color: white !important;
+  padding: 0.75rem 1.25rem !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  outline: 2px solid white !important;
+  outline-offset: 2px !important;
+}
+
 /* View Transitions for smooth page navigation */
 ::view-transition-old(root),
 ::view-transition-new(root) {
@@ -94,20 +159,78 @@ a {
 
 /* Glassmorphism/* Navbar */
 .navbar {
-  background: hsl(var(--background));
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: transparent;
   border-bottom: 1px solid hsl(var(--border) / 0.6);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  height: 4rem;
-  /* Enforce height */
+  min-height: var(--ifm-navbar-height);
   display: flex;
   align-items: center;
+  padding: 0;
+  /* Let inner handle padding if needed */
+}
+
+.navbar__inner {
+  background: hsl(var(--background) / 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--ifm-navbar-padding-horizontal);
 }
 
 .navbar__link {
   font-weight: 500;
   transition: color 0.2s ease;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.3);
+  border-radius: 5px;
+  border: 2px solid hsl(var(--background));
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.6);
+}
+
+.navbar-title-gradient,
+.navbar__title {
+  background: linear-gradient(to right,
+      #ffffff,
+      hsl(340 82% 56%),
+      #ffffff,
+      hsl(340 82% 70%),
+      #ffffff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-flow 4s linear infinite;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
 }
 
 .navbar__items {
@@ -354,4 +477,115 @@ html[data-theme='dark'] {
   margin: 0 !important;
   padding: 0 !important;
   position: static !important;
+
+}
+
+/* --- Heading Fixes --- */
+h1,
+.markdown h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.025em;
+  color: hsl(var(--foreground));
+}
+
+h2,
+.markdown h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid hsl(var(--border) / 0.5);
+  padding-bottom: 0.5rem;
+}
+
+h3,
+.markdown h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* --- Mobile Fixes --- */
+@media (max-width: 996px) {
+
+  /* Search Bar Fix */
+  .navbar__search {
+    padding-left: 0.5rem;
+  }
+
+  .DocSearch-Button {
+    margin: 0 !important;
+    padding: 0.5rem !important;
+    border-radius: 8px !important;
+  }
+
+  .DocSearch-Button-Container svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* Sidebar/TOC "On this page" fix */
+  .table-of-contents {
+    font-size: 0.875rem;
+  }
+
+  .theme-doc-toc-mobile {
+    margin-bottom: 1rem;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+  }
+
+  .theme-doc-toc-mobile button {
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+}
+
+/* Fix for the homepage css delay */
+.navbar--fixed-top {
+  transition: background-color 0s !important;
+}
+
+/* Ensure headings have anchors visible on hover */
+.hash-link {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  margin-left: 0.5rem;
+  color: hsl(var(--primary));
+}
+
+h1:hover .hash-link,
+h2:hover .hash-link,
+h3:hover .hash-link,
+h4:hover .hash-link,
+h5:hover .hash-link,
+h6:hover .hash-link {
+  opacity: 1;
+}
+
+/* Custom Footer Signature Styling */
+.footer {
+  padding: 1rem 0 !important;
+  background: hsl(var(--background)) !important;
+  border-top: 1px solid hsl(var(--border) / 0.4);
+}
+
+.footer__copyright {
+  font-size: 0 !important;
+  /* Hide default copyright text if any remains */
+}
+
+.footer img {
+  height: 40px;
+  width: auto;
+  transition: all 0.3s ease;
+}
+
+.footer a:hover img {
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.5));
+  opacity: 1 !important;
 }

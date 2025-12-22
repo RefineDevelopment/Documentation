@@ -2,9 +2,10 @@ import React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faLink, faShield, faBolt, faMicrochip, faWind, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { faGithub, faTwitter, faDiscord } from '@fortawesome/free-brands-svg-icons';
 import clsx from 'clsx';
+import { products } from '../../data/products';
 
 interface FooterLinkProps {
   href: string;
@@ -17,7 +18,7 @@ const FooterLink: React.FC<FooterLinkProps> = ({ href, label, Icon }) => (
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 text-sm"
+    className="text-muted-foreground hover:text-[#e91e63] transition-colors flex items-center gap-2 text-sm"
   >
     {Icon && <FontAwesomeIcon icon={Icon} className="w-4 h-4" />}
     {label}
@@ -47,13 +48,11 @@ const Footer: React.FC = () => {
   const footerSections: FooterSection[] = [
     {
       title: "Products",
-      items: [
-        { label: "Phoenix", href: "/Phoenix/Introduction", Icon: faShield },
-        { label: "Bolt", href: "/Bolt/Introduction", Icon: faBolt },
-        { label: "CarbonSpigot", href: "/CarbonSpigot/Introduction", Icon: faMicrochip },
-        { label: "Zephyr", href: "/Zephyr/Introduction", Icon: faWind },
-        { label: "Bolt Web Addon", href: "/BoltWebAddon/Introduction", Icon: faGlobe },
-      ],
+      items: products.map(p => ({
+        label: p.title,
+        href: p.href,
+        Icon: p.icon
+      })),
     },
     {
       title: "Quick Links",
@@ -108,16 +107,14 @@ const Footer: React.FC = () => {
           <p className="text-center md:text-left mb-2 md:mb-0">
             &copy; {currentYear} Refine Development. All rights reserved.
           </p>
-          
+
           <div className="flex flex-wrap items-center justify-center gap-4 mt-2 md:mt-0">
-            <span className="text-xs">Made with Docusaurus</span>
-            <a 
-              href="https://shedux.dev" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-xs text-muted-foreground hover:text-primary transition-colors"
+            <a
+              href="https://shedux.dev"
+              target="_blank"
+              className="inline-block transition-all duration-300 hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.5)] opacity-60 hover:opacity-100"
             >
-              Theme by shedux.dev
+              <img src="/signature.png" alt="shedux" className="h-10 w-auto" />
             </a>
           </div>
         </div>

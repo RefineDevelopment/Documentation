@@ -12,24 +12,32 @@ const PageBackground = () => {
     location.pathname.includes('/Zephyr') ||
     location.pathname.includes('/BoltWebAddon');
 
-
-  if (isDocsPage) {
-    return (
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute inset-0 bg-background"></div>
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-primary/8 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }}></div>
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 md:w-96 md:h-96 bg-primary/8 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s', animationDuration: '10s' }}></div>
-      </div>
-    );
-  }
-
-
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-primary/5"></div>
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-primary/8 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }}></div>
-      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 md:w-96 md:h-96 bg-primary/8 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s', animationDuration: '10s' }}></div>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[700px] md:h-[700px] bg-primary/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s', animationDuration: '12s' }}></div>
+      {/* Base Background */}
+      <div className={clsx(
+        "absolute inset-0 transition-opacity duration-1000 ease-in-out",
+        isDocsPage ? "bg-background opacity-100" : "bg-gradient-to-b from-primary/10 via-transparent to-primary/5 opacity-100"
+      )}></div>
+
+      {/* Decorative Orbs - Persistent across pages */}
+      <div
+        className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-primary/8 rounded-full blur-3xl animate-pulse"
+        style={{ animationDuration: '8s' }}
+      ></div>
+      <div
+        className="absolute bottom-1/4 right-1/4 w-64 h-64 md:w-96 md:h-96 bg-primary/8 rounded-full blur-3xl animate-pulse"
+        style={{ animationDelay: '2s', animationDuration: '10s' }}
+      ></div>
+
+      {/* Homepage specific orb - fades in/out */}
+      <div
+        className={clsx(
+          "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[700px] md:h-[700px] bg-primary/5 rounded-full blur-3xl animate-pulse transition-opacity duration-1000",
+          isDocsPage ? "opacity-0" : "opacity-100"
+        )}
+        style={{ animationDelay: '4s', animationDuration: '12s' }}
+      ></div>
     </div>
   );
 };
@@ -38,13 +46,31 @@ import { gsap } from 'gsap';
 
 export default function Layout(props) {
   const layoutRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
   useLayoutEffect(() => {
-    if (layoutRef.current) {
-      gsap.fromTo(layoutRef.current,
-        { opacity: 0, y: 10 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
+    // Target main content elements to avoid fading navbar/footer
+    // Docusaurus main content usually has .main-wrapper or <main>
+    const target = layoutRef.current?.querySelector('main') || contentRef.current;
+
+    if (target) {
+      gsap.killTweensOf(target);
+
+      gsap.fromTo(target,
+        {
+          opacity: 0,
+          y: 6,
+          scale: 0.998
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.45,
+          ease: 'power2.out',
+          clearProps: 'transform'
+        }
       );
     }
   }, [location.pathname]);
@@ -64,7 +90,7 @@ export default function Layout(props) {
     <div
       ref={layoutRef}
       className={clsx(
-        "relative min-h-screen cta-spotlight",
+        "relative min-h-screen cta-spotlight overflow-x-hidden",
         "bg-background"
       )}
       onMouseMove={handleMouseMove}
@@ -75,7 +101,7 @@ export default function Layout(props) {
       ></div>
       <PageBackground />
 
-      <div className="relative z-10">
+      <div ref={contentRef} className="relative z-10">
         <OriginalLayout {...props} />
       </div>
     </div>

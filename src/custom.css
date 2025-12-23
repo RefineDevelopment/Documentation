@@ -1,5 +1,4 @@
-@import "tailwindcss/theme";
-@import "tailwindcss/utilities";
+@import "tailwindcss";
 
 @theme {
   --color-primary: hsl(340 82% 56%);
@@ -15,7 +14,9 @@
   --color-accent: hsl(var(--accent));
   --color-popover: hsl(var(--popover));
   --color-card: hsl(var(--card));
+  --color-glow: hsla(var(--primary) / 0.15);
 
+  --radius-xl: calc(var(--radius) + 8px);
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
@@ -136,25 +137,38 @@ a.skipToContent_fXgn:focus {
 }
 
 /* View Transitions for smooth page navigation */
-::view-transition-old(root),
+::view-transition-old(root) {
+  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out;
+}
+
 ::view-transition-new(root) {
-  animation-duration: 0.3s;
+  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in;
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(4px) scale(0.998);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 .fade-in {
-  animation: fade-in 0.6s ease-out forwards;
+  animation: fade-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 /* Glassmorphism/* Navbar */
@@ -231,6 +245,52 @@ a.skipToContent_fXgn:focus {
   100% {
     background-position: 200% center;
   }
+}
+
+/* Premium Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-button {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transform: translateY(-2px);
+}
+
+.primary-glow {
+  box-shadow: 0 0 40px -10px hsla(var(--primary) / 0.3);
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, hsla(var(--foreground) / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, hsla(var(--foreground) / 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(circle at center, black, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%);
+  opacity: 0.4;
+}
+
+.text-reveal {
+  background: linear-gradient(135deg, #fff 0%, hsla(var(--foreground) / 0.7) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .navbar__items {
@@ -588,4 +648,17 @@ h6:hover .hash-link {
 .footer a:hover img {
   filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.5));
   opacity: 1 !important;
+}
+
+/* Hero Typography Overrides */
+.hero-title {
+  font-size: clamp(3rem, 10vw, 6.5rem) !important;
+  line-height: 1.1 !important;
+  font-weight: 850 !important;
+  letter-spacing: -0.03em !important;
+}
+
+.hero-description {
+  font-size: clamp(1rem, 2.5vw, 1.35rem) !important;
+  max-width: 750px !important;
 }

@@ -18,10 +18,15 @@ const FooterLink: React.FC<FooterLinkProps> = ({ href, label, Icon }) => (
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    className="text-muted-foreground hover:text-[#e91e63] transition-colors flex items-center gap-2 text-sm"
+    className="!text-white hover:!text-primary transition-all duration-300 flex items-center justify-start text-sm font-medium group/link no-underline !p-0 !m-0"
   >
-    {Icon && <FontAwesomeIcon icon={Icon} className="w-4 h-4" />}
-    {label}
+    {Icon && (
+      <FontAwesomeIcon
+        icon={Icon}
+        className="w-4 h-4 !text-white/50 group-hover/link:!text-primary transition-colors duration-300 mr-3 ml-[-6px]"
+      />
+    )}
+    <span>{label}</span>
   </a>
 );
 
@@ -78,23 +83,23 @@ const Footer: React.FC = () => {
       "text-foreground"
     )}>
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left border-b border-border/40 pb-8 mb-8">
-          <div className="col-span-2 md:col-span-1 space-y-4">
-            <div className="flex items-center justify-center md:justify-start space-x-3 mb-2">
-              <img src={logoSrc} alt={logoAlt} className="h-8 w-auto" />
-              <span className="text-lg font-semibold">{title}</span>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12 border-b border-border/40 pb-16 mb-12">
+          <div className="col-span-2 md:col-span-1 flex flex-col items-start text-left space-y-4">
+            <div className="flex items-center space-x-3">
+              <img src={logoSrc} alt={logoAlt} className="h-9 w-auto" />
+              <span className="text-xl font-bold tracking-tight text-white">{title}</span>
             </div>
-            <p className="text-sm text-muted-foreground max-w-xs mx-auto md:mx-0">
+            <p className="text-sm text-gray-400 max-w-xs leading-relaxed">
               A dedicated software studio focused on delivering optimized, scalable plugins and custom-tailored server solutions.
             </p>
           </div>
 
           {footerSections.map((section, index) => (
-            <div key={index} className="space-y-3">
-              <h4 className="text-sm font-semibold text-foreground">{section.title}</h4>
-              <ul className="space-y-2 text-sm list-none p-0 m-0">
+            <div key={index} className="flex flex-col items-start text-left space-y-5">
+              <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-white/40 mb-4 text-left w-full">{section.title}</h4>
+              <ul className="flex flex-col items-start space-y-3.5 text-sm list-none !p-0 !m-0">
                 {section.items.map((item, itemIndex) => (
-                  <li key={itemIndex}>
+                  <li key={itemIndex} className="flex items-center justify-start !p-0 ml-2">
                     <FooterLink {...item} />
                   </li>
                 ))}

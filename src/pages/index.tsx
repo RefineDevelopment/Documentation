@@ -1,7 +1,8 @@
 import React, { useRef, useLayoutEffect } from 'react';
 import Layout from '@theme/Layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRocket } from '@fortawesome/free-solid-svg-icons';
+import { faRocket, faEye, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faDiscord, faGithub } from '@fortawesome/free-brands-svg-icons';
 import ProductCard from '../components/ProductCard';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
@@ -81,18 +82,23 @@ const Home: React.FC = () => {
   };
 
   const ButtonStyle = clsx(
-    "px-6 py-2 md:px-8 md:py-3 text-base md:text-lg font-semibold rounded-md transition-colors duration-200",
-    "shadow-lg hover:shadow-xl font-semibold w-full sm:w-auto"
+    "px-6 py-2.5 md:px-8 md:py-3 text-base font-bold rounded-xl transition-all duration-300",
+    "shadow-lg hover:shadow-xl w-full sm:w-auto flex items-center justify-center gap-2.5 group/btn active:scale-95"
   );
 
   const PrimaryButton = clsx(
     ButtonStyle,
-    "bg-gradient-to-br from-white to-gray-200 !text-black hover:to-white hover:!text-black hover:shadow-purple-500/20"
+    "bg-white !text-black hover:bg-primary hover:!text-white hover:-translate-y-1 primary-glow"
   );
 
-  const SecondaryButton = clsx(
+  const MainWebsiteButton = clsx(
     ButtonStyle,
-    "bg-black !text-white hover:bg-gray-900 border border-gray-800"
+    "bg-primary !text-white hover:opacity-90 hover:-translate-y-1 shadow-primary/30"
+  );
+
+  const GlassButton = clsx(
+    ButtonStyle,
+    "bg-white/10 backdrop-blur-md border border-white/20 !text-white hover:bg-white/20 hover:-translate-y-1"
   );
 
   return (
@@ -107,50 +113,51 @@ const Home: React.FC = () => {
         >
           <HeroBackground />
 
-          <div className="container mx-auto relative z-10 py-24 md:py-32 px-4">
-            <div className="max-w-5xl mx-auto text-center">
-              <h1 className="hero-title text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 md:mb-6 text-center text-white drop-shadow-sm">
-                Refine Development <span className="text-primary">Documentation</span>
+          <div className="container mx-auto relative z-10 py-32 px-4 flex flex-col items-center">
+            <div className="max-w-7xl w-full text-center flex flex-col items-center">
+              <h1 className="hero-title text-white mb-10">
+                Refine Development <br />
+                <span className="text-primary drop-shadow-[0_0_25px_rgba(233,30,99,0.5)]">Documentation</span>
               </h1>
 
-              <p className="hero-description text-lg md:text-2xl text-gray-200 mb-4 md:mb-6 text-center max-w-3xl mx-auto leading-relaxed font-medium">
+              <p className="hero-description text-gray-300 mb-12 font-medium">
                 {description}
               </p>
 
-              <p className="hero-github-note text-base md:text-lg text-gray-400 mb-8 md:mb-10 text-center max-w-3xl mx-auto leading-relaxed">
-                If you would like to change anything in this Documentation, please make a Pull Request in our GitHub.
-              </p>
-
-              <div className="hero-buttons flex flex-col sm:flex-row flex-wrap justify-center gap-3 md:gap-4">
+              <div className="hero-buttons flex flex-wrap justify-center items-center gap-4 sm:gap-6">
                 <Link
                   to="/#products"
                   onClick={handleScrollToProducts}
                   className={PrimaryButton}
                 >
+                  <FontAwesomeIcon icon={faEye} className="w-5 h-5" />
                   View Documentation
                 </Link>
                 <Link
                   to="https://refinedev.org"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={SecondaryButton}
+                  className={MainWebsiteButton}
                 >
+                  <FontAwesomeIcon icon={faGlobe} className="w-5 h-5 transition-transform group-hover/btn:rotate-12" />
                   Main Website
                 </Link>
                 <Link
                   to="https://discord.refinedev.org"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={SecondaryButton}
+                  className={GlassButton}
                 >
+                  <FontAwesomeIcon icon={faDiscord} className="w-5 h-5 transition-transform group-hover/btn:scale-110" />
                   Join Discord
                 </Link>
                 <Link
                   to="https://github.com/RefineDevelopment/Documentation"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={SecondaryButton}
+                  className={GlassButton}
                 >
+                  <FontAwesomeIcon icon={faGithub} className="w-5 h-5 transition-transform group-hover/btn:translate-y-[-1px]" />
                   GitHub
                 </Link>
               </div>
@@ -177,31 +184,32 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        <section className="py-16 md:py-24 bg-background" id="cta">
-          <div className="container mx-auto px-4">
-            <div className="max-w-5xl mx-auto">
+        <section className="py-24 md:py-32 bg-background flex flex-col items-center" id="cta">
+          <div className="container mx-auto px-4 flex flex-col items-center">
+            <div className="max-w-5xl w-full flex flex-col items-center">
               <div
-                className="cta-card relative p-8 md:p-16 rounded-2xl bg-card/50 border border-primary/20 overflow-hidden group cta-spotlight"
+                className="cta-card relative w-full p-10 md:p-20 rounded-3xl bg-card/60 border border-white/10 overflow-hidden group/cta cta-spotlight flex flex-col items-center"
                 onMouseMove={handleMouseMove}
               >
-                <div className="relative z-10 text-center">
-                  <div className="inline-flex items-center justify-center mb-4">
-                    <FontAwesomeIcon icon={faRocket} className="h-6 w-6 text-primary mr-2" />
-                    <span className="text-sm font-semibold text-primary uppercase tracking-wider">Get Started</span>
+                <div className="relative z-10 flex flex-col items-center text-center w-full">
+                  <div className="inline-flex items-center justify-center gap-3 mb-8 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20">
+                    <FontAwesomeIcon icon={faRocket} className="h-4 w-4 text-primary" />
+                    <span className="text-xs font-bold text-primary uppercase tracking-[0.25em]">Get Started</span>
                   </div>
-                  <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-center mb-4 md:mb-6">
-                    Ready to Explore Our <span className="text-primary">Products</span>?
+                  <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">
+                    Ready to Explore Our <br /><span className="text-primary">Products</span>?
                   </h2>
-                  <p className="text-base md:text-xl text-muted-foreground mb-8 md:mb-10 text-center max-w-2xl mx-auto leading-relaxed">
+                  <p className="text-lg md:text-2xl text-gray-400 mb-12 max-w-2xl leading-relaxed">
                     Browse our premium collection of plugins and resources designed for performance and reliability.
                   </p>
-                  <div className="flex flex-wrap justify-center gap-4">
+                  <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
                     <Link
                       to="https://refinedev.org/resources"
                       target="_blank"
                       rel="noopener noreferrer"
                       className={PrimaryButton}
                     >
+                      <FontAwesomeIcon icon={faRocket} className="w-5 h-5" />
                       Browse All Products
                     </Link>
                   </div>

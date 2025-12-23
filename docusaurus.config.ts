@@ -48,10 +48,21 @@ const config: Config = {
         ]
     ],
 
-    scripts: [
-        { src: "https://cdn.tailwindcss.com" },
-        { src: "/tailwind-config.js" }
+    plugins: [
+        async function tailwindPlugin(context, options) {
+            return {
+                name: "docusaurus-tailwindcss",
+                configurePostCss(postcssOptions) {
+                    // Appends TailwindCSS and AutoPrefixer.
+                    postcssOptions.plugins.push(require("@tailwindcss/postcss"))
+                    postcssOptions.plugins.push(require("autoprefixer"))
+                    return postcssOptions
+                }
+            }
+        }
     ],
+
+
 
     themeConfig: {
         image: "banner.png",
@@ -116,6 +127,19 @@ const config: Config = {
                     target: '_blank'
                 }
             ]
+        },
+        footer: {
+            style: 'dark',
+            links: [],
+            copyright: `
+        <a 
+          href="https://shedux.dev" 
+          target="_blank"
+          class="inline-block transition-all duration-300 hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.5)] opacity-60 hover:opacity-100"
+        >
+          <img src="/signature.png" alt="shedux" class="h-10 w-auto" />
+        </a>
+            `,
         },
         prism: {
             theme: prismThemes.github,

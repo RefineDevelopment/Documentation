@@ -1,59 +1,17 @@
-import React, { useRef } from 'react';
+import React, { useRef, useLayoutEffect } from 'react';
 import Layout from '@theme/Layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faRocket, faShield, faBolt, faMicrochip, faWind, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faRocket } from '@fortawesome/free-solid-svg-icons';
 import ProductCard from '../components/ProductCard';
-import ScrollAnimationWrapper from '../components/ScrollAnimationWrapper';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { products } from '../data/products';
 
-interface Product {
-  title: string;
-  description: string;
-  href: string;
-  colorClass: string;
-  icon: IconDefinition;
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
 }
-
-const products: Product[] = [
-  {
-    title: "Phoenix",
-    description: "The ultimate network management suite for security, ranks, and staff tools.",
-    href: "/Phoenix/Introduction",
-    colorClass: "bg-red-600",
-    icon: faShield,
-  },
-  {
-    title: "Bolt",
-    description: "High-performance PvP practice plugin with advanced ELO and match tracking.",
-    href: "/Bolt/Introduction",
-    colorClass: "bg-yellow-600",
-    icon: faBolt,
-  },
-  {
-    title: "CarbonSpigot",
-    description: "Optimized Minecraft server fork for superior performance and stability.",
-    href: "/CarbonSpigot/Introduction",
-    colorClass: "bg-gray-600",
-    icon: faMicrochip,
-  },
-  {
-    title: "Zephyr",
-    description: "Simple and modern FFA plugin.",
-    href: "/Zephyr/Introduction",
-    colorClass: "bg-blue-600",
-    icon: faWind,
-  },
-  {
-    title: "Bolt Web Addon",
-    description: "A sleek web interface for displaying Bolt leaderboards and player statistics.",
-    href: "/BoltWebAddon/Introduction",
-    colorClass: "bg-primary",
-    icon: faGlobe,
-  },
-];
-
 
 const HeroBackground: React.FC = () => (
   <div className="absolute inset-0 overflow-hidden">
@@ -66,6 +24,45 @@ const Home: React.FC = () => {
   const title = 'Refine Documentation';
   const description = 'Here, you can find Documentation for all of our products with up-to-date information, if you have any questions please create a ticket on our Discord.';
   const productSectionRef = useRef<HTMLElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      // Hero Animation
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl.from('.hero-title', { y: 50, opacity: 0, duration: 1, delay: 0.2 })
+        .from('.hero-description', { y: 20, opacity: 0, duration: 0.8 }, '-=0.6')
+        .from('.hero-github-note', { y: 10, opacity: 0, duration: 0.8 }, '-=0.6')
+        .from('.hero-buttons > *', { y: 20, opacity: 0, duration: 0.5, stagger: 0.1 }, '-=0.4');
+
+      // Product Cards Scroll Animation
+      gsap.from('.product-card-wrapper', {
+        scrollTrigger: {
+          trigger: '.products-grid',
+          start: 'top 80%',
+        },
+        y: 60,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power2.out',
+      });
+
+      // CTA Animation
+      gsap.from('.cta-card', {
+        scrollTrigger: {
+          trigger: '#cta',
+          start: 'top 85%',
+        },
+        scale: 0.95,
+        opacity: 0,
+        duration: 1,
+        ease: 'elastic.out(1, 0.8)',
+      });
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
 
   const handleScrollToProducts = (e: React.MouseEvent<HTMLAnchorElement>): void => {
     e.preventDefault();
@@ -90,12 +87,12 @@ const Home: React.FC = () => {
 
   const PrimaryButton = clsx(
     ButtonStyle,
-    "bg-gradient-to-br from-white to-gray-200 text-black hover:to-white hover:text-black hover:shadow-cyan-500/20"
+    "bg-gradient-to-br from-white to-gray-200 !text-black hover:to-white hover:!text-black hover:shadow-purple-500/20"
   );
 
   const SecondaryButton = clsx(
     ButtonStyle,
-    "bg-black text-white hover:bg-gray-900 border border-gray-800"
+    "bg-black !text-white hover:bg-gray-900 border border-gray-800"
   );
 
   return (
@@ -103,7 +100,7 @@ const Home: React.FC = () => {
       title={title}
       description={description}
     >
-      <main className="relative overflow-hidden">
+      <main className="relative overflow-hidden" ref={heroRef}>
         <section
           className="relative min-h-screen flex items-center justify-center overflow-hidden bg-transparent group cta-spotlight"
           onMouseMove={handleMouseMove}
@@ -112,19 +109,19 @@ const Home: React.FC = () => {
 
           <div className="container mx-auto relative z-10 py-24 md:py-32 px-4">
             <div className="max-w-5xl mx-auto text-center">
-              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 md:mb-6 text-center text-white drop-shadow-sm">
+              <h1 className="hero-title text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-4 md:mb-6 text-center text-white drop-shadow-sm">
                 Refine Development <span className="text-primary">Documentation</span>
               </h1>
 
-              <p className="text-lg md:text-2xl text-gray-200 mb-4 md:mb-6 text-center max-w-3xl mx-auto leading-relaxed font-medium">
+              <p className="hero-description text-lg md:text-2xl text-gray-200 mb-4 md:mb-6 text-center max-w-3xl mx-auto leading-relaxed font-medium">
                 {description}
               </p>
 
-              <p className="text-base md:text-lg text-gray-400 mb-8 md:mb-10 text-center max-w-3xl mx-auto leading-relaxed">
+              <p className="hero-github-note text-base md:text-lg text-gray-400 mb-8 md:mb-10 text-center max-w-3xl mx-auto leading-relaxed">
                 If you would like to change anything in this Documentation, please make a Pull Request in our GitHub.
               </p>
 
-              <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 md:gap-4">
+              <div className="hero-buttons flex flex-col sm:flex-row flex-wrap justify-center gap-3 md:gap-4">
                 <Link
                   to="#products"
                   onClick={handleScrollToProducts}
@@ -164,16 +161,16 @@ const Home: React.FC = () => {
         <section id="products" ref={productSectionRef} className="py-16 md:py-24 bg-background">
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
-              <ScrollAnimationWrapper delay={0}>
+              <div>
                 <h2 className="text-3xl md:text-5xl font-bold text-center mb-8 md:mb-12 text-foreground">
                   Our <span className="text-primary">Products</span>
                 </h2>
-              </ScrollAnimationWrapper>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                {products.map((product, index) => (
-                  <ScrollAnimationWrapper key={product.title} delay={index * 0.1}>
+              </div>
+              <div className="products-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                {products.map((product) => (
+                  <div key={product.title} className="product-card-wrapper">
                     <ProductCard {...product} />
-                  </ScrollAnimationWrapper>
+                  </div>
                 ))}
               </div>
             </div>
@@ -181,39 +178,37 @@ const Home: React.FC = () => {
         </section>
 
         <section className="py-16 md:py-24 bg-background" id="cta">
-          <ScrollAnimationWrapper delay={0}>
-            <div className="container mx-auto px-4">
-              <div className="max-w-5xl mx-auto">
-                <div
-                  className="relative p-8 md:p-16 rounded-2xl bg-card/50 border border-primary/20 overflow-hidden group cta-spotlight"
-                  onMouseMove={handleMouseMove}
-                >
-                  <div className="relative z-10 text-center">
-                    <div className="inline-flex items-center justify-center mb-4">
-                      <FontAwesomeIcon icon={faRocket} className="h-6 w-6 text-primary mr-2" />
-                      <span className="text-sm font-semibold text-primary uppercase tracking-wider">Get Started</span>
-                    </div>
-                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-center mb-4 md:mb-6">
-                      Ready to Explore Our <span className="text-primary">Products</span>?
-                    </h2>
-                    <p className="text-base md:text-xl text-muted-foreground mb-8 md:mb-10 text-center max-w-2xl mx-auto leading-relaxed">
-                      Browse our premium collection of plugins and resources designed for performance and reliability.
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-4">
-                      <Link
-                        to="https://refinedev.org/resources"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={PrimaryButton}
-                      >
-                        Browse All Products
-                      </Link>
-                    </div>
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <div
+                className="cta-card relative p-8 md:p-16 rounded-2xl bg-card/50 border border-primary/20 overflow-hidden group cta-spotlight"
+                onMouseMove={handleMouseMove}
+              >
+                <div className="relative z-10 text-center">
+                  <div className="inline-flex items-center justify-center mb-4">
+                    <FontAwesomeIcon icon={faRocket} className="h-6 w-6 text-primary mr-2" />
+                    <span className="text-sm font-semibold text-primary uppercase tracking-wider">Get Started</span>
+                  </div>
+                  <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-center mb-4 md:mb-6">
+                    Ready to Explore Our <span className="text-primary">Products</span>?
+                  </h2>
+                  <p className="text-base md:text-xl text-muted-foreground mb-8 md:mb-10 text-center max-w-2xl mx-auto leading-relaxed">
+                    Browse our premium collection of plugins and resources designed for performance and reliability.
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-4">
+                    <Link
+                      to="https://refinedev.org/resources"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={PrimaryButton}
+                    >
+                      Browse All Products
+                    </Link>
                   </div>
                 </div>
               </div>
             </div>
-          </ScrollAnimationWrapper>
+          </div>
         </section>
       </main>
     </Layout>

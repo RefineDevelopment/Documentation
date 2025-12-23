@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faTrash, faFileAlt, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from '@docusaurus/router';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { useAllDocsData } from '@docusaurus/plugin-content-docs/client';
 import clsx from 'clsx';
 
@@ -15,7 +14,37 @@ interface SearchResult {
   matches?: string[];
 }
 
-function SearchModal({ isOpen, onClose, query, setQuery, results, selectedIndex, setSelectedIndex, inputRef, handleResultClick }: any) {
+interface DocData {
+  title?: string;
+  id?: string;
+  description?: string;
+  permalink?: string;
+  path?: string;
+}
+
+interface SearchModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  query: string;
+  setQuery: (query: string) => void;
+  results: SearchResult[];
+  selectedIndex: number;
+  setSelectedIndex: (index: number) => void;
+  inputRef: React.RefObject<HTMLInputElement>;
+  handleResultClick: (path: string) => void;
+}
+
+function SearchModal({
+  isOpen,
+  onClose,
+  query,
+  setQuery,
+  results,
+  selectedIndex,
+  setSelectedIndex,
+  inputRef,
+  handleResultClick
+}: SearchModalProps) {
   if (!isOpen) return null;
 
   const portal = (
@@ -121,7 +150,7 @@ function SearchModal({ isOpen, onClose, query, setQuery, results, selectedIndex,
             </div>
           ) : results.length === 0 ? (
             <div style={{ padding: '2.5rem 1.5rem', textAlign: 'center', color: 'hsl(var(--muted-foreground))' }}>
-              <p style={{ fontSize: '0.875rem', margin: 0 }}>No results for "<span style={{ color: 'hsl(var(--primary))', fontWeight: 500 }}>{query}</span>"</p>
+              <p style={{ fontSize: '0.875rem', margin: 0 }}>No results for &quot;<span style={{ color: 'hsl(var(--primary))', fontWeight: 500 }}>{query}</span>&quot;</p>
             </div>
           ) : (
             <div>
@@ -262,7 +291,8 @@ function SearchModal({ isOpen, onClose, query, setQuery, results, selectedIndex,
     </div>
   );
 
-  return ReactDOM.createPortal(portal, document.body);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return ReactDOM.createPortal(portal, document.body) as any;
 }
 
 export default function CustomSearch(): JSX.Element {
@@ -272,7 +302,6 @@ export default function CustomSearch(): JSX.Element {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const history = useHistory();
-  const { siteConfig } = useDocusaurusContext();
   const allDocsData = useAllDocsData();
 
   useEffect(() => {
@@ -309,8 +338,10 @@ export default function CustomSearch(): JSX.Element {
 
   useEffect(() => {
     if (query.length < 2) {
-      setResults([]);
-      return;
+      const timer = setTimeout(() => {
+        setResults([]);
+      }, 0);
+      return () => clearTimeout(timer);
     }
 
     const searchDocs = () => {
@@ -322,11 +353,12 @@ export default function CustomSearch(): JSX.Element {
         const version = pluginData.versions[0];
         if (!version || !version.docs) return;
 
-        Object.entries(version.docs).forEach(([docId, doc]: [string, any]) => {
-          const title = doc.title || doc.id || '';
-          const description = doc.description || '';
-          const id = doc.id || '';
-          const permalink = doc.permalink || doc.path || '';
+        Object.entries(version.docs).forEach(([_docId, doc]) => {
+          const typedDoc = doc as DocData;
+          const title = typedDoc.title || typedDoc.id || '';
+          const description = typedDoc.description || '';
+          const id = typedDoc.id || '';
+          const permalink = typedDoc.permalink || typedDoc.path || '';
 
           const titleLower = title.toLowerCase();
           const descLower = description.toLowerCase();
@@ -381,6 +413,12 @@ export default function CustomSearch(): JSX.Element {
     return () => clearTimeout(debounce);
   }, [query, allDocsData]);
 
+  const handleResultClick = React.useCallback((path: string) => {
+    history.push(path);
+    setIsOpen(false);
+    setQuery('');
+  }, [history]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
@@ -399,13 +437,7 @@ export default function CustomSearch(): JSX.Element {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, results, selectedIndex]);
-
-  const handleResultClick = (path: string) => {
-    history.push(path);
-    setIsOpen(false);
-    setQuery('');
-  };
+  }, [isOpen, results, selectedIndex, handleResultClick]);
 
   const handleClose = () => {
     setIsOpen(false);

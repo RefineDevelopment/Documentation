@@ -2,7 +2,6 @@ import React from 'react';
 import DocItemContent from '@theme-original/DocItem/Content';
 import clsx from 'clsx';
 import type { WrapperProps } from '@docusaurus/types';
-import type { Props } from '@theme/DocItem/Content';
 
 type DocItemContentWrapperProps = WrapperProps<typeof DocItemContent>;
 

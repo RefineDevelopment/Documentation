@@ -1,0 +1,8 @@
+node_modules
+build
+.docusaurus
+.cache
+.npm
+.DS_Store
+*.sh
+*.map

@@ -123,7 +123,7 @@ const Home: React.FC = () => {
 
               <div className="hero-buttons flex flex-col sm:flex-row flex-wrap justify-center gap-3 md:gap-4">
                 <Link
-                  to="#products"
+                  to="/#products"
                   onClick={handleScrollToProducts}
                   className={PrimaryButton}
                 >
@@ -158,11 +158,11 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        <section id="products" ref={productSectionRef} className="py-16 md:py-24 bg-background">
+        <section ref={productSectionRef} className="py-16 md:py-24 bg-background">
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
               <div>
-                <h2 className="text-3xl md:text-5xl font-bold text-center mb-8 md:mb-12 text-foreground">
+                <h2 id="products" className="text-3xl md:text-5xl font-bold text-center mb-8 md:mb-12 text-foreground">
                   Our <span className="text-primary">Products</span>
                 </h2>
               </div>

@@ -112,7 +112,7 @@ const Footer: React.FC = () => {
             <a
               href="https://shedux.dev"
               target="_blank"
-              className="inline-block transition-all duration-300 hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.5)] opacity-60 hover:opacity-100"
+              className="inline-block transition-all duration-300 hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.5)] opacity-60 hover:opacity-100" rel="noreferrer"
             >
               <img src="/signature.png" alt="shedux" className="h-10 w-auto" />
             </a>

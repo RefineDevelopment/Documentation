@@ -18,7 +18,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   title,
   description,
   href,
-  colorClass,
   icon
 }) => {
   const cardRef = useRef<HTMLAnchorElement>(null);

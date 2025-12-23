@@ -12,6 +12,7 @@ const config: Config = {
     baseUrl: "/",
 
     onBrokenLinks: "warn",
+    onBrokenAnchors: "ignore",
 
     markdown: {
         mermaid: true,

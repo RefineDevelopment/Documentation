@@ -16,21 +16,26 @@ const Root: React.FC<RootProps> = ({ children }) => {
       behavior: 'instant'
     });
 
-    setIsLoading(true);
     const timer = setTimeout(() => {
+      setIsLoading(true);
+    }, 0);
+
+    const finishTimer = setTimeout(() => {
       setIsLoading(false);
     }, 300);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(finishTimer);
+    };
   }, [location.pathname]);
 
   return (
     <>
 
-      <div 
-        className={`fixed top-0 left-0 h-1 bg-primary transition-all duration-300 ease-out z-[9999] ${
-          isLoading ? 'w-full' : 'w-0'
-        }`}
+      <div
+        className={`fixed top-0 left-0 h-1 bg-primary transition-all duration-300 ease-out z-[9999] ${isLoading ? 'w-full' : 'w-0'
+          }`}
         style={{
           boxShadow: isLoading ? '0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary))' : 'none'
         }}

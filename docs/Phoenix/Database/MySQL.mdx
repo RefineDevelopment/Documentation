@@ -1,0 +1,104 @@
+---
+sidebar_position: 3
+title: MySQL / MariaDB (Required)
+description: Relational database configuration for advanced data management.
+---
+
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+
+# Relational Database Management
+
+MySQL or MariaDB is a **mandatory requirement** for Phoenix. It is utilized for structured relational data management that complements the document-based storage of MongoDB.
+
+---
+
+## 1. MariaDB vs MySQL
+
+:::tip Industry Standard
+We strongly recommend **MariaDB** over Oracle MySQL. MariaDB offers enhanced performance, a better query optimizer, and is fully open-source.
+:::
+
+| Feature | MariaDB | Standard MySQL |
+| :--- | :--- | :--- |
+| **Performance** | High (XtraDB Engine) | Standard (InnoDB) |
+| **Query Speed** | Faster for complex joins | Basic |
+| **Compatibility** | 100% Drop-in replacement | N/A |
+
+---
+
+## 2. Platform-Specific Installation
+
+<Tabs queryString="platform">
+<TabItem value="linux" label="Linux (SSH)" default>
+
+### Step 1: Deployment
+```bash
+sudo apt update
+sudo apt install mariadb-server -y
+sudo systemctl enable --now mariadb
+```
+
+### Step 2: Hardening
+Follow the interactive wizard to secure your installation:
+```bash
+sudo mysql_secure_installation
+# Recommended: Remove anonymous users, disable remote root login.
+```
+
+### Step 3: Database & User Creation
+```sql
+CREATE DATABASE phoenix;
+CREATE USER 'phoenix'@'%' IDENTIFIED BY 'YourStrongPassword';
+GRANT ALL PRIVILEGES ON phoenix.* TO 'phoenix'@'%';
+FLUSH PRIVILEGES;
+```
+</TabItem>
+
+<TabItem value="pterodactyl" label="Pterodactyl Panel">
+
+### Using Panel Databases (Recommended)
+1. Navigate to your server's **Databases** tab.
+2. Click **New Database**.
+3. Note the **External Connection** details (IP, Port, Username).
+
+### Using Dedicated MariaDB Egg
+:::tip MariaDB Egg
+**Link:** [MariaDB Pterodactyl Egg](https://pterodactyleggs.com/egg/67a9e0132871dc821ef904b0)
+:::
+
+1. Create a server using the egg above.
+2. Define `Root Password` in the startup variables.
+3. Connect using the server's public or gateway IP.
+
+</TabItem>
+</Tabs>
+
+---
+
+## 3. Phoenix Configuration
+
+Apply these details in your `globa.yml` configuration:
+
+```yaml
+database:
+  mysql:
+    address: "172.18.0.1" # Gateway if on same node
+    port: 3306
+    database: "phoenix"
+    username: "phoenix_user"
+    password: "YourStrongPassword"
+```
+
+---
+
+## 4. Troubleshooting & Maintenance
+
+### Common Connection Errors
+- **`Access Denied`**: Ensure the user has permissions for the specific database and IP. Check `GRANT` statements.
+- **`Communications link failure`**: Ensure MariaDB is listening on more than just `127.0.0.1`. Check `/etc/mysql/mariadb.conf.d/50-server.cnf`.
+- **`Wait timeout`**: The database closed the connection. Phoenix handles reconnection automatically, but check for network instability.
+
+:::important Optimization
+For large networks, ensure `max_connections` in your MariaDB configuration is set to at least `500` to handle simultaneous server queries.
+:::

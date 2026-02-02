@@ -7,41 +7,58 @@ import TabItem from '@theme/TabItem'
 import Spigot from './installation/_spigot.mdx'
 import Proxy from './installation/_proxy.mdx'
 
-An advanced Network Core plugin that provides a plethora of features to enhance any server administration experience. Phoenix core is compatible with multiple plugins and comes with numerous free add-ons that expand features of Phoenix.
+# Welcome to Phoenix
 
-Its simple, its powerful and it gets the job done.
+**Phoenix** is an advanced Network Core plugin designed to be the ultimate solution for server administration, rank management, and staff efficiency. It combines power with simplicity, offering a highly customizable experience that scales from small servers to massive networks.
 
-Phoenix is extremely customizable. The freedom to change messages, menus, settings and more will allow Phoenix to fit in to your network seamlessly.
+<div className="flex gap-4 my-8">
+  <a href="/Phoenix/Installation" className="glass-button px-8 py-4 rounded-2xl inline-flex items-center gap-3 no-underline text-white hover:text-white font-bold primary-glow transition-all hover:scale-105">
+    <span>🚀 Get Started</span>
+  </a>
+</div>
 
-## Installation
+---
 
-<Tabs queryString="type">
-    <TabItem value="spigot" label="Spigot / Paper" default>
-        <Spigot />
-    </TabItem>
-    <TabItem value="proxy" label="Velocity / Bungee">
-        <Proxy />
-    </TabItem>
-</Tabs>
+## Core Features
+
+Phoenix provides everything you need to manage a professional Minecraft network.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-10">
+  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
+    <h3 className="text-primary mt-0">👑 Rank & Permission System</h3>
+    <p className="mb-0 text-sm">Sophisticated inheritance-based rank system with global and server-specific scopes.</p>
+  </div>
+  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
+    <h3 className="text-primary mt-0">⚖️ Advanced Punishments</h3>
+    <p className="mb-0 text-sm">Comprehensive punishment ladders, rollbacks, and searchable histories for staff accountability.</p>
+  </div>
+  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
+    <h3 className="text-primary mt-0">🛡️ Network Security</h3>
+    <p className="mb-0 text-sm">Built-in 2FA, staff security layers, and anti-VPN to protect your server from unauthorized access.</p>
+  </div>
+  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
+    <h3 className="text-primary mt-0">📦 Extensive Addons</h3>
+    <p className="mb-0 text-sm">Modular architecture with numerous free addons like Staff Mode, Basic utils, and Cosmetics.</p>
+  </div>
+</div>
+
+:::tip Phoenix ecosystem
+Phoenix isn't just a plugin it's a complete ecosystem. With built-in support for Velocity, BungeeCord, and cross-server synchronization, your network remains unified and secure.
+:::
+
+## Detailed Capabilities
+
+- **Elastic Permission Scoping**: Assign permissions globally or target specific servers and server groups.
+- **Grants & Histories**: Every rank assignment is logged and can be viewed or revoked at any time via a clean GUI.
+- **Staff Automation**: Advanced staff mode with vanish, freeze, and inventory inspection tools integrated out of the box.
+- **Data Integrity**: Optimized for high-performance databases (Redis, MongoDB, SQL) ensuring zero-latency data syncing across proxies.
 
 ## FAQ
-
-:::tip
-Debug mode can be toggled using `/phoenix debug-mode`.
-:::
 
 <details>
 <summary>My menus are not working on 1.12+ servers. How do I fix?</summary>
 
 Change `fill-glass` in `menus.yml` to something like `GRAY_STAINED_GLASS_PANE`, then restart.
-</details>
-
-<details>
-<summary>I have a missing dependency error. Why am I getting this?</summary>
-
-You are missing a required dependency that Phoenix relies on, please ensure you have all plugins listed below.
-
-- PlaceholderAPI
 </details>
 
 <details>
@@ -53,8 +70,9 @@ Please ensure you have `core.grant.*` or `core.grant.<rank>`, and your rank is a
 <details>
 <summary>Why am I being blacklisted randomly when I op someone or I get opped?</summary>
 
-This is because you arent a [security user](/Phoenix/Features/Security).
+This is because you aren't a [security user](/Phoenix/Features/Security).
 Execute `/security add <player> [admin]` in console to fix this.
 
-You can also turn security off in config but it is highly recommended not to.
+It is highly recommended to keep security enabled to prevent unauthorized administrative actions.
 </details>
+

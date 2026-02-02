@@ -1,0 +1,100 @@
+---
+sidebar_position: 4
+---
+
+# Phoenix API
+
+**Phoenix API (Version: 2.0)** provides developers with the tools to integrate with Phoenix and pxQueue seamlessly.
+
+<div className="flex gap-4 my-8">
+  <a href="https://github.com/RefineDevelopment/PhoenixAPI" target="_blank" className="glass-button px-8 py-4 rounded-2xl inline-flex items-center gap-3 no-underline text-white hover:text-white font-bold primary-glow transition-all hover:scale-105">
+    <span>🔗 GitHub Repository</span>
+  </a>
+</div>
+
+---
+
+## Installing
+
+You can either shade this repository into your plugin, or run it as a plugin by itself.
+
+### Option 1: Manual Build
+1. Clone the repository: `git clone https://github.com/RefineDevelopment/PhoenixAPI`
+2. Enter the directory: `cd PhoenixAPI`
+3. Build & install with Maven: `mvn clean install`
+
+### Option 2: Maven Dependency
+Add our repository to your `pom.xml`:
+
+```xml
+<repositories>
+    <repository>
+        <id>refine-public</id>
+        <url>https://maven.refinedev.xyz/public-repo/</url>
+    </repository>
+</repositories>
+```
+
+Then, add the PhoenixAPI dependency:
+
+```xml
+<dependency>
+    <groupId>xyz.refinedev.phoenix</groupId>
+    <artifactId>pxAPI</artifactId>
+    <version>2.0</version>
+    <scope>provided</scope>
+</dependency>
+```
+
+---
+
+## Usage
+
+To access PhoenixAPI, you can use these two core methods:
+
+### Phoenix Core API
+For all the api features such as `RankHandler`, `ProfileHandler`, `RebootHandler`, `ChatHandler`, etc... use:
+
+```java
+Phoenix phoenix = Phoenix.getInstance();
+```
+
+### Common Platform API
+If you want all the handlers that are global (Bukkit, Bungee & Velocity) you can also do:
+
+```java
+CommonPlatform platform = PlatformGetter.getInstance();
+```
+
+### Queue API
+To access QueueAPI, you can use:
+
+```java
+QueueAPI qApi = QueueAPI.INSTANCE;
+```
+
+---
+
+## Examples
+
+### Getting a player's highest rank
+```java
+Phoenix plugin = Phoenix.getInstance();
+Profile profile = api.getProfileHandler().getProfile(UUID.fromString("447e2ed3-1cf5-4e73-9160-e3c5e195ed7d"));
+
+if (profile != null) {
+    player.sendMessage(profile.getName() + "'s highest rank is " + profile.getHighestRank().getName());    
+}
+```
+
+### Obtaining information about a player in Queue
+```java
+QueueAPI qApi = QueueAPI.INSTANCE;
+Queue queue = qApi.getPlayerQueue(UUID.fromString("447e2ed3-1cf5-4e73-9160-e3c5e195ed7d"));
+
+if (queue != null) {
+    player.sendMessage("Player is currently queued for " + queue.getName());
+    return;
+}
+player.sendMessage("Player is currently not in a queue");
+```

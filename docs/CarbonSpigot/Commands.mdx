@@ -1,0 +1,72 @@
+---
+sidebar_position: 5
+---
+
+# Commands
+
+Below is a list of Commands available in Carbon, categorized by their respective sections.
+
+### Carbon Commands
+Commands used for to manage Carbon specific features.
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/carbon help` | `carbon.command.main` | Main help command and command list |
+| `/carbon reload` | `carbon.command.reload` | Reload the server settings and combat profiles |
+| `/carbon save` | `carbon.command.save` | Save all server and world settings to files |
+| `/carbon theme` | `carbon.command.theme` | Change the plugin's theme color |
+| `/carbon gc` | `carbon.command.gc` | Manually call the Java Garbage Collector to clear memory |
+| `/carbon startprofiling` | `carbon.command.startprofiling` | Start profiling the server's CPU usage |
+| `/carbon stopprofiling` | `carbon.command.stopprofiling` | Stop profiling and save the JFR result |
+| `/carbon crash` | `carbon.command.crash` | Disconnect a player by sending an invalid explosion packet |
+| `/carbon updateinventory` | `carbon.command.updateinventory` | Force an update of a player's active inventory container |
+
+### World & Lighting Commands
+Utility commands for debugging and fixing world-related issues.
+
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/carbon fixlight` | `carbon.command.fixlight` | Fix lighting in a specified radius around the player |
+| `/carbon refreshchunks`| `carbon.command.refreshchunks` | Force a refresh of chunks in a radius around the player |
+| `/carbon lightlevel` | `carbon.command.lightlevel` | View detailed light information for the targeted block |
+| `/carbon checklight` | `carbon.command.checklight` | Queue a light check for the block you are looking at |
+| `/carbon syncload dump` | `carbon.command.syncload` | Dump synchronous chunk load logs to a JSON file |
+| `/carbon syncload clear`| `carbon.command.syncload` | Clear the current synchronous chunk load logs |
+
+### Debug & Developer Commands
+Hidden utility commands used for internal debugging and technical testing.
+
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/carbon debug` | `carbon.command.debug` | Toggle global debug mode for Carbon |
+| `/carbon resendchunks` | `carbon.command.resendchunks` | Refresh and resend chunks specifically to your client |
+| `/carbon chunk` | `carbon.debug` | Debug technical metadata of your current chunk |
+| `/carbon dump` | `carbon.command.dump` | Dump a player's raw entity data to the console |
+| `/carbon voxel` | `carbon.command.voxel` | Visualize the VoxelShape/Collision of a block |
+| `/carbon bbox` | `carbon.command.bbox` | Highlight the bounding box of the targeted entity |
+| `/carbon lava` | `carbon.command.lava` | Test block-change interactions via fake lava placement |
+| `/carbon debuginfo` | `carbon.command.debuginfo` | Print internal chunk provider server information |
+| `/carbon debuglightingdata` | `carbon.command.debuglightingdata`| Log raw light NibbleArrays to the console |
+
+### Admin Commands
+Commands used for server management, performance monitoring, and configuration.
+
+| `/chunkunload` | `carbon.command.unload` | Unload unused chunks from memory |
+| `/killall` | `carbon.command.killall` | Clears all entities in the world |
+| `/combat` | `carbon.command.combat` | Combat profile management and configuration |
+| `/hide` | `carbon.command.hide` | Toggle player visibility |
+| `/plugin` | `carbon.plugin` | Advanced plugin management (load/unload/reload) |
+| `/properties` | `carbon.command.properties` | Modify server properties on the fly |
+| `/serverstats` | `carbon.command.serverstats` | View detailed server performance and memory stats |
+| `/tps` | `bukkit.command.tps` | View server ticks per second |
+| `/trackingrange` | `carbon.trackingrange` | View or modify entity tracking ranges |
+| `/locate` | `carbon.command.locate` | Optimized structure locator |
+| `/setslots` | `carbon.command.setslots` | Change server player slots |
+
+### Player Commands
+General utility commands available to players.
+
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/day` | `none` | Set your personal time to day |
+| `/night` | `none` | Set your personal time to night |
+| `/ping` | `none` | View your own or another player's latency |

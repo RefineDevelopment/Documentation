@@ -1,0 +1,61 @@
+---
+sidebar_position: 3
+---
+
+# Commands
+
+Phoenix features a wide array of commands to manage your network, players, and staff. Commands are categorized below by their primary usage.
+
+### Core & Admin Commands
+Main commands for server configuration and rank management.
+
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/phoenix help` | `core.command.phoenix` | View all core phoenix commands. |
+| `/phoenix reload` | `core.command.phoenix` | Reload the plugin configuration. |
+| `/rank editor` | `core.command.rank` | Open the GUI-based rank editor. |
+| `/grant <player>` | `core.command.grant` | Open the rank grant menu for a player. |
+| `/security` | `core.command.security` | Manage the network security users. |
+| `/whitelist` | `core.command.whitelist` | Configure the network-wide whitelist. |
+
+:::info Detailed Ranks
+For all sub-commands related to ranks (like adding permissions via command line), visit the [Ranks Features page](/Phoenix/Features/Ranks#commands).
+:::
+
+### Staff & Punishment Commands
+Commands used by staff to moderate the network.
+
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/punish <player>` | `core.command.punish` | Open the punishment GUI for a player. |
+| `/ban <player>` | `core.command.ban` | Permanently ban a player from the network. |
+| `/mute <player>` | `core.command.mute` | Mute a player across the network. |
+| `/history <player>` | `core.command.history` | View a player's moderation history. |
+| `/modmode` | `core.command.modmode` | Toggle staff mod-mode (Vanish, inventory tools, etc). |
+| `/vanish` | `core.command.vanish` | Toggle staff visibility. |
+
+:::tip Punishment Ladders
+You can automate punishment severity using ladders. See [Punishment Ladders](/Phoenix/Features/Punishments) for more.
+:::
+
+### Player & Utility Commands
+General commands provided by Phoenix and its core addons.
+
+| Command | Permission | Description |
+| :--- | :--- | : :--- |
+| `/ping` | `none` | View your latency to the server. |
+| `/spawn` | `core.command.spawn` | Teleport to the server spawn point. |
+| `/heal` | `core.command.heal` | Restore your health and hunger (pxBasic). |
+| `/fly` | `core.command.fly` | Toggle flight mode (pxBasic). |
+| `/tags` | `none` | Open the chat tags selection menu. |
+| `/2fa` | `core.2fa` | Configure account two-factor authentication. |
+
+### Advanced Developer Commands
+Internal tools for debugging and technical analysis.
+
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/phoenix debug-mode` | `core.command.phoenix` | Toggle internal debug logging. |
+| `/chatsnapshot` | `core.command.chatsnapshot` | Create a URL-based snapshot of recent chat. |
+| `/mclogs` | `core.command.mclogs` | Upload server logs to mclo.gs instantly. |
+| `/serverinfo` | `core.command.serverinfo` | View technical load and sync stats for specific servers. |

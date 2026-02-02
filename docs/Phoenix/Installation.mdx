@@ -1,0 +1,69 @@
+---
+sidebar_position: 2
+---
+
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+import Spigot from './installation/_spigot.mdx'
+import Proxy from './installation/_proxy.mdx'
+
+# Installation
+
+Phoenix is designed to work across your entire network. Follow the steps below based on your server type.
+
+<Tabs queryString="type">
+  <TabItem value="spigot" label="Spigot / Paper" default>
+    <div className="bg-card/40 border border-white/10 p-6 rounded-2xl my-6">
+      <h3 className="text-primary mt-0">Standard Server Setup</h3>
+      <div className="space-y-4">
+        <Spigot />
+      </div>
+    </div>
+  </TabItem>
+  <TabItem value="proxy" label="Velocity / Bungee">
+    <div className="bg-card/40 border border-white/10 p-6 rounded-2xl my-6">
+      <h3 className="text-primary mt-0">Network Proxy Setup</h3>
+      <div className="space-y-4">
+        <Proxy />
+      </div>
+    </div>
+  </TabItem>
+</Tabs>
+
+---
+
+## Database Configuration
+
+Phoenix requires a database to synchronize data across your network. We support MongoDB, MariaDB/MySQL, and Redis.
+
+:::important Setup Required
+You must configure your database details in `global.yml` before Phoenix can start successfully.
+:::
+
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
+  <a href="/Phoenix/Database/Mongo" className="bg-card/40 border border-white/10 p-4 rounded-xl no-underline text-white hover:border-primary/50 transition-colors">
+    <h4 className="mt-0 text-primary text-sm">🍃 MongoDB</h4>
+    <p className="text-xs mb-0 text-muted-foreground">High-performance document storage (Recommended).</p>
+  </a>
+  <a href="/Phoenix/Database/SQL" className="bg-card/40 border border-white/10 p-4 rounded-xl no-underline text-white hover:border-primary/50 transition-colors">
+    <h4 className="mt-0 text-primary text-sm">🐘 MariaDB / MySQL</h4>
+    <p className="text-xs mb-0 text-muted-foreground">Standard relational database support.</p>
+  </a>
+  <a href="/Phoenix/Database/Redis" className="bg-card/40 border border-white/10 p-4 rounded-xl no-underline text-white hover:border-primary/50 transition-colors">
+    <h4 className="mt-0 text-primary text-sm">⚡ Redis</h4>
+    <p className="text-xs mb-0 text-muted-foreground">Required for cross-server synchronization.</p>
+  </a>
+</div>
+
+## Next Steps
+
+Once you have Phoenix installed and connected to your database, you can begin configuring your ranks and security.
+
+<div className="flex gap-4 mt-6">
+  <a href="/Phoenix/Features/Ranks" className="glass-button px-6 py-3 rounded-xl inline-flex items-center gap-2 no-underline text-white hover:text-white font-bold text-sm">
+    <span>👑 Configure Ranks</span>
+  </a>
+  <a href="/Phoenix/Features/API" className="glass-button px-6 py-3 rounded-xl inline-flex items-center gap-2 no-underline text-white hover:text-white font-bold text-sm">
+    <span>💻 Developer API</span>
+  </a>
+</div>

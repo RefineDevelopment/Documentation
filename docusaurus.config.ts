@@ -35,7 +35,7 @@ const config: Config = {
                         "**/_*",
                         "Template",
                         "Phoenix/Phoenix.mdx",
-                        "CarbonSpigot/CarbonSpigot.mdx",
+                        "Carbon/Carbon.mdx",
                         "Zephyr/Zephyr.mdx",
                         "Bolt/Bolt.mdx"
                     ],
@@ -96,10 +96,10 @@ const config: Config = {
                     activeBaseRegex: "^/Bolt/"
                 },
                 {
-                    to: "CarbonSpigot/Introduction",
+                    to: "Carbon/Introduction",
                     position: "left",
                     label: "Carbon",
-                    activeBaseRegex: "/CarbonSpigot"
+                    activeBaseRegex: "/Carbon"
                 },
                 {
                     to: "Zephyr/Introduction/",
@@ -107,12 +107,12 @@ const config: Config = {
                     label: "Zephyr",
                     activeBaseRegex: "/Zephyr/Introduction"
                 },
-                {
-                    to: "BoltWebAddon/Introduction/",
-                    position: "left",
-                    label: "Bolt Web Addon",
-                    activeBaseRegex: "/BoltWebAddon/Introduction"
-                },
+                // {
+                //     to: "BoltWebAddon/Introduction/",
+                //     position: "left",
+                //     label: "Bolt Web Addon",
+                //     activeBaseRegex: "/BoltWebAddon/Introduction"
+                // },
                 {
                     type: 'search',
                     position: 'right'

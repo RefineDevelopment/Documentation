@@ -1,7 +1,48 @@
 ---
 sidebar_position: 1
 ---
-## What is CarbonSpigot?
-It is an advanced PaperSpigot fork specifically designed to elevate the PvP experience by implementing significant modifications to the core NMS code. Our enhanced version incorporates a range of additional enhancements and improvements to ensure optimal gameplay. Thorough testing, involving over 700+ players, has confirmed its stability, maintaining a consistent 20 ticks per second (TPS) for an uninterrupted experience. One of the key highlights of our fork is the remarkable smoothness and fluidity it offers in terms of knockback mechanics, potions, and hit detection. These crucial aspects of PvP have been finely tuned to provide players with an exceptional combat experience. Moreover, our implementation of API additions and alterations offers developers unparalleled flexibility and an enhanced environment for crafting plugins tailored to their Carbon server.
+# Welcome to CarbonSpigot
 
-CarbonSpigot can be purchased via our [Store](https://refinedev.org/resources/carbonspigot.15/)
+**Carbon** is a high-performance **Minecraft 1.8.8** server fork that brings modern optimizations and advanced features to your network. It delivers ultra-responsive PvP and cutting-edge gameplay enhancements, making it the perfect choice for servers seeking top-tier performance.
+
+<div className="flex gap-4 my-8">
+  <a href="/CarbonSpigot/Installation" className="glass-button px-8 py-4 rounded-2xl inline-flex items-center gap-3 no-underline text-white hover:text-white font-bold primary-glow transition-all hover:scale-105">
+    <span>🚀 Get Started</span>
+  </a>
+</div>
+
+---
+
+## Core Features
+
+Experience a server built for modern performance standards.
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-10">
+  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
+    <h3 className="text-primary mt-0">⚡ High Performance</h3>
+    <p className="mb-0 text-sm">Low-CPU tickloops and fully parallelized entity tracking for maximum TPS stability.</p>
+  </div>
+  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
+    <h3 className="text-primary mt-0">⚔️ Advanced Combat</h3>
+    <p className="mb-0 text-sm">Unique combat engine with custom knockback profiles and hit-detection optimizations.</p>
+  </div>
+  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
+    <h3 className="text-primary mt-0">🌪️ Async Everything</h3>
+    <p className="mb-0 text-sm">Asynchronous lighting (Starlight), chunk loading, and networking for zero lag spikes.</p>
+  </div>
+  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
+    <h3 className="text-primary mt-0">🛠️ Modern Developer API</h3>
+    <p className="mb-0 text-sm">Backported Paper APIs and rich event system for creating powerful plugins on 1.8.8.</p>
+  </div>
+</div>
+
+:::tip Why Carbon?
+Carbon has rewritten core subsystems to ensure that your server remains fluid and stable even under heavy player loads, confirming consistent 20 TPS in tests with over 700+ players.
+:::
+
+## Detailed Capabilities
+
+- **Low-CPU Tickloop & API Backports**: Modern low-CPU tickloop plus key Paper APIs—raytracing, pathfinding, richer events, and crit tracking.
+- **Mouse Desync Fix**: Queues yaw/pitch-sensitive interactions to the client tick for frame-perfect accuracy.
+- **Reworked Network Stack**: Slashes heavy packet writes and reduces unnecessary Netty wakeup calls.
+- **Memory Leak Fixes**: Extensive fixes for safer world unloading and accurate projectile owner tracking.

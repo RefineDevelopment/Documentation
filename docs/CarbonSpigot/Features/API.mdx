@@ -2,64 +2,88 @@ The methods are pretty self-explanatory. The API access usage is explained below
 Use this in accordance with PaperSpigot JAR.
 
 ## Maven
+
 ```xml
 <repositories>
-   <repository>
-       <id>refine-public</id>
-       <url>https://maven.refinedev.org/public-repo/</url>
-   </repository>
+    <repository>
+        <id>refine-public-repo</id>
+        <url>https://maven.refinedev.org/public-repo</url>
+    </repository>
+    <repository>
+        <id>papermc</id>
+        <url>https://repo.papermc.io/repository/maven-public/</url>
+    </repository>
 </repositories>
 
 <dependencies>
-   <dependency>
-      <groupId>xyz.refinedev.spigot</groupId>
-      <artifactId>CarbonSpigotAPI</artifactId>
-      <version>1.1</version>
-      <scope>provided</scope>
-   </dependency>
-   <dependency>
-      <groupId>org.github.paperspigot</groupId>
-      <artifactId>PaperSpigot</artifactId>
-      <version>1.8.8</version>
-      <scope>provided</scope>
-   </dependency>
+    <dependency>
+        <groupId>xyz.refinedev.spigot</groupId>
+        <artifactId>Carbon-API</artifactId>
+        <version>1.8.8-R0.1-SNAPSHOT</version>
+        <scope>provided</scope>
+    </dependency>
 </dependencies>
 ```
 
-## Usage
+## Gradle
+
+```gradle
+repositories {
+    maven("https://maven.refinedev.org/public-repo")
+    maven("https://repo.papermc.io/repository/maven-public/")
+}
+
+dependencies {
+    compileOnly("xyz.refinedev.spigot:Carbon-API:1.8.8-R0.1-SNAPSHOT")
+}
+```
+
+
+## Example Usage
+
+Below are examples of how to use the core Carbon APIs.
+
 ```java
-// Packet based API
-PacketAPI packet = PacketAPI.getInstance();
-packet.registerPacketHandler(Plugin, PacketHandler);
-packet.registerMovementHandler(Plugin, PacketHandler);
+// Packet API - Handle packets and movement efficiently
+PacketAPI packetAPI = PacketAPI.instance();
+packetAPI.registerPacketHandler(plugin, new IPacketHandler() {
+    @Override
+    public <T> void handle(Player player, IPacketWrapper<T> packet, boolean fromClient) {
+        // Handle packet
+    }
+});
 
-// Chunk Snapshot API
-ChunkAPI chunk = ChunkAPI.getInstance();
-ChunkSnapshot snapshot = chunk.takeSnapshot();
+// Chunk API - Lightweight chunk snapshots
+IChunkAPI chunkAPI = IChunkAPI.instance();
+ICarbonChunkSnapshot<?> snapshot = chunkAPI.takeSnapshot(chunk);
 
-// Once restored, you have to takeSnapshot again
-chunk.restoreSnapshot(snapshot);
-// Or use true in the method, to allow deep cloning
-chunk.restoreSnapshot(snapshot, true);
+// Restore snapshot later (automatically handles refreshing)
+chunkAPI.restoreSnapshot(chunk, snapshot);
 
-// Knockback API
-KnockbackAPI knockback = KnockbackAPI.getInstance();
-// Returns Default profile if no profile is set
-KnockbackProfile profile = knockback.getPlayerProfile(Player);
-knockback.setPlayerProfile(player, profile);
+// Combat API - Manage knockback profiles
+CombatAPI combatAPI = CombatAPI.instance();
+ICombatProfile profile = combatAPI.getProfile("default");
 
+// Apply profile to player
+combatAPI.setPlayerProfile(player, profile);
 
-Collection<KnockbackValue<?>> values = knockback.getKnockbackValues(profile);
-// You can manually do it like this
-for ( KnockbackValue<?> value : values ) {
-    if (value.getValue() instanceof Double && value.getId().equals("horizontal")) {
-        KnockbackValue<Double> doubleValue = (KnockbackValue<Double>) value;
-        doubleValue.setValue(2.0D);
+// Modify values dynamically
+Collection<ICombatValue<?>> values = combatAPI.getKnockbackValues(profile);
+for (ICombatValue<?> value : values) {
+    // Check for specific value ID (e.g., "horizontal")
+    if (value.getValue() instanceof Double && value.getID().equalsIgnoreCase("horizontal")) {
+        ICombatValue<Double> doubleValue = (ICombatValue<Double>) value;
+        // Apply new value to the profile instance
+        doubleValue.setValue(profile, 0.45D); 
         break;
     }
 }
-// OR this can work too
-KnockbackValue<Double> value = knockback.getDoubleValue(profile, "horizontal");
-if (value == null) return;
-value.setValue(2.0D);
 ```
+
+## Javadocs
+
+You can find the full Javadocs for Carbon API 5.0 below. This includes all classes, methods, and documentation for the API.
+
+<a href="/carbon/javadocs/index.html" target="_blank" className="glass-button px-6 py-3 rounded-xl inline-flex items-center gap-2 no-underline text-white hover:text-white font-bold primary-glow">
+  <span>Browse Javadocs</span>
+</a>

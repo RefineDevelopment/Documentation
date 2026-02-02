@@ -115,7 +115,7 @@ const Footer: React.FC = () => {
 
           <div className="flex flex-wrap items-center justify-center gap-4 mt-2 md:mt-0">
             <a
-              href="https://shedux.dev"
+              href="https://github.com/sheduxdev"
               target="_blank"
               className="inline-block transition-all duration-300 hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.5)] opacity-60 hover:opacity-100" rel="noreferrer"
             >

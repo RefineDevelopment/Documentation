@@ -8,7 +8,7 @@ const PageBackground = () => {
   const location = useLocation();
   const isDocsPage = location.pathname.includes('/Phoenix') ||
     location.pathname.includes('/Bolt') ||
-    location.pathname.includes('/CarbonSpigot') ||
+    location.pathname.includes('/Carbon') ||
     location.pathname.includes('/Zephyr') ||
     location.pathname.includes('/BoltWebAddon');
 

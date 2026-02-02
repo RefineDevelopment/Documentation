@@ -25,9 +25,9 @@ export const products: Product[] = [
         icon: faBolt,
     },
     {
-        title: "CarbonSpigot",
+        title: "Carbon",
         description: "Optimized Minecraft server fork for superior performance and stability.",
-        href: "/CarbonSpigot/Introduction",
+        href: "/Carbon/Introduction",
         colorClass: "bg-primary",
         icon: faMicrochip,
     },
@@ -38,11 +38,5 @@ export const products: Product[] = [
         colorClass: "bg-primary",
         icon: faWind,
     },
-    {
-        title: "Bolt Web Addon",
-        description: "A sleek web interface for displaying Bolt leaderboards and player statistics.",
-        href: "/BoltWebAddon/Introduction",
-        colorClass: "bg-primary",
-        icon: faGlobe,
-    },
+
 ];

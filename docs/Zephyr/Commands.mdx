@@ -1,0 +1,101 @@
+---
+sidebar_position: 5
+title: Commands & Permissions
+description: Complete reference for Zephyr commands and permissions
+---
+
+# Commands
+
+Below is a list of commands available in Zephyr, categorized by their respective sections.
+
+### Zephyr Commands
+Commands used to manage Zephyr's core features.
+
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/zephyr` | `zephyr.admin` | View the Zephyr command list |
+| `/zephyr reload` | `zephyr.admin` | Reload all configurations |
+| `/zephyr settings` | `none` | Open the settings menu |
+| `/zephyr build` | `zephyr.command.build` | Toggle build mode |
+| `/zephyr resetProfile <player>` | `zephyr.command.resetStats` | Reset a player's statistics |
+| `/zephyr wipeDb` | `zephyr.command.wipedb` | Wipe the entire Zephyr database |
+| `/zephyr wipeProfiles` | `zephyr.command.wipeprofiles` | Wipe all profiles from the database |
+| `/zephyr wipeInventories` | `zephyr.command.wipeinvs` | Wipe all inventories from the database |
+| `/zephyr resetInventory <player>` | `zephyr.command.wipeinvs` | Remove a player's saved inventory |
+
+### Player Commands
+General utility commands available to players.
+
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/spawn` | `none` | Teleport to the current arena's spawn after a five-second countdown |
+| `/stats [player]` | `none` | View your own or another player's statistics |
+| `/plzratemekthanksbye <arena> <rating>` | `none` | Rate an arena when arena ratings are enabled |
+
+### Arena Commands
+Commands used to create, configure, and manage arenas.
+
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/arena` | `zephyr.command.arena` | View the arena command list |
+| `/arena create <name>` | `zephyr.command.arena` | Create a new arena |
+| `/arena delete <arena> [deleteWorld]` | `zephyr.command.arena` | Delete an arena |
+| `/arena saveAll` | `zephyr.command.arena` | Save all arenas to configuration |
+| `/arena setDisplayName <arena> <displayName>` | `zephyr.command.arena` | Set an arena's display name |
+| `/arena setSpawn <arena>` | `zephyr.command.arena` | Set an arena's spawn location |
+| `/arena pos1 <arena>` | `zephyr.command.arena` | Set the first arena boundary corner |
+| `/arena pos2 <arena>` | `zephyr.command.arena` | Set the second arena boundary corner |
+| `/arena setDeathHeight <arena> [y-level]` | `zephyr.command.arena` | Set an arena's death height |
+| `/arena setGameHeight <arena> [y-level]` | `zephyr.command.arena` | Set an arena's game height |
+| `/arena setBuildLimit <arena> [y-level]` | `zephyr.command.arena` | Set an arena's build limit |
+| `/arena setKit <arena> <kit>` | `zephyr.command.arena` | Set an arena's kit |
+| `/arena teleport <arena>` | `zephyr.command.arena` | Teleport to an arena |
+| `/arena rating <arena>` | `zephyr.command.arena` | View an arena's rating |
+| `/arena info <arena>` | `zephyr.command.arena` | View information about an arena |
+| `/arena list` | `zephyr.command.arena` | List all available arenas |
+
+### Kit Commands
+Commands used to create, configure, and manage kits.
+
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/kit` | `none` | View the kit command list |
+| `/kit create <name>` | `zephyr.command.kit` | Create a new kit |
+| `/kit delete <kit>` | `zephyr.command.kit` | Delete a kit |
+| `/kit give <kit>` | `zephyr.command.kit` | Give yourself a kit |
+| `/kit edit <kit>` | `zephyr.command.kit` | Start editing a kit |
+| `/kit save-edits` | `zephyr.command.kit` | Save the kit currently being edited |
+| `/kit cancel-edits` | `zephyr.command.kit` | Cancel editing the current kit |
+| `/kit setInventory <kit>` | `zephyr.command.kit` | Set a kit's inventory contents |
+| `/kit setArmor <kit>` | `zephyr.command.kit` | Set a kit's armor contents |
+| `/kit setName <kit> <name>` | `zephyr.command.kit` | Set a kit's display name |
+| `/kit enable <kit>` | `zephyr.command.kit` | Enable a kit |
+| `/kit disable <kit>` | `zephyr.command.kit` | Disable a kit |
+| `/kit setDamage <kit> <state>` | `zephyr.command.kit` | Change whether a kit allows damage |
+| `/kit setBreaking <kit> <state> [allowDrops]` | `zephyr.command.kit` | Change whether a kit allows block breaking and item drops |
+| `/kit list` | `zephyr.command.kit` | List all loaded kits |
+| `/kit saveAll` | `zephyr.command.kit` | Save all loaded kits |
+
+### Hologram Commands
+Commands used to manage leaderboard holograms.
+
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/zephyrholo` | `zephyr.command.holo` | View the hologram command list |
+| `/zephyrholo create <name> <leaderboardType>` | `zephyr.command.holo` | Create a new hologram |
+| `/zephyrholo delete <hologram>` | `zephyr.command.holo` | Delete a hologram |
+| `/zephyrholo resetVis <hologram>` | `zephyr.command.holo` | Reset your visibility for a hologram |
+| `/zephyrholo moveHere <hologram>` | `zephyr.command.holo` | Move a hologram to your location |
+| `/zephyrholo teleport <hologram>` | `zephyr.command.holo` | Teleport to a hologram |
+| `/zephyrholo force-update <leaderboardType>` | `zephyr.command.holo` | Manually update a leaderboard |
+| `/zephyrholo force-update-all` | `zephyr.command.holo` | Manually update all leaderboards |
+
+### Additional Permissions
+Permissions used by Zephyr outside its commands.
+
+| Permission | Description |
+| :--- | :--- |
+| `zephyr.changearena` | Allow changing the current arena from the settings menu |
+| `zephyr.cooldown.bypass` | Bypass the arena-change cooldown |
+| `zephyr.killeffect.<effect>` | Access to a specific kill effect |
+| `zephyr.killeffect.*` | Access to all kill effects |

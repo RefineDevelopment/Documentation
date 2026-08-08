@@ -2,21 +2,113 @@
 sidebar_position: 3
 ---
 
-Tournaments in Bolt, are a way for people to test out their skills against other players in a competitive environment,
-Tournaments are a great way to earn rewards and show off their skills.
+Tournaments let players or staff host bracket-style competitions directly inside Bolt. Bolt supports solo and team tournaments, automatic match creation, round progression, winner detection, cooldowns, permissions, and public API events.
+
+## Tournament Flow
+
+1. A player or staff member hosts a tournament.
+2. Players join until the tournament fills or staff force-start it.
+3. Bolt creates matches for each round.
+4. Winners advance and eliminated players/parties are removed.
+5. The final winner is announced and tournament events are fired.
+
+If every participant leaves or disconnects while a tournament is active, Bolt now ends the tournament instead of leaving it stuck on a round with zero players.
+
+## Hosting
+
+Player-hosted tournament:
+
+```bash
+/tournament host <type> <kit> [teamSize]
+```
+
+Console/staff-hosted tournament:
+
+```bash
+/tournament chost <type> <kit> [teamSize]
+```
+
+Examples:
+
+```bash
+/tournament host SOLO nodebuff
+/tournament host TEAM builduhc 2
+/tournament chost SOLO sumo
+```
+
+## Permissions
+
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.tournament.host` | Host tournaments and bypass kit-specific host checks. |
+| `bolt.tournament.start` | Alternative host/start permission checked by the host flow. |
+| `bolt.tournament.join` | Join tournaments without needing kit-specific permission. |
+| `bolt.tournament.<kit>` | Host or join tournaments for a specific kit. |
+| `bolt.tournament.cooldown` | Reset tournament cooldowns. |
+| `bolt.tournament.admin` | Use admin commands such as console host, stop, force start, and force end. |
+
+If you want all players to join public tournaments, give the default group:
+
+```bash
+/lp group default permission set bolt.tournament.join true
+```
+
+If you want VIPs to host only specific kits:
+
+```bash
+/lp group vip permission set bolt.tournament.nodebuff true
+/lp group vip permission set bolt.tournament.sumo true
+```
+
+If you want VIPs to host any kit:
+
+```bash
+/lp group vip permission set bolt.tournament.host true
+```
 
 ## Commands
 
-| Command | Description                         |
-|---------|----------------------------------   |
-| `/tournament help`                            | Bring up help menu for Tournaments |
-| `/tournament host <type>`                     | Host a tournament by a player |
-| `/tournament chost <type> <kit> <teamsize>`   | Host a tournament through console |
-| `/tournament forceStart`                      | Force start the current tournament |
-| `/tournament info`                            | View the information for the current tournament |
-| `/tournament join`                            | Join the tournament |
-| `/tournament leave`                           | Leave the tournament |
-| `/tournament cancel`                          | Cancel the current tournament |
-## How to Setup Tournaments?
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/tournament` | View tournament help. | None |
+| `/tournament info` | View current tournament status. | None |
+| `/tournament host <type> <kit> [teamSize]` | Host a tournament. | `bolt.tournament.host` or `bolt.tournament.start`; kit may require `bolt.tournament.<kit>` |
+| `/tournament chost <type> <kit> [teamSize]` | Host from console/staff command. | `bolt.tournament.admin` |
+| `/tournament join` | Join the current tournament. | `bolt.tournament.join` or `bolt.tournament.<kit>` |
+| `/tournament leave` | Leave the current tournament. | None |
+| `/tournament clearCooldown <type>` | Reset a tournament cooldown. | `bolt.tournament.cooldown` |
+| `/tournament stop` | Cancel the current tournament. | `bolt.tournament.admin` |
+| `/tournament forceStart` | Force start the current tournament. | `bolt.tournament.admin` |
+| `/tournament forceEnd <player>` | Force end a participant's match. | `bolt.tournament.admin` |
 
-Tournaments do not need to be setup at all, they are using the arenas that are linked to the kit.
+## Kit And Arena Requirements
+
+Tournament kits should be fully configured before public use:
+
+- The kit should be enabled.
+- The kit should have usable arenas.
+- The kit should support the match type you want to host.
+- Team tournaments need arenas that fit the configured team size.
+- Build or reset-heavy modes should use standalone arenas with saved schematics.
+
+## API Events
+
+BoltAPI exposes tournament lifecycle events for integrations:
+
+- `TournamentStartEvent`
+- `TournamentJoinEvent`
+- `TournamentLeaveEvent`
+- `TournamentEliminateEvent`
+- `TournamentRoundStartEvent`
+- `TournamentWinEvent`
+- `TournamentEndEvent`
+
+Use these to broadcast tournament data, run rewards, sync Discord messages, update web panels, or track analytics.
+
+## Tips
+
+- Use `bolt.tournament.<kit>` when you want to sell or grant access per kit.
+- Use `bolt.tournament.host` only for users who can host any tournament kit.
+- Use cooldowns to prevent tournament spam.
+- Keep tournament arenas duplicated for high-traffic servers.
+- If a tournament cannot continue because of missing arenas or forced match ends, use `/tournament forceEnd` or `/tournament stop`.

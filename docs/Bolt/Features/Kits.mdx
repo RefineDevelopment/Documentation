@@ -2,73 +2,183 @@
 sidebar_position: 0
 ---
 
-Kits allow you to make kits with custom inventories, knockback profiles, and attributes,
+Kits define how each match type behaves. A kit controls inventories, armor, potions, knockback, queue availability, duel availability, arena behavior, round behavior, block rules, explosion rules, bot support, and match commands.
 
-Kits in bolt support the following gamemodes, 
-Sumo, Bridges, Fireball Fight, Pearl Fight, Battle Rush, Spleef,
-CrystalPVP, Bed Fight, Boxing, TopFight, MLGRush, Stick Fight, Combo and many more.
+## Supported Match Styles
 
-## Commands
+Bolt's kit rules can be combined to create many practice modes:
 
-`<>` = Required `[]` = Optional
+- NoDebuff, Debuff, Soup, Combo, Boxing, Sumo, Stick Fight
+- BuildUHC, Classic, Archer, Pearl Fight, Crystal PvP
+- Bridges, BattleRush, MLGRush, BedFight, WallRush, BlockFight
+- Fireball Fight, TNTSumo, Spleef, TopFight, OITQ, Wind Charge
+- Party FFA, Party Split, Party vs Party, Best Of, respawn-based modes
 
-### 🧭 Main Commands
+## Important Kit Rules
 
-Command                             | Permission             | Description
------------------------------------ | ---------------------- | -------------------------------------
-`/kit list [page]`                  | bolt.kit.admin         | Lists all kits.
-`/kit manage`                       | bolt.kit.admin         | Opens the kit manage menu.
-`/kit save`                         | bolt.kit.admin         | Saves all kits.
-`/kit editor`                       | bolt.kit.admin         | Edit a certain kit.
+### Queue And Duel Rules
 
-### ⚙️ Setup Commands
+| Rule | Description |
+| :--- | :--- |
+| `enabled` | Shows the kit to players and allows normal use. |
+| `ranked` | Allows ranked queue support. |
+| `unrankedQueueEnabled` | Allows unranked queue support. |
+| `duelEnabled` | Allows direct duel support. |
+| `editable` | Allows players to edit custom layouts for this kit. |
 
-Command                             | Permission             | Description
------------------------------------ | ---------------------- | -------------------------------------
-`/kit create <name>`                | bolt.kit.admin         | Creates a kit.
-`/kit delete <kit>`                 | bolt.kit.admin         | Deletes a kit.
-`/kit toggle <kit>`                 | bolt.kit.admin         | Enable or Disable a kit from being included.
-`/kit info <kit>`                   | bolt.kit.admin         | Displays information about a kit.
+### Match Flow Rules
 
-### 🧰 Edit Commands
+| Rule | Description |
+| :--- | :--- |
+| `bestOf` | Number of rounds needed to win. |
+| `countdownTicks` | Fight countdown duration. |
+| `newRoundCountdownTicks` | Countdown used between scored/Best Of rounds. |
+| `respawnMode` | Enables respawn-based gameplay. |
+| `respawnTicks` | Delay before a player respawns. |
+| `resetArenaEachRound` | Resets the arena between scored rounds. |
+| `noDrop` | Prevents item drops. |
+| `noHunger` | Disables hunger loss. |
+| `noRegen` | Disables natural regeneration. |
+| `noFall` | Disables fall damage. |
+| `allowCrafting` | Allows crafting/workbench interaction. |
+| `actionBarHealth` | Sends opponent health in the actionbar. |
+| `damageMultiplier` | Multiplies damage for the kit. |
 
-Command                             | Permission             | Description
------------------------------------ | ---------------------- | -----------------------------------
-`/kit setName <kit> <name>`         | bolt.kit.admin         | Sets a kit's display name.
-`/kit setIcon <kit>`                | bolt.kit.admin         | Sets a kit's icon.
-`/kit setPriority <kit> <priority>` | bolt.kit.admin         | Sets a kit's priority.
-`/kit setKb <kit> <profile>`        | bolt.kit.admin         | Sets a kit's knockback profile.
-`/kit setBotKb <kit> <profile>`     | bolt.kit.admin         | Sets a kit's bot knockback profile.
-`/kit setQueueSlot <kit>`           | bolt.kit.admin         | Sets a kit's queue slot.
-`/kit setDescription <kit>`         | bolt.kit.admin         | Sets a kit's description.
+### Build And Block Rules
 
-### 🧱 Block Management Commands
+| Rule | Description |
+| :--- | :--- |
+| `build` | Allows players to place blocks. |
+| `blockRemoval` | Removes placed blocks after the match. |
+| `breakMap` | Allows breaking map blocks. |
+| `buildHeightDamage` | Punishes players above the configured build height. |
+| `blockTimer` | Adds block placement cooldown. |
+| `allowedBlocks` | Blocks players may place. |
+| `disallowedBlocks` | Map blocks players may not break/place against. |
+| `explosionBlacklist` | Blocks protected from Fireball/TNT explosions. |
+| `dropWhitelist` | Blocks allowed to drop items when broken. |
 
-Command                                      | Permission             | Description
--------------------------------------------- | ---------------------- | -------------------------------------
-`/kit addAllowedBlock <kit> <block>`         | bolt.kit.admin         | Add a block to a kit's allowed blocks
-`/kit removeAllowedBlock <kit> <block>`      | bolt.kit.admin         | Remove a block to a kit's allowed blocks
-`/kit addDisallowedBlock <kit> <block>`      | bolt.kit.admin         | Add a block to a kit's disallowed blocks
-`/kit removeDisallowedBlock <kit> <block>`   | bolt.kit.admin         | Remove a block to a kit's disallowed blocks
-`/kit addExplosionBlacklist <kit> <block>`   | bolt.kit.admin         | Add a block to a kit's explosion blacklist
-`/kit removeExplosionBlacklist <kit> <block>`| bolt.kit.admin         | Remove a block to a kit's explosion blacklist
+### Game Mode Rules
 
-### 🎒 Inventory Commands
+| Rule | Description |
+| :--- | :--- |
+| `sumo` | Sumo knockback/void style. |
+| `boxing` | Boxing hit/combo style. |
+| `combo` | Combo combat behavior. |
+| `spleef` | Spleef mechanics. |
+| `bridges` | Bridge/portal mechanics. |
+| `battleRush` | BattleRush mechanics. |
+| `fireballFight` | Fireball Fight mechanics. |
+| `pearlFight` | Pearl Fight mechanics. |
+| `bedFight` | Bed destruction and respawn mechanics. |
+| `wallRush` | WallRush behavior using BedFight-style map logic. |
+| `blockFight` | BlockFight hearts, actionbar, and void penalty behavior. |
+| `blockFightHearts` | Starting hearts/lives for BlockFight. |
+| `blockFightVoidPenalty` | Penalty applied when a player falls into the void in BlockFight. |
+| `mlgRush` | MLGRush mechanics. |
+| `topFight` | TopFight mechanics. |
+| `stickFight` | Stick Fight mechanics. |
+| `stickSpawn` | Gives the configured stick spawn item. |
+| `crystalPvP` | Crystal PvP placement/interaction behavior. |
+| `tntSumo` | TNTSumo behavior. |
+| `oitq` | One in the Quiver behavior. |
+| `windChargeMode` | Wind charge gameplay. |
+| `partyFFA` | Allows party FFA matches. |
+| `partySplit` | Allows party split matches. |
+| `liquidKill` | Liquids kill players. |
+| `voidSpawn` | Allows void-style spawning. |
 
-Command                             | Permission             | Description
------------------------------------ | ---------------------- | -------------------------------------
-`/kit getEditInv <kit>`             | bolt.kit.admin         | Loads a kit's edit inventory.
-`/kit getInv <kit>`                 | bolt.kit.admin         | Loads a kit's inventory.
-`/kit setEditInv <kit>`             | bolt.kit.admin         | Sets a kit's edit inventory.
-`/kit setInv <kit>`                 | bolt.kit.admin         | Sets a kit's inventory.
-`/kit wipeKits kit <kit>`           | bolt.kit.admin         | Wipes everyones kit editor for a kit.
-`/kit wipekits player <player>`     | bolt.kit.admin         | Wipes a players kit editor.
+### Bot Rules
 
-### ⚔️ Match Commands
+| Rule | Description |
+| :--- | :--- |
+| `botBlockHit` | Allows bot block-hitting for the kit. |
+| `botKnockback` | Bot knockback profile for the kit. |
+| `knockback` | Player knockback profile for the kit. |
 
-Command                              | Permission             | Description
------------------------------------- | ---------------------- | -------------------------------------
-`/kit addEndCMD <kit> <command>`     | bolt.kit.admin         | Adds a match end command.
-`/kit addStartCMD <kit> <command>`   | bolt.kit.admin         | Adds a match start command.
-`/kit removeEndCMD <kit> <command>`  | bolt.kit.admin         | Remove a match end command.
-`/kit removeStartCMD <kit> <command>`| bolt.kit.admin         | Remove a match start command.
+## Inventories
+
+Bolt stores multiple inventory concepts for each kit:
+
+| Inventory | Used for |
+| :--- | :--- |
+| Main inventory | Items players receive in matches. |
+| Armor | Armor players receive in matches. |
+| Kit editor inventory | Base layout used by the kit editor. |
+| Custom player layouts | Player-created layouts, up to the configured slot limit. |
+| Selection items | Items shown when choosing custom layouts before a match. |
+
+## Match Commands
+
+Kits can run console commands when matches start or end.
+
+Use `<player>` for player-based start/end command replacement. Older `{winner}` and `{loser}` examples may exist in old configs, but current Bolt command formatting supports player replacement through the match result flow.
+
+Examples:
+
+```bash
+/kit addStartCMD nodebuff msg <player> Good luck!
+/kit addEndCMD nodebuff eco give <player> 50
+```
+
+Common uses:
+
+- Reward players.
+- Broadcast match results.
+- Trigger external plugins.
+- Run rank, quest, or analytics commands.
+
+## Kit Commands
+
+All kit management commands require `bolt.kit.admin`.
+
+| Command | Description |
+| :--- | :--- |
+| `/kit list [page]` | List kits. |
+| `/kit manage` | Open kit management menu. |
+| `/kit save` | Save all kits. |
+| `/kit editor` | Open kit editor. |
+| `/kit create <name>` | Create a kit. |
+| `/kit delete <kit>` | Delete a kit. |
+| `/kit toggle <kit>` | Enable or disable a kit. |
+| `/kit info <kit>` | View kit information. |
+| `/kit getInv <kit>` | Load kit inventory. |
+| `/kit setInv <kit>` | Save held inventory as kit inventory. |
+| `/kit getEditInv <kit>` | Load editor inventory. |
+| `/kit setEditInv <kit>` | Save editor inventory. |
+| `/kit setIcon <kit>` | Set icon from held item. |
+| `/kit setName <kit> <name>` | Set display name. |
+| `/kit setDescription <kit> <description>` | Set description. |
+| `/kit setQueueSlot <kit> <slot>` | Set queue slot. |
+| `/kit setKnockback <kit> <profile>` | Set player knockback. |
+| `/kit setBotKnockback <kit> <profile>` | Set bot knockback. |
+| `/kit setPriority <kit> <priority>` | Set menu sort priority. |
+| `/kit viewArenas <kit>` | View arenas linked to the kit. |
+| `/kit wipeKits kit <kit>` | Wipe all player layouts for a kit. |
+| `/kit wipeKits player <player>` | Wipe a player's custom kit layouts. |
+| `/kit deleteAll` | Delete all kits. |
+| `/kit addAllowedBlock <kit> <block>` | Add allowed block. |
+| `/kit removeAllowedBlock <kit> <block>` | Remove allowed block. |
+| `/kit addDisallowedBlock <kit> <block>` | Add disallowed block. |
+| `/kit removeDisallowedBlock <kit> <block>` | Remove disallowed block. |
+| `/kit addExplosionBlacklist <kit> <block>` | Add explosion-protected block. |
+| `/kit removeExplosionBlacklist <kit> <block>` | Remove explosion-protected block. |
+| `/kit addDropWhitelist <kit> <block>` | Add block drop whitelist entry. |
+| `/kit removeDropWhitelist <kit> <block>` | Remove block drop whitelist entry. |
+
+## Staff Layout Cleanup
+
+Bolt also exposes staff commands for custom kit layout cleanup:
+
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/bolt deleteEveryoneKitLayout <kit>` | `bolt.admin.kitlayouts` | Deletes every player's custom layouts for the kit. |
+| `/bolt deletePlayerKitLayout <player> [kit]` | `bolt.admin.kitlayouts` | Deletes one player's custom layouts, optionally only for one kit. |
+
+## Tips
+
+- Use `resetArenaEachRound` for scored build modes where dropped items or blocks should not carry into the next round.
+- Use standalone arenas for build, BedFight, BlockFight, WallRush, Fireball, TNT, and Spleef-style kits.
+- For TNTSumo, configure the kit blocks to use clay/terracotta instead of wool.
+- Use `unrankedQueueEnabled` and `duelEnabled` to hide kits from specific flows without fully disabling the kit.
+- Use `bolt.profile.arena` for paid or staff access to selected-arena duels/queues.

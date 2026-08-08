@@ -295,7 +295,14 @@ function SearchModal({
   return ReactDOM.createPortal(portal, document.body) as any;
 }
 
-export default function CustomSearch(): JSX.Element {
+/**
+ * `navbar` is the pill in the header. `hero` is the wide field on the landing
+ * page — same modal, same index, just a different trigger, so there is only one
+ * search implementation to keep working.
+ */
+export default function CustomSearch({
+  variant = 'navbar'
+}: { variant?: 'navbar' | 'hero' } = {}): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -447,24 +454,43 @@ export default function CustomSearch(): JSX.Element {
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(true)}
-        className={clsx(
-          "flex items-center gap-2 px-3 py-2 rounded-full",
-          "bg-card border border-border",
-          "text-muted-foreground hover:text-foreground",
-          "transition-all duration-200",
-          "hover:border-primary/50",
-          "text-sm"
-        )}
-      >
-        <FontAwesomeIcon icon={faMagnifyingGlass} className="w-4 h-4 text-foreground" />
-        <span className="hidden md:inline">Search</span>
-        <kbd className="hidden md:inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-muted rounded border border-border">
-          <span>⌘</span>
-          <span>K</span>
-        </kbd>
-      </button>
+      {variant === 'hero' ? (
+        <button
+          onClick={() => setIsOpen(true)}
+          className={clsx(
+            'group flex w-full items-center gap-3 rounded-xl border border-border bg-card',
+            'px-5 py-4 text-left transition-colors hover:border-white/20'
+          )}
+        >
+          <FontAwesomeIcon
+            icon={faMagnifyingGlass}
+            className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+          />
+          <span className="flex-1 text-base text-muted-foreground">
+            Search the documentation
+          </span>
+          <kbd className="hidden shrink-0 items-center gap-1 rounded border border-border px-2 py-0.5 font-mono text-xs text-muted-foreground sm:inline-flex">
+            <span>Ctrl</span>
+            <span>K</span>
+          </kbd>
+        </button>
+      ) : (
+        <button
+          onClick={() => setIsOpen(true)}
+          className={clsx(
+            'flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5',
+            'text-sm text-muted-foreground transition-colors',
+            'hover:border-white/20 hover:text-foreground'
+          )}
+        >
+          <FontAwesomeIcon icon={faMagnifyingGlass} className="h-4 w-4" />
+          <span className="hidden md:inline">Search</span>
+          <kbd className="hidden items-center gap-1 rounded border border-border px-1.5 py-0.5 font-mono text-xs md:inline-flex">
+            <span>Ctrl</span>
+            <span>K</span>
+          </kbd>
+        </button>
+      )}
 
       <SearchModal
         isOpen={isOpen}

@@ -2,38 +2,74 @@
 sidebar_position: 2
 ---
 
-Events allow you to host and manage events on your server,
-They allow your players to host events, that allow your ranked players to have fun.
+Events are server-wide activities that players can join for community practice and competition. Bolt events use their own arenas, cooldowns, host flow, game rules, and admin tools.
 
-## Commands
+## Common Event Types
 
-`<>` = Required `[]` = Optional
+Bolt event types are configurable, but typical practice setups use events such as:
 
-### 🎉 Event Commands
+- Sumo
+- Spleef
+- Parkour
+- Other custom event modes configured by the server
 
-Command                   | Permission        | Description                                    
---------------------------|-------------------|---------------------------------------------
-`/event help`             | bolt.event.admin  | Displays the help message                   
-`/event host <type>`      | bolt.event.admin  | Host a tournament                           
-`/event info`             | bolt.event.admin  | Displays information about the current event
-`/event join`             | bolt.event.admin  | Join the current event                      
-`/event leave`            | bolt.event.admin  | Leave the current event                     
-`/event forcestart`       | bolt.event.admin  | Force start the current event               
-`/event cancel`           | bolt.event.admin  | Cancel the current event                    
+## Event Flow
 
+1. A staff member or configured host opens the event host menu.
+2. Players join the active event.
+3. The event starts automatically or staff force-start it.
+4. Bolt handles event-specific rules and elimination.
+5. Rewards, stats, tokens, or announcements can be handled by your configuration/integrations.
 
-### 🎉 Event Arena Commands
+## Event Commands
 
-Command                                         | Permission        | Description                                      
-------------------------------------------------|-------------------|--------------------------------------------------
-`/event arena create <eventType>`               | bolt.event.admin  | Create an arena for the given event type         
-`/event arena updatePoints <eventType>`         | bolt.event.admin  | Scan arena spawn points for the given event type 
-`/event arena updateBounds <eventType>`         | bolt.event.admin  | Update arena bounds for the given event type     
-`/event arena setFallDeathHeight <eventType>`   | bolt.event.admin  | Set an arena’s void death height                 
-`/event arena setBuildHeight <eventType>`       | bolt.event.admin  | Set an arena’s maximum build height              
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/event` | View event help. | None |
+| `/event host` | Open event host menu. | Host menu checks event/token rules |
+| `/event chost <type>` | Console/staff host command. | `bolt.event.admin` |
+| `/event info` | View current event information. | None |
+| `/event join` | Join current event. | None |
+| `/event leave` | Leave current event. | None |
+| `/event clearCooldown <type>` | Reset event cooldown. | `bolt.event.cooldown` |
+| `/event cancel` | Cancel current event. | `bolt.event.admin` |
+| `/event forcestart` | Force-start current event. | `bolt.event.admin` |
+| `/event setIcon <type>` | Set event icon. | `bolt.event.admin` |
+| `/event setName <type> <name>` | Set event display name. | `bolt.event.admin` |
 
-### Creating an Event Arena
+## Event Arena Commands
 
-To create an event arena, you need to use the command,
-/event arena create [Event Name],
-Then go through the setup process, and you will have an event arena.
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/event arena list` | List event arenas. | `bolt.event.admin` |
+| `/event arena info <arena>` | View event arena information. | `bolt.event.admin` |
+| `/event arena create <type>` | Create an event arena. | `bolt.event.admin` |
+| `/event arena finish` | Finish event arena setup. | `bolt.event.admin` |
+| `/event arena cancel` | Cancel event arena setup. | `bolt.arena.setup` |
+| `/event arena wand` | Get event arena selection wand. | `bolt.event.admin` |
+| `/event arena updatePoints <arena>` | Update event arena spawn points. | `bolt.event.admin` |
+| `/event arena updateCuboid <arena>` | Update event arena bounds. | `bolt.event.admin` |
+| `/event arena setFallDeathHeight <arena> <height>` | Set void death height. | `bolt.event.admin` |
+| `/event arena setBuildHeight <arena> <height>` | Set build height. | `bolt.event.admin` |
+| `/event arena teleport <arena>` | Teleport to an event arena. | `bolt.event.admin` |
+| `/event arena delete <arena>` | Delete an event arena. | `bolt.event.admin` |
+
+## Permissions
+
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.event.admin` | Manage events and event arenas. |
+| `bolt.event.cooldown` | Reset event cooldowns. |
+| `bolt.event.<event>` | Bypass event-token requirement for a specific event type when checked by the event host flow. |
+
+## Game Rules
+
+Events can use special game rules depending on the event type, including no-hunger and liquid-kill behavior. Configure these carefully per event so the arena and event rules match.
+
+## Tips
+
+- Use dedicated event arenas instead of normal duel arenas.
+- Set build height and void/fall death height before public events.
+- Use cooldowns to prevent event spam.
+- Test event join/leave/cancel flow after changing event arenas.
+- Give `bolt.event.cooldown` only to staff trusted to reset cooldowns.

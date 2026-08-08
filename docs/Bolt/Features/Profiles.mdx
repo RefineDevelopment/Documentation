@@ -2,11 +2,74 @@
 sidebar_position: 8
 ---
 
-The profile menu in Bolt, allows the player to view crutial information about their statistics, match history,
-Your division, your rank, change your profile settings, access your coin shop and change cosmetics.
+Profiles are the player state and progression layer in Bolt. A profile tracks lobby/match state, settings, party state, statistics, match history, coins, experience, divisions, cosmetics, visibility, and spectator preferences.
 
-## Commands
+## Profile Commands
 
-| Command        | Description |
-|--------------- |------------- |
-| /bolt:profile  | View your profile |
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/profile` | Open your profile menu. | None |
+| `/settings` | Open settings. | None |
+| `/stats [player]` | View statistics. | None |
+| `/matchhistory` | View match history. | None |
+| `/postmatch <player>` | View post-match inventory. | None |
+| `/divisions` | Open divisions. | None |
+| `/cosmetics` | Open cosmetics. | None |
+| `/shop` | Open coin shop. | None |
+| `/reward` | Claim daily reward. | None |
+| `/spawn` | Teleport to spawn. | `bolt.profile.admin` |
+| `/silent` | Toggle silent spectating. | `bolt.profile.silent` |
+| `/edit` | Toggle build/edit mode. | `bolt.profile.edit` |
+
+## Profile Features
+
+| Feature | Description |
+| :--- | :--- |
+| Statistics | Wins, losses, kills, deaths, ELO, ranked stats, streaks, ratios, and global stats. |
+| Match history | Previous matches and post-match inventories. |
+| Settings | Visibility, duel requests, party requests, sidebar, death animation, fly mode, play again, and other preferences. |
+| Progression | Coins, experience, levels, divisions, rewards, and unlocks. |
+| Spectating | Spectator state, silent spectating, and spectator messages. |
+| Play Again | Requeue or rematch after match end, including selected arena flows when permitted. |
+
+## Profile Permissions
+
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.profile.fly` | Lobby flight when enabled. |
+| `bolt.profile.flymode` | Toggle fly mode setting. |
+| `bolt.profile.ranked` | Bypass ranked requirements. |
+| `bolt.profile.ping` | Bypass queue ping limits. |
+| `bolt.profile.pingfactor` | Change ping factor/range settings. |
+| `bolt.profile.arena` | Pick a preferred arena for supported queue, duel, and play-again flows. |
+| `bolt.profile.revert` | Revert match history/ELO from match history tools. |
+| `bolt.profile.edit` | Use edit/build mode. |
+| `bolt.profile.silent` | Use silent spectating. |
+| `bolt.profile.hidebypass` | See players hidden by forced visibility. |
+| `bolt.profile.admin` | Use profile-admin commands such as `/spawn`. |
+| `bolt.profile.deathanimation` | Toggle death animation setting. |
+| `bolt.profile.clearinventory` | Toggle post-match inventory clear setting. |
+| `bolt.profile.dropitems` | Toggle opponent item drop setting. |
+| `bolt.profile.coins` | Manage coins. |
+| `bolt.profile.experience` | Manage experience. |
+| `bolt.profile.unlock` | Unlock cosmetics/products for a player. |
+
+## API Coverage
+
+BoltAPI supports:
+
+- Getting online profiles.
+- Fetching profiles asynchronously.
+- Saving profiles.
+- Reading profile histories.
+- Refreshing hotbars, visibility, and nametags.
+- Reading profile settings and runtime state.
+
+See [API Documentation](/Bolt/Features/API) for examples.
+
+## Tips
+
+- Use match history for player support requests and match disputes.
+- Give selected arena access with `bolt.profile.arena` only to groups that should pick maps.
+- Give `bolt.profile.revert` only to trusted staff.
+- Use `/bolt resetStats` carefully; it is intended for admin correction or data repair.

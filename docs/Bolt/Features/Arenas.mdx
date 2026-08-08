@@ -2,138 +2,122 @@
 sidebar_position: 1
 ---
 
-## Arena Setup Guide
+Arenas are the maps where Bolt creates matches. They can be simple no-build arenas, full build arenas, BedFight maps, Bridge-style maps, event arenas, or duplicated standalone maps for high player counts.
 
-**NOTE**: If your arenas are bigger than 300x300, go into settings.yml and increase the grid size from 300 to your desired amount. This is the distance between each arena. I recommend doing this BEFORE you make arenas to prevent them pasting into each other.
+## Requirements
 
-## For 1.12+ ABOVE
+Bolt requires FastAsyncWorldEdit for schematic creation, saving, and paste resets. Use the Refine FAWE-Legacy fork for the best compatibility with Carbon and legacy practice setups:
 
-**NOTE**: Standalone and Standard arena are both combined on versions above 1.12+ since Bolt 1.5, so you do not need to specify an arena type when creating one.
+[Download Refine FAWE-Legacy](http://github.com/refinedevelopment/fastAsyncWorldEdit-Legacy/releases/latest)
 
-## Setting up a default arena for 1.8-1.12
+## Arena Types
 
-### How do we setup default arena?
-1. Paste a schematic from WorldEdt
-2. Do `/edit` to go into build mode.
-3. Do `/arena create <name> <type>`. (Arena types are two, standard and stand alone)
-- Standard arenas are shared, and no build fights can take place here. (You can't duplicate these)
-- Standalone arenas are build arenas, only fight can be taken here at a time. (You can duplicate these)
-4. Set the spawns:
-- Spawn 1 place a fence and a Player Head on top of it.
-- Spawn 2 place a fence and a Player Head on top of it.
-5. Use the arena wand given in your first slot to select bounds, make sure you select the entire arena as Bolt's Arena System will paste it according to a grid.
-6. Click in chat where it says **CLICK HERE** OR do `/arena finish`.
-7. You can now add kits to your arena using `/arena addkit <arena>`.
-8. If your arena is standalone you can now duplicate it using `/arena scale <amountOfCopies>` or `/arena manage`.
+| Type | Best for | Notes |
+| :--- | :--- | :--- |
+| Standard | No-build modes like NoDebuff, Boxing, Sumo, Combo | Shared arena style. Do not use it for modes that need heavy block changes. |
+| Standalone | BuildUHC, BedFight, Bridge, Fireball Fight, BlockFight, WallRush, Spleef | One match per copy. Can be duplicated with `/arena scale`. |
 
-### How do we setup Bridge arena?
-1. Paste a schematic from World Edit in the **Arena World**.
-2. Do `/edit` to go into build mode.
-3. Do `/arena create <name>` standalone.
-4. Set the spawns 
-- Blue Spawn place a Blue Wool and a Player Head on it.
-- Red Spawn place a Red Wool and a Player Head on it.
-5. Use the arena wand given in your first slot to select bounds, make sure you select the entire arena as Bolt's Arena System will paste it according to a grid.
-6. Click in chat where it says CLICK HERE OR do `/arena finish`.
-7. Now go to the arena using `/arena tp <arena>`.
-8. Select cuboid for portals using `/arena wand` and set them using `/arena setSpecialCuboid <arena> <red/blue>`. (Do this step if your experiencing issues with portals)
-9. You can now add kits to your arena using `/arena addkit <arena>`.
-10. You can now also duplicate it using `/arena scale <amountOfCopies>` or `/arena manage`.
-    
-### How do we setup a Bed-based arena?
-1. Paste a schematic from World Edit in the **Arena World**.
-2. Do `/edit` to go into build mode.
-3. Do `/arena create <name>` standalone.
-4. Set the spawns 
-- Blue Spawn place a Blue Wool and a Player Head on it.
-- Red Spawn place a Red Wool and a Player Head on it.
-5. For special locations like beds and portals, this is how to set them.
-- Bolt detects special points using a **focal point** or **mid point**
-- Find the closest block you can find to the bed, place Red or Blue wool depending on team color, now on top of it, place a sponge.
-6. Use the arena wand given in your first slot to select bounds, make sure you select the entire arena as Bolt's Arena System will paste it according to a grid.
-7. Click in chat where it says CLICK HERE OR do `/arena finish`.
-8. You can now add kits to your arena using `/arena addkit <arena>`.
-9. You can now also duplicate it using `/arena scale <amountOfCopies>` or `/arena manage`.
+Use standalone arenas for any mode that places, breaks, explodes, or resets blocks.
 
-## Setting up a default arena for 1.13-LATEST
+## Basic Setup
 
-Setting up an arena in the latest version is the same process however, all arenas are created in standalone mode, meaning they have to be duplicated.
+1. Install FastAsyncWorldEdit.
+2. Paste or build the map in your arena world.
+3. Use `/edit` to enter build mode.
+4. Run `/arena create <name> <standard/standalone>`.
+5. Place the required spawn markers or use the setup chat flow.
+6. Select arena bounds with `/arena wand`.
+7. Save spawn points and bounds with the setup prompts or update commands.
+8. Finish with `/arena finish`.
+9. Add supported kits with `/arena addKit <arena> <kit>`.
+10. If the map is standalone, save the schematic with `/arena saveChanges <arena>`.
 
-### How do we setup default arena?
-1. Paste a schematic from WorldEdt
-2. Do `/edit` to go into build mode.
-3. Do `/arena create <name>` standalone
+## Spawn And Special Locations
 
-#### For normal arenas, e.g NoDebuff, Boxing
-4. Set the spawns:
-- Spawn 1 place a fence and a Player Head on top of it.
-- Spawn 2 place a fence and a Player Head on top of it.
+| Mode | Setup notes |
+| :--- | :--- |
+| Standard 1v1 | Set both player spawn points. |
+| Team modes | Set both team spawn points and make sure the map has enough room for the configured team size. |
+| Bridges / BattleRush | Configure portal/special cuboids and build height. |
+| BedFight / WallRush | Place team-colored wool near beds and configure BedFight-style spawn/protection areas. |
+| BlockFight | Use standalone arenas and configure kit BlockFight heart/void rules. |
+| FFA / Party FFA | Set middle spawn and FFA radius when needed. |
+| Events | Use `/event arena` commands for event-specific arenas. |
 
-#### For Beds and Portals (Skip this if your just setting a normal arena)
-5. For special locations like beds and portals, this is how to set them.
-- Bolt detects special points using a **focal point** or **mid point**
-- Find the closest block you can find to the bed, place Red or Blue wool depending on team color, now on top of it, place a sponge.
+## Schematic Workflow
 
-6. Use the arena wand given in your first slot to select bounds, make sure you select the entire arena as Bolt's Arena System will paste it according to a grid.
-7. Click in chat where it says **CLICK HERE** OR do `/arena finish`.
+Standalone arenas use schematics for reset and duplicate management.
 
-#### Do this step if your having issues with portals not working properly.
-8. Select cuboid for portals using `/arena wand` and set them using `/arena setSpecialCuboid <arena> <red/blue>`.
+| Command | Use when |
+| :--- | :--- |
+| `/arena saveChanges <arena>` | You edited one arena and want to save the new schematic. |
+| `/arena saveAllChanges` | You edited multiple arenas and want to save all schematic changes. |
+| `/arena scale <arena> <amount>` | You need more or fewer duplicate copies for high traffic. |
+| `/arena save` | You changed arena metadata and want to save arena config. |
 
-9. You can now add kits to your arena using `/arena addkit <arena>`.
-10. You can now also duplicate it using `/arena scale <amountOfCopies>` or `/arena manage`.
+Bolt also preserves skulls/heads placed above wool during paste resets, which is important for BedFight-style spawn markers and decorative map setups.
 
-## Commands
+## Kit Whitelist
 
-`<>` = Required `[]` = Optional
+Arenas are linked to kits. A queue, duel, or selected arena flow can only use maps that are available for that kit.
 
-### 🧭 Main Commands
+| Command | Description |
+| :--- | :--- |
+| `/arena kits <arena>` | View kits linked to an arena. |
+| `/arena addKit <arena> <kit>` | Allow a kit to use an arena. |
+| `/arena removeKit <arena> <kit>` | Remove a kit from an arena. |
+| `/arena copyKit <source> <target>` | Copy kit whitelist from one arena to another. |
+| `/kit viewArenas <kit>` | View arenas available for a kit. |
 
-Command                                | Permission         | Description                                 
----------------------------------------|--------------------|--------------------------------------------
-`/arena list`                          | bolt.arena.admin   | List all arenas                             
-`/arena save`                          | bolt.arena.admin   | Save all arenas                             
-`/arena manage`                        | bolt.arena.admin   | Manage all arenas                           
-`/arena wand`                          | bolt.arena.admin   | Get selection wand                          
-`/arena saveAllChanges [regen]`        | bolt.arena.admin   | Save all changes made to an arena           
+## Common Commands
 
-### ⚙️ Setup Commands
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/arena create <name> <standard/standalone>` | `bolt.arena.setup` | Start arena creation. |
+| `/arena wand` | `bolt.arena.setup` | Get the selection wand. |
+| `/arena finish` | `bolt.arena.setup` | Finish arena setup. |
+| `/arena cancel` | `bolt.arena.setup` | Cancel setup. |
+| `/arena updatePoints <arena>` | `bolt.arena.setup` | Update spawn points. |
+| `/arena updateCuboid <arena>` | `bolt.arena.setup` | Update arena bounds. |
+| `/arena updateSpecial <arena>` | `bolt.arena.setup` | Update special locations. |
+| `/arena updateSpecialCuboid <arena>` | `bolt.arena.setup` | Update portal/special cuboid. |
+| `/arena teleport <arena> [copy]` | `bolt.arena.admin` | Teleport to an arena. |
+| `/arena list` | `bolt.arena.admin` | List arenas. |
+| `/arena info <arena>` | `bolt.arena.admin` | View arena details. |
+| `/arena duplicates <arena>` | `bolt.arena.admin` | View duplicate copies. |
+| `/arena toggle <arena>` | `bolt.arena.admin` | Enable or disable an arena. |
+| `/arena setName <arena> <name>` | `bolt.arena.admin` | Set display name. |
+| `/arena setIcon <arena>` | `bolt.arena.admin` | Set menu icon from held item. |
+| `/arena setBuildHeight <arena> <height>` | `bolt.arena.admin` | Set maximum build height. |
+| `/arena setFallDeathHeight <arena> <height>` | `bolt.arena.admin` | Set void death height. |
+| `/arena setSpawnProtectionRadius <arena> <radius>` | `bolt.arena.admin` | Set spawn protection radius. |
+| `/arena setPortalRadius <arena> <radius>` | `bolt.arena.admin` | Set portal protection radius. |
+| `/arena setFFARadius <arena> <radius>` | `bolt.arena.admin` | Set FFA spawn radius. |
+| `/arena setPearlsAllowed <arena> <true/false>` | `bolt.arena.admin` | Allow or block pearls. |
+| `/arena setType <arena> <type>` | `bolt.arena.admin` | Change arena type. |
+| `/arena debug <arena>` | `bolt.arena.admin` | Debug arena state. |
 
-Command                                | Permission         | Description                                 
----------------------------------------|--------------------|---------------------------------------------
-`/arena create <name> <type>`          | bolt.arena.admin   | Create an arena according to name and type  
-`/arena delete <arena> [deleteBounds]` | bolt.arena.admin   | Delete an arena according to name           
-`/arena cancel`                        | bolt.arena.admin   | Cancel your arena creation                  
-`/arena finish`                        | bolt.arena.admin   | Mark your arena creation as finished        
+## Troubleshooting
 
-### 🪄 Edit Commands
+**Bolt says FastAsyncWorldEdit is missing**
 
-Command                                     | Permission       | Description                               
-------------------------------------------- | ---------------- | ------------------------------------------
-`/arena updatePoints <arena>`               | bolt.arena.admin | Re-detect an arena’s spawn-points         
-`/arena updateSpecial <arena>`              | bolt.arena.admin | Re-detect an arena’s special locations    
-`/arena updateCuboid <arena>`               | bolt.arena.admin | Set an arena’s bounds to your selection   
-`/arena setPortalCuboid <arena> <blue/red>` | bolt.arena.admin | Set an arena’s portal bounds              
-`/arena duplicates <arena>`                 | bolt.arena.admin | View an arena’s duplicates                
-`/arena teleport <arena> <duplicate-id>`    | bolt.arena.admin | Teleport to an arena’s mid-spawn          
-`/arena toggle <arena>`                     | bolt.arena.admin | Toggle an arena from being selected       
-`/arena saveChanges <arena>`                | bolt.arena.admin | Save your map changes to arena’s schematic
-`/arena scale <arena> <amount>`             | bolt.arena.admin | Scale an arena’s copies to your liking    
+- Install FAWE and restart the server.
+- Use the Refine FAWE-Legacy release linked above for Carbon/legacy setups.
 
-### ℹ️ Information Commands
+**A standalone arena does not reset**
 
-Command                                     | Permission       | Description                                 
-------------------------------------------- | ---------------- | --------------------------------------------
-`/arena setName <arena> <name>`             | bolt.arena.admin | Set an arena’s display name                 
-`/arena setIcon <arena>`                    | bolt.arena.admin | Set an arena’s icon to the item in your hand
-`/arena setFallDeathHeight <arena> <level>` | bolt.arena.admin | Set an arena’s void death height            
-`/arena setBuildHeight <arena> <level>`     | bolt.arena.admin | Set an arena’s maximum build height         
+- Make sure the arena has a saved schematic.
+- Run `/arena saveChanges <arena>` after editing the map.
+- Check console for FAWE/WorldEdit paste errors.
 
-### 🎒 Kit Commands
+**Players spawn in the wrong place**
 
-Command                         | Permission       | Description                            
-------------------------------- | ---------------- | ---------------------------------------
-`/arena kits <arena>`           | bolt.arena.admin | View an arena’s kits                   
-`/arena addKit <arena> <kit>`   | bolt.arena.admin | Whitelist a kit to an arena            
-`/arena removeKit <arena>`      | bolt.arena.admin | Un-whitelist a kit from an arena       
-`/arena copyKit <src> <target>` | bolt.arena.admin | Copy all kits from one arena to another
+- Re-run `/arena updatePoints <arena>`.
+- For BedFight-style maps, check wool/head markers and team colors.
+- For Bridge-style maps, verify portal/special cuboids.
+
+**Selected arena does not appear in duels or queues**
+
+- Make sure the arena is enabled and playable.
+- Make sure the kit is whitelisted on the arena.
+- Make sure the player has `bolt.profile.arena` if arena selection is permission-gated in your setup.

@@ -11,11 +11,14 @@ import Proxy from './installation/_proxy.mdx'
 
 **Phoenix** is an advanced Network Core plugin designed to be the ultimate solution for server administration, rank management, and staff efficiency. It combines power with simplicity, offering a highly customizable experience that scales from small servers to massive networks.
 
-<div className="flex gap-4 my-8">
-  <a href="/Phoenix/Installation" className="glass-button px-8 py-4 rounded-2xl inline-flex items-center gap-3 no-underline text-white hover:text-white font-bold primary-glow transition-all hover:scale-105">
-    <span>🚀 Get Started</span>
-  </a>
-</div>
+<DocCards>
+  <DocCard title="Installation" href="/Phoenix/Installation">Spigot and proxy setup, step by step.</DocCard>
+  <DocCard title="Commands" href="/Phoenix/Commands">Every command and what it does.</DocCard>
+  <DocCard title="Permissions" href="/Phoenix/Permissions">Nodes and what they unlock.</DocCard>
+  <DocCard title="Addons" href="/Phoenix/Addons/">pxStaff, pxBasic, pxCosmetics, and more.</DocCard>
+  <DocCard title="Database" href="/Phoenix/Database/MongoDB">MongoDB, MySQL, and Redis connections.</DocCard>
+  <DocCard title="Developer API" href="/Phoenix/Features/API">Events, models, and services.</DocCard>
+</DocCards>
 
 ---
 
@@ -23,24 +26,14 @@ import Proxy from './installation/_proxy.mdx'
 
 Phoenix provides everything you need to manage a professional Minecraft network.
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-10">
-  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
-    <h3 className="text-primary mt-0">👑 Rank & Permission System</h3>
-    <p className="mb-0 text-sm">Sophisticated inheritance-based rank system with global and server-specific scopes.</p>
-  </div>
-  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
-    <h3 className="text-primary mt-0">⚖️ Advanced Punishments</h3>
-    <p className="mb-0 text-sm">Comprehensive punishment ladders, rollbacks, and searchable histories for staff accountability.</p>
-  </div>
-  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
-    <h3 className="text-primary mt-0">🛡️ Network Security</h3>
-    <p className="mb-0 text-sm">Built-in 2FA, staff security layers, and anti-VPN to protect your server from unauthorized access.</p>
-  </div>
-  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
-    <h3 className="text-primary mt-0">📦 Extensive Addons</h3>
-    <p className="mb-0 text-sm">Modular architecture with numerous free addons like Staff Mode, Basic utils, and Cosmetics.</p>
-  </div>
-</div>
+<DocCards>
+  <DocCard title="Ranks & Permissions" href="/Phoenix/Features/Ranks">Inheritance-based ranks with global and server-specific scopes.</DocCard>
+  <DocCard title="Punishments" href="/Phoenix/Features/Punishments">Punishment ladders, rollbacks, and searchable histories.</DocCard>
+  <DocCard title="Network Security" href="/Phoenix/Features/Security">2FA, staff security layers, and anti-VPN.</DocCard>
+  <DocCard title="Staff Tools" href="/Phoenix/Features/Staff">Staff mode, chat logs, command logs, and notes.</DocCard>
+  <DocCard title="Grants" href="/Phoenix/Features/Grants">Temporary and permanent rank grants with history.</DocCard>
+  <DocCard title="Web Editor" href="/Phoenix/Features/WebEditor">Edit configuration outside the server console.</DocCard>
+</DocCards>
 
 :::tip Phoenix ecosystem
 Phoenix isn't just a plugin it's a complete ecosystem. With built-in support for Velocity, BungeeCord, and cross-server synchronization, your network remains unified and secure.

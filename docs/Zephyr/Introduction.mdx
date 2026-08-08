@@ -2,10 +2,16 @@
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs'
-import TabItem from '@theme/TabItem'
-
 Zephyr is a fully customizable FFA plugin to suit your servers needs.
+
+<DocCards>
+  <DocCard title="Installation" href="/Zephyr/Installation">Requirements and setup, step by step.</DocCard>
+  <DocCard title="Arenas" href="/Zephyr/Setup/Arenas">Create arenas, set bounds, spawns, and game height.</DocCard>
+  <DocCard title="Kits" href="/Zephyr/Setup/Kits">Define the kits players spawn with.</DocCard>
+  <DocCard title="Leaderboards" href="/Zephyr/Features/Leaderboards">Track and display top players.</DocCard>
+  <DocCard title="Permissions" href="/Zephyr/Permissions">Every permission node.</DocCard>
+  <DocCard title="Placeholders" href="/Zephyr/Placeholders">PlaceholderAPI values Zephyr exposes.</DocCard>
+</DocCards>
 
 :::warning
 Zephyr requires a MongoDB database to work
@@ -15,17 +21,6 @@ Zephyr requires a MongoDB database to work
 Zephyr does NOT depend on Phoenix or Carbon
 :::
 
-## Installation and setup
+## Getting started
 
-<Tabs queryString="type">
-    <TabItem value="spigot" label="Paper" default>
-        1. Download and install Retention, which can be found on the resource page, into your plugins folder.<br/>
-        2. Start your server and wait until it finishes booting up, once finished, stop your server.<br/>
-        3. Open loader.yml in Retention's plugin folder and enable Zephyr, save and reboot.<br/>
-        4. [Setup your arenas](/Zephyr/Setup/Arenas)
-        5. [Setup your kits](/Zephyr/Setup/Kits)
-        6. You're good to go!
-    </TabItem>
-</Tabs>
-
-
+Zephyr loads through Retention. Follow the [installation guide](/Zephyr/Installation), then set up your [arenas](/Zephyr/Setup/Arenas) and [kits](/Zephyr/Setup/Kits).

@@ -2,15 +2,80 @@
 sidebar_position: 5
 ---
 
-Queues in Bolt, are seperated into 2 types: `Unranked`, and `Ranked`,
-Ranked queues being elo based, and Unranked being a casual queue.
+Bolt has solo and duo queues for ranked and unranked matches. Queues use kit settings, player state, party state, ping limits, ranked unlock requirements, and arena availability before a match is created.
 
-## Unranked Queues
+## Queue Types
 
-Unranked queues are casual queues, where players can play without the pressure of losing elo,
-unranked queues allow the option for ping-based matchmaking.
+| Queue | Description |
+| :--- | :--- |
+| Solo Unranked | Casual 1v1 matches with no ELO changes. |
+| Solo Ranked | Competitive 1v1 matches with ELO, divisions, and leaderboard impact. |
+| Duo Unranked | Casual 2v2 party queue. |
+| Duo Ranked | Competitive 2v2 party queue when the kit and party are eligible. |
 
-## Ranked Queues
+## Queue Requirements
 
-Ranked queues are elo based queues, where players can play to increase their elo, and climb the leaderboards.
-Ranked queues also allow the option for ping-based matchmaking, and elo based matchmaking.
+A player can join a queue only when the required checks pass:
+
+- The player is online and in lobby state.
+- The player is not already queueing.
+- The kit is enabled.
+- The kit supports the selected queue type.
+- Ranked queues require the kit to be ranked-enabled.
+- Unranked queues require `unrankedQueueEnabled`.
+- Ranked queues can require minimum unranked wins.
+- Ping limits can block players unless they have `bolt.profile.ping`.
+- Party queueing requires a valid party state and party leader.
+- The kit must have available arenas.
+
+## Selected Arena Queueing
+
+Players with `bolt.profile.arena` can use selected arena flows when your menus/config expose them. Bolt will prefer the selected arena when creating the match, then fall back to available duplicate arenas if needed.
+
+Selected arenas must be:
+
+- Enabled.
+- Playable.
+- Linked to the selected kit.
+- Available or duplicated for active usage.
+
+## Queue Commands
+
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/queue select` | Open queue type selection. | None |
+| `/queue join <queue>` | Join a specific queue. | None |
+| `/queue leave` | Leave your current queue. | None |
+| `/queue forceQueue <player> <kit> <type>` | Force a player into a queue. | `bolt.queue.admin` |
+| `/randomqueue` | Join a random unranked solo queue. | None |
+| `/randomqueue other <player>` | Force another player into a random unranked solo queue. | `bolt.queue.admin` |
+| `/bolt randomQueue <player>` | Staff shortcut for random queueing. | `bolt.queue.admin` |
+
+## Queue Permissions
+
+| Permission | Use |
+| :--- | :--- |
+| `bolt.queue.admin` | Staff queue commands. |
+| `bolt.profile.ranked` | Bypass ranked unlock requirements. |
+| `bolt.profile.ping` | Bypass ping limit checks. |
+| `bolt.profile.arena` | Use preferred/selected arena flows. |
+
+## Actionbars And Scoreboards
+
+Bolt supports queue actionbars for:
+
+- Solo ranked.
+- Solo unranked.
+- Duo ranked.
+- Duo unranked.
+- Follow queue state.
+
+Scoreboards can display queue type, queue name, queue duration, and ping range using configurable text from the scoreboard config.
+
+## Tips
+
+- Keep at least one playable arena linked to every queue-enabled kit.
+- Use duplicate standalone arenas for popular build modes.
+- Use ranked win requirements to protect ranked from new accounts.
+- Use ping ranges carefully; too strict values can make queues feel empty.
+- Test `/randomqueue` after changing kit queue availability.

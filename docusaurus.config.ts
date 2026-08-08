@@ -18,6 +18,21 @@ const config: Config = {
         mermaid: true,
     },
 
+    // Sen for everything, Geist Mono for code (Sen has no monospace cut).
+    stylesheets: [
+        "https://fonts.googleapis.com/css2?family=Sen:wght@400..800&family=Geist+Mono:wght@100..900&display=swap"
+    ],
+
+    headTags: [
+        {
+            // Reveal hides its child until JS shows it. Without scripts that would
+            // leave the page permanently blank, so the rule is undone here.
+            tagName: "noscript",
+            attributes: {},
+            innerHTML: "<style>.reveal{opacity:1;transform:none}</style>"
+        }
+    ],
+
     i18n: {
         defaultLocale: "en",
         locales: ["en"]
@@ -140,8 +155,8 @@ const config: Config = {
             `,
         },
         prism: {
-            theme: prismThemes.github,
-            darkTheme: prismThemes.dracula,
+            theme: prismThemes.vsDark,
+            darkTheme: prismThemes.vsDark,
             additionalLanguages: ["java", "bash"]
         }
     } satisfies Preset.ThemeConfig

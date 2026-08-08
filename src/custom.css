@@ -1,50 +1,76 @@
-@import "tailwindcss";
+/* Tailwind is imported in pieces on purpose.
+ *
+ * `@import "tailwindcss"` puts the utilities in `@layer utilities`, and every
+ * layered rule loses to an unlayered one no matter how specific it is. Infima
+ * (Docusaurus' stylesheet) is entirely unlayered, so its bare `a { color }` and
+ * `h3 { font-size }` were beating `text-foreground` and `text-sm` everywhere —
+ * which is why headings came out pink and oversized.
+ *
+ * Theme and preflight stay in their layers; utilities are pulled in unlayered so
+ * a class beats an element selector again, the way it does in a normal Tailwind
+ * project. */
+@layer theme, base, components;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+
+/* Design language ported 1:1 from the tarik site: shadcn "zinc" darkened to a
+   true black page, black cards sitting on hairlines, tight corners, and the
+   accent colour reserved for the few places that actually need it. The only
+   deviation is the accent itself, which stays Refine pink. */
 
 @theme {
-  --color-primary: hsl(340 82% 56%);
-  /* Add other custom colors from tailwind.config.js if needed */
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
   --color-secondary: hsl(var(--secondary));
   --color-destructive: hsl(var(--destructive));
   --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
   --color-accent: hsl(var(--accent));
   --color-popover: hsl(var(--popover));
   --color-card: hsl(var(--card));
-  --color-glow: hsla(var(--primary) / 0.15);
+  --color-brand: hsl(var(--primary));
 
-  --radius-xl: calc(var(--radius) + 8px);
+  --font-sans: "Sen", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
 }
 
-:root {
-  --background: 240 10% 3.9%;
+/* The site is dark-only (colorMode.disableSwitch), so one token set is enough. */
+:root,
+[data-theme='dark'] {
+  --background: 0 0% 0%;
   --foreground: 0 0% 98%;
-  --card: 240 10% 3.9%;
+  --card: 0 0% 0%;
   --card-foreground: 0 0% 98%;
-  --popover: 240 10% 3.9%;
+  --popover: 0 0% 7%;
   --popover-foreground: 0 0% 98%;
   --primary: 340 82% 56%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 240 3.7% 15.9%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 4% 16%;
   --secondary-foreground: 0 0% 98%;
-  --muted: 240 3.7% 15.9%;
-  --muted-foreground: 240 5% 64.9%;
-  --accent: 240 3.7% 15.9%;
+  --muted: 240 4% 16%;
+  --muted-foreground: 240 5% 65%;
+  --accent: 240 4% 16%;
   --accent-foreground: 0 0% 98%;
-  --destructive: 0 62.8% 30.6%;
+  --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 98%;
-  --border: 240 3.7% 15.9%;
-  --input: 240 3.7% 15.9%;
-  --ring: 340 82% 56%;
-  --radius: 0.75rem;
+  --border: 0 0% 9%;
+  --input: 0 0% 12%;
+  --ring: 240 5% 34%;
+  --radius: 0.45rem; /* tight corners; the nav pill is the only round thing */
 
-  /* Docusaurus Standard Overrides */
+  /* Docusaurus / Infima */
   --ifm-color-primary: hsl(var(--primary));
   --ifm-color-primary-dark: hsl(340 82% 50%);
   --ifm-color-primary-darker: hsl(340 82% 45%);
@@ -52,40 +78,67 @@
   --ifm-color-primary-light: hsl(340 82% 62%);
   --ifm-color-primary-lighter: hsl(340 82% 68%);
   --ifm-color-primary-lightest: hsl(340 82% 74%);
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 
-  --ifm-font-color-base: hsl(var(--foreground));
   --ifm-background-color: hsl(var(--background));
+  --ifm-background-surface-color: hsl(var(--card));
+  --ifm-font-color-base: hsl(var(--foreground));
+  --ifm-font-family-base: "Sen", ui-sans-serif, system-ui, sans-serif;
+  --ifm-font-family-monospace: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+  --ifm-font-size-base: 17px;
+  --ifm-line-height-base: 1.7;
+  --ifm-global-radius: var(--radius);
+  --ifm-heading-font-weight: 600;
+
   --ifm-link-color: hsl(var(--primary));
-  --ifm-link-hover-color: hsl(var(--primary-foreground));
+  --ifm-link-hover-color: hsl(var(--primary));
+
+  --ifm-navbar-height: 5rem;
+  --ifm-navbar-background-color: transparent;
+  --ifm-navbar-shadow: none;
+  --ifm-navbar-link-color: hsl(var(--muted-foreground));
+  --ifm-navbar-link-hover-color: hsl(var(--foreground));
+
   --ifm-menu-color: hsl(var(--muted-foreground));
-  --ifm-menu-color-active: hsl(var(--primary));
-  --ifm-menu-color-background-active: hsl(var(--secondary));
+  --ifm-menu-color-active: hsl(var(--foreground));
+  --ifm-menu-color-background-active: rgba(255, 255, 255, 0.06);
+  --ifm-menu-color-background-hover: rgba(255, 255, 255, 0.04);
 
-  --ifm-navbar-background-color: hsl(var(--background) / 0.8);
-  --ifm-navbar-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --ifm-toc-border-color: hsl(var(--border));
+  --ifm-hr-border-color: hsl(var(--border));
+  --ifm-table-border-color: hsl(var(--border));
+  --ifm-table-stripe-background: rgba(255, 255, 255, 0.02);
+  --ifm-table-head-background: transparent;
 
-  --gap: 20px;
+  --ifm-code-font-size: 0.875em;
+  --ifm-code-background: rgba(255, 255, 255, 0.07);
+  --ifm-pre-background: hsl(var(--card));
+  --ifm-blockquote-color: hsl(var(--muted-foreground));
+  --ifm-blockquote-border-color: hsl(var(--border));
+
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.07);
+
+  --hairline: rgba(255, 255, 255, 0.1);
 }
-
-[data-theme='dark'] {
-  --background: 240 10% 4%;
-  --foreground: 0 0% 98%;
-  --card: 240 10% 6%;
-  --card-foreground: 0 0% 98%;
-  --primary: 340 82% 56%;
-  --primary-foreground: 0 0% 100%;
-}
-
-/* --- Global & Animations --- */
 
 html {
-  scroll-behavior: smooth;
+  /* No `scroll-behavior: smooth` here. SmoothScroll drives the page with
+     window.scrollTo every frame; with native smoothing on, the browser eases
+     each of those calls as well and the two compound into a crawl. */
+  font-family: var(--ifm-font-family-base);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+/* Infima's own `html[data-theme='dark']` rule out-specifies the token override
+   in `[data-theme='dark']` below, so html kept painting its stock #1b1b1d and
+   the page read as charcoal rather than black. Set it on the element directly. */
+html,
+html[data-theme='dark'] {
+  background-color: hsl(var(--background));
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: hsl(var(--background));
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -94,528 +147,519 @@ a {
   text-decoration: none !important;
 }
 
-/* Hide "Skip to main content" link unless focused */
-[class*='skipToContent'],
-.skipToContent_fXgn,
-a.skipToContent_fXgn {
-  position: absolute !important;
-  top: -9999px !important;
-  left: -9999px !important;
-  width: 1px !important;
-  height: 1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  z-index: 9999;
-}
-
-[class*='skipToContent']:focus,
-.skipToContent_fXgn:focus,
-a.skipToContent_fXgn:focus {
-  position: fixed !important;
-  top: 10px !important;
-  left: 10px !important;
-  width: auto !important;
-  height: auto !important;
-  overflow: visible !important;
-  clip: auto !important;
-  white-space: normal !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  background: hsl(var(--primary)) !important;
-  color: white !important;
-  padding: 0.75rem 1.25rem !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  text-decoration: none !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
-  outline: 2px solid white !important;
-  outline-offset: 2px !important;
-}
-
-/* View Transitions for smooth page navigation */
-::view-transition-old(root) {
-  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out;
-}
-
-::view-transition-new(root) {
-  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in;
-}
-
-@keyframes fade-out {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(4px) scale(0.998);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.fade-in {
-  animation: fade-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-
-/* Glassmorphism/* Navbar */
-.navbar {
-  background: transparent;
-  border-bottom: 1px solid hsl(var(--border) / 0.6);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  min-height: var(--ifm-navbar-height);
-  display: flex;
-  align-items: center;
-  padding: 0;
-  /* Let inner handle padding if needed */
-}
-
-.navbar__inner {
-  background: hsl(var(--background) / 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 0 var(--ifm-navbar-padding-horizontal);
-}
-
-.navbar__link {
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-/* Custom Scrollbar */
+/* Scrollbar, sized and coloured like the rest of the chrome. */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
-
 ::-webkit-scrollbar-track {
-  background: hsl(var(--background));
+  background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary) / 0.3);
-  border-radius: 5px;
-  border: 2px solid hsl(var(--background));
-  transition: background 0.3s ease;
+  background: rgba(255, 255, 255, 0.14);
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-clip: content-box;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary) / 0.6);
+  background: rgba(255, 255, 255, 0.28);
+  background-clip: content-box;
 }
 
-.navbar-title-gradient,
-.navbar__title {
-  background: linear-gradient(to right,
-      #ffffff,
-      hsl(340 82% 56%),
-      #ffffff,
-      hsl(340 82% 70%),
-      #ffffff);
-  background-size: 200% auto;
+/* ===== Utilities carried over from tarik ===== */
+
+/* Faint sheen down the top of a panel, so black cards read on a black page. */
+.sheen {
+  position: relative;
+}
+.sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 6rem;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(rgba(255, 255, 255, 0.025), transparent);
+}
+
+/* Hairline that fades out at both ends. */
+.rule {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.14), transparent);
+}
+
+/* Heading treatment: text fading from white into zinc. */
+.title-gradient {
+  background: linear-gradient(to bottom, #fff, hsl(var(--muted-foreground)));
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradient-flow 4s linear infinite;
-  font-weight: 800;
-  letter-spacing: -0.025em;
+  color: transparent;
 }
 
-@keyframes gradient-flow {
-  0% {
-    background-position: 0% center;
-  }
-
-  100% {
-    background-position: 200% center;
-  }
-}
-
-/* Premium Utilities */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
+/* Legacy hooks used inline across the .mdx pages. Redefined rather than removed
+   so the docs keep working, but they now render as the outlined pill the rest
+   of the chrome uses. .primary-glow is deliberately inert — nothing in this
+   design glows. */
 .glass-button {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--hairline);
+  border-radius: 9999px !important;
+  background: transparent;
+  padding: 0.5625rem 1.125rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  color: hsl(var(--muted-foreground)) !important;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  transform: none !important;
 }
 
 .glass-button:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  transform: translateY(-2px);
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.2);
+  color: hsl(var(--foreground)) !important;
+}
+
+.glass-panel {
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--card));
 }
 
 .primary-glow {
-  box-shadow: 0 0 40px -10px hsla(var(--primary) / 0.3);
+  box-shadow: none;
 }
 
-.hero-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(to right, hsla(var(--foreground) / 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, hsla(var(--foreground) / 0.05) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(circle at center, black, transparent 80%);
-  -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%);
-  opacity: 0.4;
+/* ===== Entrance animations =====
+   Short and shallow on purpose. A long travel with a long duration reads as the
+   page struggling rather than as polish. */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade-in {
+  animation: fadeIn 0.35s ease both;
 }
 
-.text-reveal {
-  background: linear-gradient(135deg, #fff 0%, hsla(var(--foreground) / 0.7) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.animate-card {
+  animation: cardIn 0.28s cubic-bezier(0.22, 0.9, 0.28, 1) both;
 }
 
-.navbar__items {
+/* Opacity only. Sliding the article up on every click meant the text you were
+   about to read was still moving when it arrived. */
+@keyframes pageEnter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.page-enter {
+  animation: pageEnter 0.16s ease-out both;
+}
+
+.reveal {
+  opacity: 0;
+  transition: opacity 0.4s ease-out;
+}
+.reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-card,
+  .animate-fade-in,
+  .page-enter {
+    animation: fadeIn 0.15s ease both;
+    transform: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ===== Navbar: the floating pill ===== */
+
+.navbar {
+  background: transparent !important;
+  border: 0;
+  box-shadow: none !important;
+  padding: 0;
+  height: var(--ifm-navbar-height);
+  display: flex;
+  align-items: center;
+  transition: none !important;
+}
+
+.navbar__inner {
+  width: calc(100% - 2rem);
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0.375rem 0.5rem 0.375rem 0.625rem;
+  border-radius: 9999px;
+  border: 1px solid var(--hairline);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  display: flex;
+  align-items: center;
   gap: 0.5rem;
 }
 
-.navbar__items--right {
-  gap: 1rem;
+@media (min-width: 997px) {
+  .navbar__inner {
+    width: calc(100% - 4rem);
+  }
 }
 
-/* Navbar Button - Main Website */
-.navbar-button {
-  --ifm-button-background-color: transparent;
-  --ifm-button-color: hsl(var(--foreground));
-  --ifm-button-border-color: hsl(var(--border));
-  --ifm-button-hover-background-color: hsl(var(--secondary));
+.navbar__brand {
+  margin-right: 0.25rem;
+}
 
-  font-size: 0.85rem !important;
-  padding: 0.4rem 0.8rem !important;
+.navbar__logo {
+  height: 2.25rem;
+  width: 2.25rem;
+}
+
+.navbar__title {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: hsl(var(--foreground));
+}
+
+.navbar__items {
+  gap: 0.25rem;
+}
+
+.navbar__items--right {
+  gap: 0.375rem;
+}
+
+.navbar__link {
+  font-size: 0.875rem;
+  font-weight: 400;
+  padding: 0.4375rem 0.875rem;
   border-radius: 9999px;
-  white-space: nowrap !important;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.navbar__link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: hsl(var(--foreground));
+}
+
+.navbar__link--active {
+  background: rgba(255, 255, 255, 0.1);
+  color: hsl(var(--foreground));
+}
+
+/* The "Main Website" button: an outlined chip, not a filled accent block. */
+.navbar-button,
+.navbar .navbar-button.button--primary {
+  background: transparent !important;
+  color: hsl(var(--muted-foreground)) !important;
+  border: 1px solid var(--hairline) !important;
+  border-radius: 9999px !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  padding: 0 0.875rem !important;
+  height: 2.25rem;
   display: flex;
   align-items: center;
-  height: 36px;
-  border: 1px solid hsl(var(--border)) !important;
-  transition: all 0.2s ease;
+  white-space: nowrap;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.navbar-button:hover {
-  background: hsl(var(--primary)) !important;
-  border-color: hsl(var(--primary)) !important;
-  color: white !important;
-  /* Force white text on hover */
+.navbar-button:hover,
+.navbar .navbar-button.button--primary:hover {
+  background: transparent !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
 @media (max-width: 996px) {
   .navbar-button {
     display: none !important;
-    /* Hide on smaller screens to prevent wrapping */
   }
 }
 
-/* Search Button Tuning */
-.DocSearch-Button {
-  background: transparent !important;
-  border: 1px solid transparent !important;
-  box-shadow: none !important;
-  opacity: 0.7;
-  transition: all 0.2s ease;
-  width: auto !important;
-  padding: 0 0.5rem !important;
+.navbar__toggle {
+  color: hsl(var(--muted-foreground));
 }
 
-.DocSearch-Button:hover {
-  background: hsl(var(--secondary)) !important;
-  opacity: 1;
-  border-color: hsl(var(--border)) !important;
+.navbar-sidebar {
+  background: hsl(var(--popover));
 }
 
-.DocSearch-Button-Placeholder {
-  display: none !important;
-  /* Hide "Search" text to make it cleaner */
-}
-
-.DocSearch-Search-Icon {
-  width: 18px !important;
-  height: 18px !important;
-  color: hsl(var(--foreground));
-}
-
-.DocSearch-Button-Keys {
-  display: none !important;
-}
-
-[data-theme='dark'] .DocSearch-Button {
-  background: transparent !important;
-}
-
-/* --- DocSearch Modal Customization --- */
-/* --- DocSearch Modal Customization --- */
-html[data-theme='light'] {
-  --docsearch-primary-color: hsl(var(--primary));
-  --docsearch-text-color: hsl(var(--foreground));
-  --docsearch-spacing: 12px;
-  --docsearch-icon-stroke-width: 1.4;
-  --docsearch-highlight-color: hsl(var(--primary));
-  --docsearch-muted-color: hsl(var(--muted-foreground));
-  --docsearch-container-background: rgba(0, 0, 0, 0.4);
-  --docsearch-modal-width: 560px;
-  --docsearch-modal-height: 600px;
-  --docsearch-modal-background: #ffffff;
-  --docsearch-modal-shadow: 0 0 0 1px hsl(var(--border));
-  --docsearch-searchbox-height: 52px;
-  --docsearch-searchbox-background: transparent;
-  --docsearch-searchbox-focus-background: transparent;
-  --docsearch-searchbox-shadow: none;
-  --docsearch-hit-height: 50px;
-  --docsearch-hit-shadow: none;
-  --docsearch-hit-background: transparent;
-  --docsearch-hit-color: hsl(var(--foreground));
-  --docsearch-hit-active-color: #ffffff;
-  --docsearch-footer-height: 40px;
-  --docsearch-footer-background: #ffffff;
-  --docsearch-footer-shadow: 0 -1px 0 0 hsl(var(--border));
-}
-
-html[data-theme='dark'] {
-  --docsearch-primary-color: hsl(var(--primary));
-  --docsearch-text-color: hsl(var(--foreground));
-  --docsearch-spacing: 12px;
-  --docsearch-icon-stroke-width: 1.4;
-  --docsearch-highlight-color: hsl(var(--primary));
-  --docsearch-muted-color: hsl(var(--muted-foreground));
-  --docsearch-container-background: rgba(0, 0, 0, 0.7);
-  --docsearch-modal-width: 560px;
-  --docsearch-modal-height: 600px;
-  --docsearch-modal-background: hsl(var(--card));
-  --docsearch-modal-shadow: 0 0 0 1px hsl(var(--border));
-  --docsearch-searchbox-height: 52px;
-  --docsearch-searchbox-background: transparent;
-  --docsearch-searchbox-focus-background: transparent;
-  --docsearch-searchbox-shadow: none;
-  --docsearch-hit-height: 50px;
-  --docsearch-hit-shadow: none;
-  --docsearch-hit-background: transparent;
-  --docsearch-hit-color: hsl(var(--foreground));
-  --docsearch-hit-active-color: #ffffff;
-  --docsearch-footer-height: 40px;
-  --docsearch-footer-background: hsl(var(--card));
-  --docsearch-footer-shadow: 0 -1px 0 0 hsl(var(--border));
-  --docsearch-key-gradient: transparent;
-  --docsearch-key-shadow: none;
-}
-
-.DocSearch-Modal {
-  border-radius: var(--radius);
-  border: 1px solid hsl(var(--border));
-  overflow: hidden;
-  box-shadow: none !important;
-}
-
-.DocSearch-SearchBar {
-  padding: var(--docsearch-spacing);
+.navbar-sidebar__brand {
+  box-shadow: none;
   border-bottom: 1px solid hsl(var(--border));
 }
 
-.DocSearch-Form {
-  border-radius: 4px;
-  box-shadow: none !important;
-  border: 1px solid transparent;
-  background: hsl(var(--muted) / 0.5);
+/* ===== Sidebar / TOC ===== */
+
+.theme-doc-sidebar-container {
+  border-right: 1px solid hsl(var(--border)) !important;
 }
 
-.DocSearch-Form:focus-within {
-  background: hsl(var(--background));
-  border-color: hsl(var(--primary));
+.menu {
+  font-size: 0.9375rem;
+  padding: 1rem 0.75rem !important;
 }
 
-.DocSearch-Input {
-  color: var(--docsearch-text-color);
-  padding-left: 8px;
+.menu__link {
+  border-radius: var(--radius);
+  padding: 0.4375rem 0.6875rem;
+  font-weight: 400;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.DocSearch-Hit-source {
-  background: transparent;
-  color: hsl(var(--muted-foreground));
-  padding-bottom: 2px;
+/* The active page is marked by colour and weight only. */
+.menu__link--active:not(.menu__link--sublist) {
   font-weight: 500;
-  font-size: 0.85rem;
+  color: hsl(var(--primary));
+  background: rgba(255, 255, 255, 0.04);
 }
 
-.DocSearch-Hit a {
-  border-radius: 4px;
-  box-shadow: none !important;
-  border: 1px solid transparent;
-  transition: all 0.15s ease;
-}
-
-.DocSearch-Hit[aria-selected="true"] a {
-  background: hsl(var(--primary)) !important;
-  border-color: transparent !important;
-  color: #ffffff !important;
-}
-
-.DocSearch-Hit[aria-selected="true"] mark {
-  color: #ffffff !important;
-  text-decoration: underline;
-}
-
-.DocSearch-Hit[aria-selected="true"] .DocSearch-Hit-icon {
-  color: #ffffff !important;
-}
-
-.DocSearch-Hit-icon {
-  color: hsl(var(--muted-foreground));
-}
-
-.DocSearch-NoResults {
-  color: hsl(var(--muted-foreground));
-}
-
-.DocSearch-Screen-Icon {
-  color: hsl(var(--muted-foreground));
-}
-
-.DocSearch-Footer {
-  box-shadow: none !important;
-  border-top: 1px solid hsl(var(--border));
-  background: var(--docsearch-footer-background) !important;
-  padding: 0 12px;
-}
-
-.DocSearch-Commands,
-.DocSearch-Logo a {
-  color: hsl(var(--muted-foreground));
+/* Category headers read as labels, not as clickable items competing with the
+   pages under them. */
+.theme-doc-sidebar-item-category > .menu__list-item-collapsible > .menu__link {
   font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
 }
 
-/* Breadcrumb Home Icon Alignment */
-.breadcrumbs__item:first-child,
-.breadcrumbs__item--home {
-  display: inline-flex !important;
-  align-items: center !important;
-  vertical-align: middle !important;
+.menu__list .menu__list {
+  margin-left: 0.5rem;
+  padding-left: 0.5rem;
 }
 
-.breadcrumbs__item:first-child .breadcrumbs__link,
-.breadcrumbs__link[href="/"],
-.breadcrumbs__link[aria-label*="Home"] {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  line-height: 1 !important;
+.menu__list-item-collapsible:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius);
 }
 
-.breadcrumbs__item:first-child svg,
-.breadcrumbs__link[href="/"] svg,
-.breadcrumbs__link[aria-label*="Home"] svg {
-  display: block !important;
-  width: 16px !important;
-  height: 16px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  position: static !important;
+/* ===== Sidebar table of contents =====
+   The headings live under the active page in the left column instead of in a
+   third column on the right. One place to look, and the content gets the width
+   the right rail was using. */
 
+.theme-doc-toc-desktop {
+  display: none;
 }
 
-/* --- Heading Fixes --- */
-h1,
-.markdown h1 {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.025em;
+/* With the right rail gone, the article takes the full row. */
+[class*='docItemCol'] {
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
+}
+
+.sidebar-toc {
+  list-style: none;
+  margin: 0.25rem 0 0.5rem;
+  padding: 0 0 0 0.75rem;
+  margin-left: 0.625rem;
+  border-left: 1px solid hsl(var(--border));
+  overflow: hidden;
+  animation: tocOpen 0.22s ease-out both;
+}
+
+@keyframes tocOpen {
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 40rem; }
+}
+
+.sidebar-toc li {
+  margin: 0;
+  animation: fadeIn 0.24s ease both;
+}
+
+.sidebar-toc__item--sub {
+  padding-left: 0.75rem;
+}
+
+.sidebar-toc a {
+  display: block;
+  padding: 0.25rem 0.5rem;
+  border-radius: calc(var(--radius) * 0.6);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: hsl(var(--muted-foreground));
+  text-decoration: none !important;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.sidebar-toc a:hover {
+  color: hsl(var(--foreground));
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.sidebar-toc a.sidebar-toc__link--active {
+  color: hsl(var(--primary));
+  font-weight: 500;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-toc,
+  .sidebar-toc li {
+    animation: none;
+  }
+}
+
+.table-of-contents {
+  font-size: 0.8125rem;
+  border-left: 1px solid hsl(var(--border));
+}
+
+.table-of-contents__link {
+  color: hsl(var(--muted-foreground));
+  transition: color 0.15s ease;
+}
+
+.table-of-contents__link:hover {
   color: hsl(var(--foreground));
 }
 
-h2,
-.markdown h2 {
-  font-size: 1.875rem;
+.table-of-contents__link--active {
+  color: hsl(var(--primary));
+  font-weight: 500;
+}
+
+.table-of-contents__left-border {
+  border-left-color: hsl(var(--border));
+}
+
+.theme-doc-toc-mobile {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+}
+
+/* ===== Reading layout =====
+   Docs pages are read top to bottom and scanned for one heading. Both need the
+   headings to be findable and the prose to stay at a comfortable measure. */
+
+/* Anchor jumps and TOC clicks must clear the floating navbar, otherwise the
+   heading you clicked lands underneath it. */
+.markdown :is(h1, h2, h3, h4, h5, h6),
+:target {
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 1rem);
+}
+
+/* Prose keeps a readable measure; tables, code and images stay full width
+   because truncating them costs more than the long line does. */
+.markdown > :is(p, ul, ol, blockquote) {
+  max-width: 46rem;
+}
+
+.markdown > :is(ul, ol) {
+  padding-left: 1.25rem;
+}
+
+.markdown li + li {
+  margin-top: 0.375rem;
+}
+
+/* Links are the only accent in running text — underlined so they survive being
+   skimmed, offset so descenders stay legible. */
+.markdown a:not(.card):not(.glass-button) {
+  color: hsl(var(--primary));
+  text-decoration: underline !important;
+  text-decoration-color: hsl(var(--primary) / 0.35);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.15s ease;
+}
+
+.markdown a:not(.card):not(.glass-button):hover {
+  text-decoration-color: hsl(var(--primary));
+}
+
+/* Numbered install steps: a rail down the left with the ordinal sitting on it,
+   so a step stays locatable while scrolling through a long procedure. */
+.doc-steps ol {
+  counter-reset: step;
+  list-style: none;
+  margin: 0;
+  padding-left: 1.75rem;
+  border-left: 1px solid hsl(var(--border));
+}
+
+.doc-steps ol > li {
+  position: relative;
+  counter-increment: step;
+  padding-bottom: 1rem;
+}
+
+.doc-steps ol > li::before {
+  content: counter(step);
+  position: absolute;
+  left: -2.5rem;
+  top: 0.0625rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: hsl(var(--muted-foreground));
+}
+
+/* ===== Typography ===== */
+
+.markdown h1,
+h1 {
+  font-size: 2.5rem;
   font-weight: 700;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid hsl(var(--border) / 0.5);
-  padding-bottom: 0.5rem;
+  letter-spacing: -0.025em;
+  margin-bottom: 1.25rem;
 }
 
-h3,
-.markdown h3 {
-  font-size: 1.5rem;
+.markdown h2 {
+  font-size: 1.75rem;
   font-weight: 600;
-  margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+  margin-top: 2.75rem;
+  margin-bottom: 0.875rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid hsl(var(--border));
 }
 
-/* --- Mobile Fixes --- */
-@media (max-width: 996px) {
-
-  /* Search Bar Fix */
-  .navbar__search {
-    padding-left: 0.5rem;
-  }
-
-  .DocSearch-Button {
-    margin: 0 !important;
-    padding: 0.5rem !important;
-    border-radius: 8px !important;
-  }
-
-  .DocSearch-Button-Container svg {
-    width: 20px !important;
-    height: 20px !important;
-  }
-
-  /* Sidebar/TOC "On this page" fix */
-  .table-of-contents {
-    font-size: 0.875rem;
-  }
-
-  .theme-doc-toc-mobile {
-    margin-bottom: 1rem;
-    background: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
-    border-radius: var(--radius);
-  }
-
-  .theme-doc-toc-mobile button {
-    font-weight: 600;
-    color: hsl(var(--foreground));
-  }
+.markdown h3 {
+  font-size: 1.3125rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.625rem;
 }
 
-/* Fix for the homepage css delay */
-.navbar--fixed-top {
-  transition: background-color 0s !important;
+.markdown h4 {
+  font-size: 1.0625rem;
+  font-weight: 600;
 }
 
-/* Ensure headings have anchors visible on hover */
+.markdown p,
+.markdown li {
+  color: hsl(var(--foreground) / 0.9);
+}
+
 .hash-link {
   opacity: 0;
+  margin-left: 0.4rem;
+  color: hsl(var(--muted-foreground));
   transition: opacity 0.2s ease;
-  margin-left: 0.5rem;
-  color: hsl(var(--primary));
 }
 
 h1:hover .hash-link,
@@ -627,38 +671,338 @@ h6:hover .hash-link {
   opacity: 1;
 }
 
-/* Custom Footer Signature Styling */
+/* ===== Surfaces: code, tables, admonitions, cards ===== */
+
+.markdown pre,
+pre[class*='language-'],
+.theme-code-block {
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius) !important;
+  background: hsl(var(--card)) !important;
+  box-shadow: none !important;
+}
+
+.theme-code-block .prism-code {
+  background: transparent !important;
+  font-size: 0.875rem;
+}
+
+code {
+  border: 1px solid hsl(var(--border));
+  border-radius: calc(var(--radius) * 0.6);
+  background: var(--ifm-code-background);
+  font-size: var(--ifm-code-font-size);
+}
+
+.markdown table {
+  display: table;
+  width: 100%;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  font-size: 0.9375rem;
+}
+
+.markdown table th,
+.markdown table td {
+  border: 0;
+  border-bottom: 1px solid hsl(var(--border));
+  padding: 0.6875rem 1rem;
+}
+
+.markdown table th {
+  font-weight: 500;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+  text-align: left;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Command and permission tables are long and scanned across, so rows alternate
+   and the first column — the thing being looked up — is weighted. */
+.markdown table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.markdown table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.markdown table td:first-child {
+  font-weight: 500;
+  color: hsl(var(--foreground));
+  white-space: nowrap;
+}
+
+.markdown table tr:last-child td {
+  border-bottom: 0;
+}
+
+/* A wide table scrolls inside its own box instead of pushing the page sideways. */
+.markdown .table-wrapper,
+.markdown table {
+  overflow-x: auto;
+}
+
+.alert,
+.theme-admonition {
+  border: 1px solid hsl(var(--border));
+  border-left: 2px solid var(--ifm-alert-border-color, hsl(var(--border)));
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.02) !important;
+  box-shadow: none !important;
+  font-size: 0.9375rem;
+}
+
+/* The admonition heading carries the type; the body stays plain so a warning
+   reads as a warning without the whole block shouting. */
+.theme-admonition .admonitionHeading_node_modules-\@docusaurus-theme-classic-lib-theme-Admonition-Layout-styles-module,
+.theme-admonition [class*='admonitionHeading'] {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.theme-admonition [class*='admonitionContent'] > :last-child {
+  margin-bottom: 0;
+}
+
+.card,
+.theme-doc-markdown .card {
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+
+.pagination-nav__link {
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--card));
+  transition: border-color 0.2s ease;
+}
+
+.pagination-nav__link:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.pagination-nav__sublabel {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.8125rem;
+}
+
+.pagination-nav__label {
+  font-size: 1.0625rem;
+  font-weight: 500;
+}
+
+.breadcrumbs__item--active .breadcrumbs__link,
+.breadcrumbs__link {
+  background: transparent;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.8125rem;
+  padding: 0.1875rem 0.5rem;
+}
+
+.breadcrumbs__link:hover,
+.breadcrumbs__item--active .breadcrumbs__link {
+  background: rgba(255, 255, 255, 0.06);
+  color: hsl(var(--foreground));
+}
+
+/* The breadcrumb is the first thing under the navbar on every doc page, so its
+   offset is fixed rather than inherited from whatever the theme's row spacing
+   happens to be. Without this it sat at a different height depending on the
+   page's column layout. */
+.theme-doc-breadcrumbs {
+  margin: 0 0 1rem !important;
+  min-height: 1.75rem;
+  display: flex;
+  align-items: center;
+}
+
+[class*='docItemContainer'] {
+  padding-top: 0;
+}
+
+.breadcrumbs {
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumbs__item:first-child,
+.breadcrumbs__item--home {
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.breadcrumbs__item:first-child svg {
+  display: block !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.tabs__item {
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+  padding: 0.4375rem 0.875rem;
+  border-bottom: 0;
+  color: hsl(var(--muted-foreground));
+}
+
+.tabs__item--active {
+  background: rgba(255, 255, 255, 0.06);
+  color: hsl(var(--foreground));
+  border-bottom: 0;
+}
+
+/* ===== Search ===== */
+
+.DocSearch-Button {
+  background: transparent !important;
+  border: 1px solid var(--hairline) !important;
+  border-radius: 9999px !important;
+  box-shadow: none !important;
+  height: 2.25rem;
+  padding: 0 0.75rem !important;
+  margin: 0 !important;
+  color: hsl(var(--muted-foreground)) !important;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.DocSearch-Button:hover {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.DocSearch-Button-Placeholder {
+  display: none !important;
+}
+
+.DocSearch-Button-Keys {
+  display: none !important;
+}
+
+.DocSearch-Search-Icon {
+  width: 16px !important;
+  height: 16px !important;
+  stroke-width: 2;
+}
+
+html[data-theme='dark'],
+html {
+  --docsearch-primary-color: hsl(var(--primary));
+  --docsearch-text-color: hsl(var(--foreground));
+  --docsearch-spacing: 12px;
+  --docsearch-icon-stroke-width: 1.4;
+  --docsearch-highlight-color: hsl(var(--primary));
+  --docsearch-muted-color: hsl(var(--muted-foreground));
+  --docsearch-container-background: rgba(0, 0, 0, 0.7);
+  --docsearch-modal-width: 560px;
+  --docsearch-modal-background: hsl(var(--popover));
+  --docsearch-modal-shadow: 0 0 0 1px var(--hairline);
+  --docsearch-searchbox-height: 52px;
+  --docsearch-searchbox-background: transparent;
+  --docsearch-searchbox-focus-background: transparent;
+  --docsearch-searchbox-shadow: none;
+  --docsearch-hit-height: 48px;
+  --docsearch-hit-shadow: none;
+  --docsearch-hit-background: transparent;
+  --docsearch-hit-color: hsl(var(--foreground));
+  --docsearch-hit-active-color: #ffffff;
+  --docsearch-footer-height: 40px;
+  --docsearch-footer-background: hsl(var(--popover));
+  --docsearch-footer-shadow: 0 -1px 0 0 hsl(var(--border));
+  --docsearch-key-gradient: transparent;
+  --docsearch-key-shadow: none;
+}
+
+.DocSearch-Modal {
+  border-radius: calc(var(--radius) * 1.8);
+  border: 1px solid var(--hairline);
+  overflow: hidden;
+  box-shadow: none !important;
+}
+
+.DocSearch-SearchBar {
+  padding: var(--docsearch-spacing);
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.DocSearch-Form {
+  border-radius: var(--radius);
+  box-shadow: none !important;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.DocSearch-Form:focus-within {
+  border-color: var(--hairline);
+}
+
+.DocSearch-Hit a {
+  border-radius: var(--radius);
+  box-shadow: none !important;
+}
+
+.DocSearch-Hit[aria-selected="true"] a {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.DocSearch-Hit-source {
+  background: transparent;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.DocSearch-Footer {
+  box-shadow: none !important;
+  border-top: 1px solid hsl(var(--border));
+  background: var(--docsearch-footer-background) !important;
+}
+
+/* ===== Misc ===== */
+
 .footer {
-  padding: 1rem 0 !important;
-  background: hsl(var(--background)) !important;
-  border-top: 1px solid hsl(var(--border) / 0.4);
+  background: transparent !important;
+  border-top: 1px solid hsl(var(--border));
+  padding: 0 !important;
 }
 
-.footer__copyright {
-  font-size: 0 !important;
-  /* Hide default copyright text if any remains */
+/* Hide "Skip to main content" unless focused. */
+[class*='skipToContent'] {
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
-.footer img {
-  height: 40px;
-  width: auto;
-  transition: all 0.3s ease;
-}
-
-.footer a:hover img {
-  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.5));
+[class*='skipToContent']:focus {
+  position: fixed !important;
+  top: 10px !important;
+  left: 10px !important;
+  width: auto !important;
+  height: auto !important;
+  clip: auto !important;
   opacity: 1 !important;
-}
-
-/* Hero Typography Overrides */
-.hero-title {
-  font-size: clamp(3rem, 10vw, 6.5rem) !important;
-  line-height: 1.1 !important;
-  font-weight: 850 !important;
-  letter-spacing: -0.03em !important;
-}
-
-.hero-description {
-  font-size: clamp(1rem, 2.5vw, 1.35rem) !important;
-  max-width: 750px !important;
+  pointer-events: auto !important;
+  z-index: 9999;
+  background: hsl(var(--popover)) !important;
+  border: 1px solid var(--hairline);
+  color: hsl(var(--foreground)) !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 9999px !important;
+  font-size: 0.8125rem;
 }

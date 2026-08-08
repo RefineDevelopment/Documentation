@@ -2,24 +2,73 @@
 sidebar_position: 7
 ---
 
-Parties in Bolt are a way for people to make private matches and games,
-they allow FFA, Split, and dueling other parties.
+Parties let players group up for queues, duels, FFA games, split games, and party-vs-party matches. Bolt also exposes party actions through BoltAPI events and methods, making parties useful for web panels, Discord bots, and custom integrations.
 
-## Commands
+## Party Modes
 
-Commands        | Descriptions
---------------- | ------------
-/party help     | Brings up the help message
-/party create   | Creates a party
-/party info     | Displays your parties information
-/party chat     | changes your chat channel to party channel
-/party disband  | Disbands/Deletes your party
-/party leave    | Leave your party
-/party event    | Open the Party Events Menu
-/party duel     | Open Party Duel Menu
-/party roster   | View your party's roster for TeamFight
-/party privacy  | Toggle your party's privacy
-/party invite   | Invite a player to your party
-/party kick     | Kick a player from your party
-/party promote  | Promote a player to party leader
-/party join     | Join a party 
+| Mode | Description |
+| :--- | :--- |
+| Party FFA | Every party member fights each other. |
+| Party Split | Bolt splits one party into two teams. |
+| Party vs Party | One party duels another party. |
+| Duo Queue | A party leader can queue a valid party into duo queues. |
+
+## Party Commands
+
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/party` | View party help or create/invite depending on usage. | None |
+| `/party create` | Create a party. | None |
+| `/party invite <player>` | Invite a player. | None |
+| `/party join <player>` | Join a party invite. | None |
+| `/party leave` | Leave your party. | None |
+| `/party disband` | Disband your party. | None |
+| `/party kick <player>` | Kick a player from your party. | None |
+| `/party promote <player>` | Promote a member to leader. | None |
+| `/party info [player]` | View party information. | None |
+| `/party chat` | Toggle party chat mode. | None |
+| `/party settings` | Open party settings. | None |
+| `/party events` | Start party games/events. | None |
+| `/party duel` | View or challenge other parties. | None |
+| `/party open` or `/party privacy` | Make the party public/open. | `bolt.party.public` |
+| `/party announce` | Broadcast party invite. | `bolt.party.announce` |
+
+## Party Permissions
+
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.party.limit` | Use the higher permission-based party limit. |
+| `bolt.party.public` | Open the party publicly. |
+| `bolt.party.announce` | Broadcast party invites. |
+| `bolt.party.pingfactor` | Change party ping range settings. |
+
+Example VIP setup:
+
+```bash
+/lp group vip permission set bolt.party.limit true
+/lp group vip permission set bolt.party.public true
+/lp group vip permission set bolt.party.announce true
+/lp group vip permission set bolt.party.pingfactor true
+```
+
+## API Coverage
+
+BoltAPI supports:
+
+- Creating parties.
+- Sending, checking, revoking, and clearing invites.
+- Joining, leaving, kicking, promoting, and disbanding.
+- Starting party FFA, party split, and party-vs-party matches.
+- Spectating a party's active match.
+- Updating party settings such as open, all-invite, mute, duel requests, and limit.
+- Listening to party create, invite, join, leave, kick, leader change, and disband events.
+
+See [API Documentation](/Bolt/Features/API) for examples.
+
+## Tips
+
+- Keep party limits reasonable for your arena size.
+- Use `bolt.party.public` for VIP public party perks.
+- Use `bolt.party.announce` carefully on large servers to avoid chat spam.
+- Party FFA and split modes depend on kit support.
+- Party-vs-party matches require compatible parties and a kit with usable arenas.

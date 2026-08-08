@@ -1,0 +1,49 @@
+---
+sidebar_position: 2
+---
+
+# Installation
+
+Zephyr loads through Retention and stores its data in MongoDB. It does not depend on Phoenix or Carbon.
+
+## Requirements
+
+| Dependency | Required | Notes |
+| :--- | :---: | :--- |
+| Retention | Yes | Zephyr is loaded through Retention, not dropped in `plugins` on its own. |
+| MongoDB | Yes | Stores profiles, statistics, and leaderboard data. |
+
+## Install
+
+<Steps>
+
+1. Download Retention from the resource page and put it in your `plugins` folder.
+2. Start the server, wait for it to finish booting, then stop it.
+3. Open `loader.yml` in Retention's plugin folder, enable Zephyr, and save.
+4. Start the server again. Zephyr generates its configuration files on this boot.
+5. Set your MongoDB connection details in the generated config.
+6. Restart the server.
+
+</Steps>
+
+## Next
+
+<Steps>
+
+1. [Set up your arenas](/Zephyr/Setup/Arenas). Arena creation runs with `SETUP-MODE: true` in `settings.yml`.
+2. [Set up your kits](/Zephyr/Setup/Kits).
+3. Turn `SETUP-MODE` back off and restart.
+
+</Steps>
+
+Once both are configured, players can join an arena and the leaderboards start filling.
+
+## Related
+
+<DocCards>
+  <DocCard title="Arenas" href="/Zephyr/Setup/Arenas">Create arenas, set bounds, spawns, and game height.</DocCard>
+  <DocCard title="Kits" href="/Zephyr/Setup/Kits">Define the kits players spawn with.</DocCard>
+  <DocCard title="Leaderboards" href="/Zephyr/Features/Leaderboards">Track and display top players.</DocCard>
+  <DocCard title="Permissions" href="/Zephyr/Permissions">Every permission node.</DocCard>
+  <DocCard title="Placeholders" href="/Zephyr/Placeholders">PlaceholderAPI values Zephyr exposes.</DocCard>
+</DocCards>

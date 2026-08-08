@@ -1,223 +1,213 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React from 'react';
 import Layout from '@theme/Layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRocket, faEye, faGlobe } from '@fortawesome/free-solid-svg-icons';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { faArrowRight, faBookOpen, faTerminal, faKey, faCode } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faGithub } from '@fortawesome/free-brands-svg-icons';
 import ProductCard from '../components/ProductCard';
+import Reveal from '../components/Reveal';
+import CustomSearch from '../components/CustomSearch';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { products } from '../data/products';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
+/* Outlined pill. Nothing on this page is a filled accent block — the accent is
+   reserved for icons, active states and links. */
+const CHIP = clsx(
+  'flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm',
+  'text-muted-foreground no-underline transition-colors',
+  'hover:border-white/20 hover:text-foreground'
+);
+
+interface StarterTask {
+  label: string;
+  icon: IconDefinition;
+  /* Which product each link belongs to has to be on the link itself. A card
+     reading only "Commands" left you guessing whose commands you were about to
+     open. */
+  targets: { product: string; href: string }[];
 }
 
-const HeroBackground: React.FC = () => (
-  <div className="absolute inset-0 overflow-hidden">
-    <div className="hero-grid"></div>
-    <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-primary/5"></div>
-  </div>
-);
+const STARTERS: StarterTask[] = [
+  {
+    label: 'Installation',
+    icon: faBookOpen,
+    targets: [
+      { product: 'Phoenix', href: '/Phoenix/Installation' },
+      { product: 'Bolt', href: '/Bolt/Introduction#installation' },
+      { product: 'Carbon', href: '/Carbon/Installation' },
+      { product: 'Zephyr', href: '/Zephyr/Installation' },
+    ],
+  },
+  {
+    label: 'Commands',
+    icon: faTerminal,
+    targets: [
+      { product: 'Phoenix', href: '/Phoenix/Commands' },
+      { product: 'Bolt', href: '/Bolt/CommandsAndPermissions' },
+      { product: 'Carbon', href: '/Carbon/Commands' },
+    ],
+  },
+  {
+    label: 'Permissions',
+    icon: faKey,
+    targets: [
+      { product: 'Phoenix', href: '/Phoenix/Permissions' },
+      { product: 'Bolt', href: '/Bolt/Permissions' },
+      { product: 'Zephyr', href: '/Zephyr/Permissions' },
+    ],
+  },
+  {
+    label: 'Developer API',
+    icon: faCode,
+    targets: [
+      { product: 'Phoenix', href: '/Phoenix/Features/API' },
+      { product: 'Bolt', href: '/Bolt/Features/API' },
+      { product: 'Carbon', href: '/Carbon/Features/API' },
+    ],
+  },
+];
 
 const Home: React.FC = () => {
   const title = 'Refine Documentation';
-  const description = 'Here, you can find Documentation for all of our products with up-to-date information, if you have any questions please create a ticket on our Discord.';
-  const productSectionRef = useRef<HTMLElement>(null);
-  const heroRef = useRef<HTMLElement>(null);
-
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      // Hero Animation
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-      tl.from('.hero-title', { y: 50, opacity: 0, duration: 1, delay: 0.2 })
-        .from('.hero-description', { y: 20, opacity: 0, duration: 0.8 }, '-=0.6')
-        .from('.hero-github-note', { y: 10, opacity: 0, duration: 0.8 }, '-=0.6')
-        .from('.hero-buttons > *', { y: 20, opacity: 0, duration: 0.5, stagger: 0.1 }, '-=0.4');
-
-      // Product Cards Scroll Animation
-      gsap.from('.product-card-wrapper', {
-        scrollTrigger: {
-          trigger: '.products-grid',
-          start: 'top 80%',
-        },
-        y: 60,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power2.out',
-      });
-
-      // CTA Animation
-      gsap.from('.cta-card', {
-        scrollTrigger: {
-          trigger: '#cta',
-          start: 'top 85%',
-        },
-        scale: 0.95,
-        opacity: 0,
-        duration: 1,
-        ease: 'elastic.out(1, 0.8)',
-      });
-    }, heroRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const handleScrollToProducts = (e: React.MouseEvent<HTMLAnchorElement>): void => {
-    e.preventDefault();
-    if (productSectionRef.current) {
-      productSectionRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>): void => {
-    const target = e.currentTarget;
-    const rect = target.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    target.style.setProperty('--mouse-x', `${x}px`);
-    target.style.setProperty('--mouse-y', `${y}px`);
-  };
-
-  const ButtonStyle = clsx(
-    "px-6 py-2.5 md:px-8 md:py-3 text-base font-bold rounded-xl transition-all duration-300",
-    "shadow-lg hover:shadow-xl w-full sm:w-auto flex items-center justify-center gap-2.5 group/btn active:scale-95"
-  );
-
-  const PrimaryButton = clsx(
-    ButtonStyle,
-    "bg-white !text-black hover:bg-primary hover:!text-white hover:-translate-y-1 primary-glow"
-  );
-
-  const MainWebsiteButton = clsx(
-    ButtonStyle,
-    "bg-primary !text-white hover:opacity-90 hover:-translate-y-1 shadow-primary/30"
-  );
-
-  const GlassButton = clsx(
-    ButtonStyle,
-    "bg-white/10 backdrop-blur-md border border-white/20 !text-white hover:bg-white/20 hover:-translate-y-1"
-  );
+  const description =
+    'Documentation for all of our products, kept up to date. If you have a question, open a ticket on our Discord.';
 
   return (
-    <Layout
-      title={title}
-      description={description}
-    >
-      <main className="relative overflow-hidden" ref={heroRef}>
-        <section
-          className="relative min-h-screen flex items-center justify-center overflow-hidden bg-transparent group cta-spotlight"
-          onMouseMove={handleMouseMove}
-        >
-          <HeroBackground />
-
-          <div className="container mx-auto relative z-10 py-32 px-4 flex flex-col items-center">
-            <div className="max-w-7xl w-full text-center flex flex-col items-center">
-              <h1 className="hero-title text-white mb-10">
-                Refine Development <br />
-                <span className="text-primary drop-shadow-[0_0_25px_rgba(233,30,99,0.5)]">Documentation</span>
-              </h1>
-
-              <p className="hero-description text-gray-300 mb-12 font-medium">
-                {description}
-              </p>
-
-              <div className="hero-buttons flex flex-wrap justify-center items-center gap-4 sm:gap-6">
-                <Link
-                  to="/#products"
-                  onClick={handleScrollToProducts}
-                  className={PrimaryButton}
-                >
-                  <FontAwesomeIcon icon={faEye} className="w-5 h-5" />
-                  View Documentation
-                </Link>
-                <Link
-                  to="https://refinedev.org"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={MainWebsiteButton}
-                >
-                  <FontAwesomeIcon icon={faGlobe} className="w-5 h-5 transition-transform group-hover/btn:rotate-12" />
-                  Main Website
-                </Link>
-                <Link
-                  to="https://discord.refinedev.org"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={GlassButton}
-                >
-                  <FontAwesomeIcon icon={faDiscord} className="w-5 h-5 transition-transform group-hover/btn:scale-110" />
-                  Join Discord
-                </Link>
-                <Link
-                  to="https://github.com/RefineDevelopment/Documentation"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={GlassButton}
-                >
-                  <FontAwesomeIcon icon={faGithub} className="w-5 h-5 transition-transform group-hover/btn:translate-y-[-1px]" />
-                  GitHub
-                </Link>
-              </div>
-            </div>
+    <Layout title={title} description={description}>
+      {/* main is full width so the hero backdrop can reach both edges; every
+          section re-applies the reading container itself. */}
+      <main className="w-full">
+        <section className="animate-fade-in relative px-4 pt-28 pb-24 text-center md:pt-36 md:pb-28">
+          <div aria-hidden className="absolute inset-0 overflow-hidden">
+            <img
+              src="/hero.png"
+              alt=""
+              className="h-full w-full object-cover object-center opacity-50"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black" />
           </div>
-        </section>
 
-        <section ref={productSectionRef} className="py-16 md:py-24 bg-background">
-          <div className="container mx-auto px-4">
-            <div className="max-w-6xl mx-auto">
-              <div>
-                <h2 id="products" className="text-3xl md:text-5xl font-bold text-center mb-8 md:mb-12 text-foreground">
-                  Our <span className="text-primary">Products</span>
-                </h2>
-              </div>
-              <div className="products-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                {products.map((product) => (
-                  <div key={product.title} className="product-card-wrapper">
-                    <ProductCard {...product} />
-                  </div>
-                ))}
-              </div>
+          <div className="relative mx-auto flex max-w-3xl flex-col items-center">
+            <h1 className="title-gradient m-0 text-5xl font-bold tracking-tight md:text-7xl">
+              Refine Documentation
+            </h1>
+
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
+              {description}
+            </p>
+
+            {/* Search is the primary action on a docs landing page, so it gets
+                the space a hero button would otherwise take. */}
+            <div className="mt-9 w-full max-w-xl">
+              <CustomSearch variant="hero" />
             </div>
-          </div>
-        </section>
 
-        <section className="py-24 md:py-32 bg-background flex flex-col items-center" id="cta">
-          <div className="container mx-auto px-4 flex flex-col items-center">
-            <div className="max-w-5xl w-full flex flex-col items-center">
-              <div
-                className="cta-card relative w-full p-10 md:p-20 rounded-3xl bg-card/60 border border-white/10 overflow-hidden group/cta cta-spotlight flex flex-col items-center"
-                onMouseMove={handleMouseMove}
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+              <Link to="https://refinedev.org" target="_blank" rel="noopener noreferrer" className={CHIP}>
+                Main Website
+              </Link>
+              <Link to="https://discord.refinedev.org" target="_blank" rel="noopener noreferrer" className={CHIP}>
+                <FontAwesomeIcon icon={faDiscord} className="h-3.5 w-3.5" />
+                Discord
+              </Link>
+              <Link
+                to="https://github.com/RefineDevelopment/Documentation"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={CHIP}
               >
-                <div className="relative z-10 flex flex-col items-center text-center w-full">
-                  <div className="inline-flex items-center justify-center gap-3 mb-8 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20">
-                    <FontAwesomeIcon icon={faRocket} className="h-4 w-4 text-primary" />
-                    <span className="text-xs font-bold text-primary uppercase tracking-[0.25em]">Get Started</span>
-                  </div>
-                  <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">
-                    Ready to Explore Our <br /><span className="text-primary">Products</span>?
-                  </h2>
-                  <p className="text-lg md:text-2xl text-gray-400 mb-12 max-w-2xl leading-relaxed">
-                    Browse our premium collection of plugins and resources designed for performance and reliability.
-                  </p>
-                  <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-                    <Link
-                      to="https://refinedev.org/resources"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={PrimaryButton}
-                    >
-                      <FontAwesomeIcon icon={faRocket} className="w-5 h-5" />
-                      Browse All Products
-                    </Link>
-                  </div>
-                </div>
-              </div>
+                <FontAwesomeIcon icon={faGithub} className="h-3.5 w-3.5" />
+                GitHub
+              </Link>
             </div>
           </div>
         </section>
+
+        <div className="mx-auto w-full max-w-6xl px-4">
+          <section className="py-16">
+            <Reveal>
+              <h2 className="m-0 mb-6 text-sm font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                Start here
+              </h2>
+            </Reveal>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {STARTERS.map((s, i) => (
+                <Reveal key={s.label} delay={i * 50} className="h-full">
+                  <div className="flex h-full flex-col rounded-lg border border-border bg-card p-4">
+                    <div className="flex items-center gap-2.5">
+                      <FontAwesomeIcon icon={s.icon} className="h-3.5 w-3.5 text-primary" />
+                      <span className="text-sm font-medium text-foreground">{s.label}</span>
+                    </div>
+
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {s.targets.map((t) => (
+                        <Link
+                          key={t.href}
+                          to={t.href}
+                          className={clsx(
+                            'rounded-full border border-white/10 px-2.5 py-1 text-xs no-underline',
+                            'text-muted-foreground transition-colors hover:border-white/20 hover:text-foreground'
+                          )}
+                        >
+                          {t.product}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </section>
+
+          <hr className="rule m-0" />
+
+          <section className="py-16">
+            <Reveal>
+              <h2 className="m-0 mb-1.5 text-2xl font-semibold tracking-tight text-foreground">
+                Products
+              </h2>
+              <p className="m-0 mb-8 text-sm text-muted-foreground">
+                Four products, each with its own documentation set.
+              </p>
+            </Reveal>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {products.map((product, i) => (
+                <Reveal key={product.title} delay={i * 60} className="h-full">
+                  <ProductCard {...product} />
+                </Reveal>
+              ))}
+            </div>
+          </section>
+
+          <hr className="rule m-0" />
+
+          <Reveal className="flex flex-col items-start gap-4 py-16 sm:flex-row sm:items-center">
+            <div>
+              <h2 className="m-0 text-xl font-semibold tracking-tight text-foreground">
+                Looking for the products themselves?
+              </h2>
+              <p className="m-0 mt-1.5 text-sm text-muted-foreground">
+                Plugins and resources built for performance and reliability.
+              </p>
+            </div>
+
+            <Link
+              to="https://refinedev.org/resources"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={clsx(CHIP, 'group sm:ml-auto')}
+            >
+              Browse all products
+              <FontAwesomeIcon
+                icon={faArrowRight}
+                className="h-3 w-3 transition-transform group-hover:translate-x-0.5"
+              />
+            </Link>
+          </Reveal>
+        </div>
       </main>
     </Layout>
   );

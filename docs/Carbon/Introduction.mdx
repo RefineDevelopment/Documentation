@@ -5,11 +5,14 @@ sidebar_position: 1
 
 **Carbon** is a high-performance **Minecraft 1.8.8** server fork that brings modern optimizations and advanced features to your network. It delivers ultra-responsive PvP and cutting-edge gameplay enhancements, making it the perfect choice for servers seeking top-tier performance.
 
-<div className="flex gap-4 my-8">
-  <a href="/Carbon/Installation" className="glass-button px-8 py-4 rounded-2xl inline-flex items-center gap-3 no-underline text-white hover:text-white font-bold primary-glow transition-all hover:scale-105">
-    <span>🚀 Get Started</span>
-  </a>
-</div>
+<DocCards>
+  <DocCard title="Installation" href="/Carbon/Installation">Get Carbon running on your server.</DocCard>
+  <DocCard title="Commands" href="/Carbon/Commands">Every command and what it does.</DocCard>
+  <DocCard title="Developer API" href="/Carbon/Features/API">Backported Paper APIs and the event system.</DocCard>
+  <DocCard title="FastAsyncWorldEdit" href="/Carbon/Forks/FastAsyncWorldEdit">The FAWE-Legacy fork built for Carbon.</DocCard>
+  <DocCard title="Citizens" href="/Carbon/Forks/Citizens">The Citizens build compatible with Carbon.</DocCard>
+  <DocCard title="Javadocs" href="/carbon/javadocs/index.html">Full Carbon-API reference.</DocCard>
+</DocCards>
 
 ---
 
@@ -17,24 +20,12 @@ sidebar_position: 1
 
 Experience a server built for modern performance standards.
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-10">
-  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
-    <h3 className="text-primary mt-0">⚡ High Performance</h3>
-    <p className="mb-0 text-sm">Low-CPU tickloops and fully parallelized entity tracking for maximum TPS stability.</p>
-  </div>
-  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
-    <h3 className="text-primary mt-0">⚔️ Advanced Combat</h3>
-    <p className="mb-0 text-sm">Unique combat engine with custom knockback profiles and hit-detection optimizations.</p>
-  </div>
-  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
-    <h3 className="text-primary mt-0">🌪️ Async Everything</h3>
-    <p className="mb-0 text-sm">Asynchronous lighting (Starlight), chunk loading, and networking for zero lag spikes.</p>
-  </div>
-  <div className="bg-card/40 border border-white/10 p-6 rounded-2xl">
-    <h3 className="text-primary mt-0">🛠️ Modern Developer API</h3>
-    <p className="mb-0 text-sm">Backported Paper APIs and rich event system for creating powerful plugins on 1.8.8.</p>
-  </div>
-</div>
+| Area | What Carbon does |
+| :--- | :--- |
+| **High performance** | Low-CPU tickloops and fully parallelized entity tracking for maximum TPS stability. |
+| **Advanced combat** | Custom knockback profiles and hit-detection optimizations. |
+| **Async everything** | Asynchronous lighting (Starlight), chunk loading, and networking for zero lag spikes. |
+| **Modern developer API** | Backported Paper APIs and a rich event system for building plugins on 1.8.8. |
 
 :::tip Why Carbon?
 Carbon has rewritten core subsystems to ensure that your server remains fluid and stable even under heavy player loads, confirming consistent 20 TPS in tests with over 700+ players.

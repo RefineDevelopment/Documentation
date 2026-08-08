@@ -13,6 +13,7 @@ com.destroystokyo.paper.profile
 com.destroystokyo.paper.utils
 gg.pufferfish.pufferfish.sentry
 io.papermc.paper
+io.papermc.paper.event.entity
 io.papermc.paper.event.packet
 io.papermc.paper.event.player
 io.papermc.paper.math
@@ -70,6 +71,8 @@ org.spigotmc.event.player
 xyz.refinedev.spigot.config
 xyz.refinedev.spigot.config.impl
 xyz.refinedev.spigot.events
+xyz.refinedev.spigot.events.entity
+xyz.refinedev.spigot.events.player
 xyz.refinedev.spigot.features.antimalware
 xyz.refinedev.spigot.features.antimalware.detections
 xyz.refinedev.spigot.features.chunk
@@ -80,6 +83,7 @@ xyz.refinedev.spigot.features.combat.knockback
 xyz.refinedev.spigot.features.combat.module
 xyz.refinedev.spigot.features.combat.projectile
 xyz.refinedev.spigot.features.combat.value
+xyz.refinedev.spigot.features.lighting
 xyz.refinedev.spigot.features.player
 xyz.refinedev.spigot.packet
 xyz.refinedev.spigot.patches

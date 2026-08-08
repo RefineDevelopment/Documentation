@@ -3,39 +3,80 @@ sidebar_position: 6
 ---
 
 :::warning
-Bots in Bolt ONLY work on 1.8 NOT on 1.9+ 
+Bots in Bolt are designed for 1.8 environments. They are not supported on 1.9+ combat servers.
 :::
 
-# Bots
+Bots provide AI opponents for practice. They can use predefined presets, custom presets, kit-specific behavior, custom knockback profiles, healing rules, and UHC-style item usage.
 
-Bots are AI (Artificial Intelligence), that can be adjusted to your liking for Practicing and help improving your skill,
-Bots can be used in any kits, that are NOT build kits.
+## What Bots Can Do
 
-Bots can also be used in Parties via the gamemode PartyVsBots, allows you to practice with your friends,
+| Feature | Description |
+| :--- | :--- |
+| Presets | Configure different bot styles and difficulties. |
+| CPS | Control click speed. |
+| Ping | Simulate delayed reactions. |
+| Range | Configure hit reach behavior. |
+| Tryhard | Make the bot play more aggressively. |
+| Strafe | Enable side movement. |
+| W-tap | Enable W-tap movement. |
+| Block hit | Allow block-hitting when the kit supports it. |
+| Side pearl | Allow side pearl behavior in pearl kits. |
+| UHC healing | Configure instant head, golden head, and golden apple thresholds. |
+| Knockback profiles | Use separate player and bot knockback profiles. |
 
-Bolt bots allow the user to customize the bot to their liking, such as the Click speed, Ping, Range, and more,
-Or using presets
+## Bot Permissions
 
-# Customizable Features (Custom Preset)
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.bot` | Use bot duel, custom bot, and preset browsing commands. |
+| `bolt.bot.custom` | Use custom bot presets from the menu. |
+| `bolt.bot.admin` | Use bot admin/help/info commands. |
+| `bolt.bot.knockback` | Manage bot knockback profiles with `/botkb`. |
 
- Features   | Descriptions                                  
- ---------- | ---------------------------------------------                                              
- CPS        | Allows you to set the Click speed of the bot 
- Ping       | Allows you to set the Ping of the bot        
- Range      | Allows you to set the hit-reach of the bot
- Tryhard    | Allows you to set the bot to tryhard mode
- Strafe     | Allows you to make the bot be able to strafe
- W-tap      | Allows you to make the bot be able to W-tap
- BlockHit   | Allows you to make the bot be able to BlockHit
- Side-Pearl | Allows you to make the bot be able to Side-Pearl in Gamemodes that have pearls
- 
+## Commands
 
-# Pre-made Presets
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/bot duel <preset>` | Duel a bot preset. | `bolt.bot` |
+| `/bot custom` | Duel a custom bot preset. | `bolt.bot` plus custom access where configured |
+| `/bot presets` | View active bot presets. | `bolt.bot` |
+| `/bot info <preset>` | View preset information. | `bolt.bot.admin` |
+| `/bot addkit <preset> <kit>` | Add a kit to a bot preset. | Admin command |
+| `/bot removekit <preset> <kit>` | Remove a kit from a bot preset. | Admin command |
 
- Presets    | Descriptions                  | CPS | Ping | Range | Tryhard | Strafe | W-tap | BlockHit | Side-Pearl
- ---------- | ----------------------------- | --- | ---- | ----- | ------- | ------ | ----- | -------- | ----------
- Easy       | Default settings for the bot  | 6   | 100  | 3     | No      | No     | No    | No       | No
- Medium     | Normal settings for the bot   | 8   | 80   | 3.5   | Yes     | Yes    | Yes   | Yes      | Yes
- Hard       | Hard settings for the bot     | 10  | 60   | 4     | Yes     | Yes    | Yes   | Yes      | Yes
- Expert     | Insane settings for the bot   | 12  | 40   | 4.5   | Yes     | Yes    | Yes   | Yes      | Yes
- Hacker     | God settings for the bot      | 15  | 20   | 5     | Yes     | Yes    | Yes   | Yes      | Yes
+## Bot Knockback Commands
+
+All `/botkb` commands require `bolt.bot.knockback`.
+
+| Command | Description |
+| :--- | :--- |
+| `/botkb save` | Save knockback profiles. |
+| `/botkb reload` | Reload knockback profiles. |
+| `/botkb list` | List profiles. |
+| `/botkb view <profile>` | View profile values. |
+| `/botkb set <profile>` | Set every bot to a profile. |
+| `/botkb create <profile>` | Create a profile. |
+| `/botkb edit <profile>` | Edit a value. |
+| `/botkb delete <profile>` | Delete a profile. |
+| `/botkb setdefault <profile>` | Set default profile. |
+| `/botkb getdefault` | View default profile. |
+
+## Kit Compatibility
+
+Not every kit is a good bot kit. Avoid using bot presets for complex map-objective modes such as BedFight, Bridges, Fireball Fight, Pearl Fight, TNTSumo, and TopFight unless your setup has been specifically tested for it.
+
+Good bot kit candidates:
+
+- NoDebuff
+- Soup
+- Gapple
+- BuildUHC-style combat without complex objective logic
+- Boxing/Combo-style combat when configured carefully
+
+## Tips
+
+- Use `botBlockHit` on kits where bots should block-hit.
+- Configure bot knockback separately from player knockback when needed.
+- Test UHC healing thresholds before public release.
+- Keep bot presets simple and predictable for players.
+- Do not advertise bots as 1.9+ compatible.

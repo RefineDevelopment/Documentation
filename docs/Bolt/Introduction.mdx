@@ -2,47 +2,108 @@
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs'
-import TabItem from '@theme/TabItem'
+Bolt is Refine Development's practice core for competitive Minecraft PvP servers. It provides ranked and unranked queues, duels, parties, tournaments, events, bots, cosmetics, match history, leaderboards, divisions, kit editing, arena management, and a public developer API.
 
-Bolt is a unique practice core that adds exciting features such as various duels similar to those found on popular practice servers like MMC and Lunar. Whether you want to train and improve your skills or challenge other players in a competitive environment, Bolt is the perfect addition to your Phoenix network.
+<DocCards>
+  <DocCard title="Commands & Permissions" href="/Bolt/CommandsAndPermissions">Every command with its permission node.</DocCard>
+  <DocCard title="Arenas" href="/Bolt/Features/Arenas">Standalone arenas, schematics, and paste resets.</DocCard>
+  <DocCard title="Kits" href="/Bolt/Features/Kits">Kit rules, inventories, and queue support.</DocCard>
+  <DocCard title="Queues" href="/Bolt/Features/Queues">Ranked, unranked, ELO, and matchmaking.</DocCard>
+  <DocCard title="MongoDB" href="/Bolt/Database/MongoDB">Database setup and connection settings.</DocCard>
+  <DocCard title="Developer API" href="/Bolt/Features/API">BoltAPI events, models, and services.</DocCard>
+</DocCards>
 
-:::warning
-The documentation for Bolt is actively being updated with new content, please be patient as we work on providing you with an updated wiki.
-:::
+## What Bolt Includes
+
+- **Solo, Team, FFA, Party, and Bot matches** for common practice-server workflows.
+- **Ranked and Unranked queues** with ELO, divisions, ping checks, and configurable matchmaking rules.
+- **Direct duels and party duels** with optional selected arena support.
+- **Arena and schematic management** with standalone arenas, duplicate arenas, paste resets, and kit whitelists.
+- **Modern kit rules** for BedFight, BlockFight, WallRush, Bridges, BattleRush, Fireball Fight, Pearl Fight, Spleef, Crystal PvP, TNTSumo, Boxing, Combo, OITQ, and more.
+- **Tournaments and events** with cooldowns, host permissions, game rules, and automated match flow.
+- **Parties** with FFA, split, party-vs-party duels, public parties, party announcements, and party settings.
+- **Bots** for 1.8 practice with configurable presets, UHC healing behavior, speed behavior, knockback profiles, and kit-specific options.
+- **Cosmetics and progression** including coins, experience, levels, daily rewards, kill effects, kill messages, trails, stats, and leaderboards.
+- **BoltAPI** for developers who want to integrate with profiles, arenas, queues, duels, matches, parties, tournaments, kits, stats, leaderboards, and spectators.
+
+## Requirements
+
+| Dependency | Required | Notes |
+| :--- | :---: | :--- |
+| Retention | Yes | Bolt is loaded through Retention. |
+| MongoDB | Yes | Stores profiles, statistics, match history, kits, and persistent data. |
+| FastAsyncWorldEdit | Yes | Required by Bolt for arena schematics and paste resets. Use our FAWE-Legacy fork below. |
+| ProtocolLib | Conditional | Required when `FORCE_ENTITY_HIDER` is enabled. |
+| PlaceholderAPI | Optional | Enables PlaceholderAPI parsing in supported Bolt messages and menus. |
+| Citizens | Optional | Required for NPC/bot-related setups that depend on Citizens. |
+| Vault | Optional | Used only when your setup integrates Vault-supported economy or permissions. |
+
+Use the Refine FAWE-Legacy build for Carbon/legacy environments:
+
+[Download Refine FAWE-Legacy](http://github.com/refinedevelopment/fastAsyncWorldEdit-Legacy/releases/latest)
 
 ## Installation
 
-<Tabs queryString="type">
-    <TabItem value="spigot" label="Paper" default>
-        1. Download and install Retention, which can be found on the resource page, into your plugins folder.<br/>
-        2. Start your server and wait until it finishes booting up, once finished, stop your server.<br/>
-        3. Open loader.yml in Retention's plugin folder and enable Bolt, save and reboot.<br/>
-        4. Enter your [MongoDB](https://www.mongodb.com/) details in Bolt's database.yml, reboot, and Bolt should be ready.<br/>
-    </TabItem>
-</Tabs>
+<Steps>
 
-## FAQ
+1. Install Retention.
+2. Install MongoDB or prepare an external MongoDB connection.
+3. Install FastAsyncWorldEdit. We recommend the Refine FAWE-Legacy release linked above.
+4. Place the Bolt jar in your server's plugins folder.
+5. Start the server once to generate configuration files.
+6. Configure `database.yml` with your MongoDB connection.
+7. Configure lobby spawn, arenas, kits, queues, scoreboards, messages, and optional integrations.
+8. Restart the server after major configuration or dependency changes.
 
-<details>
-<summary>My server runs out of ram on startup.</summary>
+</Steps>
 
-It is recommended to allocate as much memory you can to the server
-in accordance with the amount of chunks/arenas you have.
+## First Setup Checklist
 
-Alternatively, you can disable `PRE-LOAD-CHUNKS` in your `settings.yml`. If you are using 'CHUNK' or 'VANLLA'
-reset type, then turn on 'CLEAR-CHUNK-DATA-AFTER-RESET' to reduce memory usage.
-</details>
+<Steps>
 
-<details>
-<summary>Players take damage in the sumo event.</summary>
+1. Set the lobby spawn with `/bolt setspawn`.
+2. Create or import arenas with `/arena create <name> <standard/standalone>`.
+3. Save arena bounds, spawn points, special locations, and schematics.
+4. Create kits with `/kit create <name>`.
+5. Configure kit rules, inventories, queue support, duel support, and arena whitelist.
+6. Enable ranked/unranked queues for the kits you want players to use.
+7. Test `/duel`, `/queue join`, `/randomqueue`, `/party`, `/tournament`, and spectator flows.
 
-Make sure you set the build height of the event above the arena.
-</details>
+</Steps>
 
-<details>
-<summary>Does Bolt support Phoenix Nametags?</summary>
+## Common Issues
 
-Yes, it does.
-</details>
+**Bolt disables itself on startup**
 
+- Make sure FastAsyncWorldEdit is installed and enabled.
+- If `FORCE_ENTITY_HIDER` is enabled, make sure ProtocolLib is installed.
+- Restart the server after adding missing dependencies.
+
+**Arena resets fail or paste arenas do not update**
+
+- Use the recommended Refine FAWE-Legacy build.
+- Check that the arena has a saved schematic.
+- Use `/arena saveChanges <arena>` after editing a standalone arena.
+- Use `/arena saveAllChanges` after larger schematic maintenance.
+
+**MongoDB connection fails**
+
+- Check host, port, username, password, database name, and authentication database in `database.yml`.
+- Make sure the MongoDB server accepts remote connections from your Minecraft server.
+- Check firewall rules and MongoDB user permissions.
+
+**Players cannot host or join tournaments**
+
+- Give `bolt.tournament.host` or `bolt.tournament.start` to hosts.
+- Give `bolt.tournament.join` or the kit-specific `bolt.tournament.<kit>` permission to participants.
+- Check tournament cooldowns and kit availability.
+
+## Quick Links
+
+- [Commands & Permissions](/Bolt/CommandsAndPermissions)
+- [Permissions Guide](/Bolt/Permissions)
+- [Arenas](/Bolt/Features/Arenas)
+- [Kits](/Bolt/Features/Kits)
+- [Queues](/Bolt/Features/Queues)
+- [API Documentation](/Bolt/Features/API)
+- [MongoDB Setup](/Bolt/Database/MongoDB)

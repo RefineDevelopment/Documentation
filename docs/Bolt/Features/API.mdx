@@ -2,10 +2,12 @@
 sidebar_position: 11
 ---
 
-A simple and easy to use API for Bolt version 1.6 and above.
+BoltAPI is the public integration layer for Bolt. It lets other plugins read player state, queue players, create duels, start matches, manage parties, inspect tournaments, work with kits, read stats, handle spectators, and listen to Bolt events.
 
 ## Installation
+
 ### Gradle
+
 ```kotlin
 repositories {
     maven {
@@ -15,11 +17,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly("xyz.refinedev.practice:BoltAPI:VERSION") // Replace VERSION with the latest version
+    compileOnly("xyz.refinedev.practice:BoltAPI:1.0.6")
 }
 ```
 
 ### Maven
+
 ```xml
 <repositories>
     <repository>
@@ -32,230 +35,487 @@ dependencies {
     <dependency>
         <groupId>xyz.refinedev.practice</groupId>
         <artifactId>BoltAPI</artifactId>
-        <version>VERSION</version> <!-- Replace VERSION with the latest version -->
+        <version>1.0.6</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
 ```
 
-## Usage (Example)
+## plugin.yml
 
-To hook into Bolt properly with the API, you need to set your plugin.yml to soft-depend on Retention (Refine's dynamic plugin loader system).
+Bolt is loaded through Retention, so add Retention as a soft dependency. This makes sure your plugin starts after the loader has initialized Bolt.
 
-```yml
-name: TestPlugin
+```yaml
+name: MyPlugin
 version: 1.0.0
-description: "xyz"
-author: "xyz"
-main: "xyz"
+main: com.example.MyPlugin
 api-version: "1.13"
 softdepend:
-  - Retention # Define here
+  - Retention
 ```
 
-The BoltAPI provides a comprehensive set of APIs for interacting with Bolt practice server functionality. All APIs are accessed through the main `BoltAPI` singleton instance.
+## Getting The API
 
-### Getting Started
 ```java
 import xyz.refinedev.practice.api.BoltAPI;
 
-// Get the main API instance
 BoltAPI api = BoltAPI.INSTANCE;
 ```
 
-### Profile API (Example)
+Access the sub-APIs from the singleton:
 
 ```java
-import xyz.refinedev.practice.api.profile.ProfileAPI;
-import xyz.refinedev.practice.api.profile.IProfile;
-
 ProfileAPI profileAPI = api.getProfileAPI();
-
-// Get a player's profile
-IProfile profile = profileAPI.getProfile(player);
-
-// Fetch a profile asynchronously (useful for offline players)
-CompletableFuture<IProfile> profileFuture = profileAPI.fetchProfile(playerUUID);
-
-// Save a profile
-profileAPI.saveProfile(profile, true); // async save
-
-// Refresh player's hotbar based on their state
-profileAPI.refreshHotbar(profile);
-
-// Get profile histories
-CompletableFuture<List<IProfileHistory>> histories = profileAPI.getProfileHistories(profile);
-```
-
-### Match API (Example)
-
-```java
-import xyz.refinedev.practice.api.match.MatchAPI;
-import xyz.refinedev.practice.api.match.IMatch;
-import xyz.refinedev.practice.api.match.enums.MatchEndReason;
-
+ArenaAPI arenaAPI = api.getArenaAPI();
+QueueAPI queueAPI = api.getQueueAPI();
+DuelAPI duelAPI = api.getDuelAPI();
 MatchAPI matchAPI = api.getMatchAPI();
-
-// End a match properly (handles stats, ELO, etc.)
-matchAPI.end(match, MatchEndReason.PLAYER_DISCONNECT);
-
-// Terminate a match (cleanup only)
-matchAPI.terminateMatch(match);
-
-// Get a player's current match
-IMatch playerMatch = matchAPI.getMatch(player);
-
-// Get all active matches
-Collection<IMatch> matches = matchAPI.getMatches();
+PartyAPI partyAPI = api.getPartyAPI();
+TournamentAPI tournamentAPI = api.getTournamentAPI();
+KitAPI kitAPI = api.getKitAPI();
+StatsAPI statsAPI = api.getStatsAPI();
+LeaderboardAPI leaderboardAPI = api.getLeaderboardAPI();
+IKnockbackHandler knockbackHandler = api.getKnockbackHandler();
 ```
 
-### Queue API (Example)
+## API Overview
+
+| API | Use it for |
+| :--- | :--- |
+| `ProfileAPI` | Online/offline profiles, settings, match history, hotbar, visibility, and nametags. |
+| `ArenaAPI` | Public arena lookup, available arenas for a kit, and selected arena flows. |
+| `QueueAPI` | Solo/duo queues, queue counts, joining/leaving queues, and preferred arena queueing. |
+| `DuelAPI` | Player duels, party duels, accepting/cancelling duel requests, and preferred arena duels. |
+| `MatchAPI` | Current matches, match creation, ending, terminating, respawning, spectators, and post-match inventories. |
+| `PartyAPI` | Party creation, invites, joins, kicks, promotions, settings, party matches, and spectating party matches. |
+| `TournamentAPI` | Starting, joining, leaving, force-starting, cancelling, and ending tournaments. |
+| `KitAPI` | Kit lookup, kit registration, selection items, and custom kit layout management. |
+| `StatsAPI` | Player stat profiles and persistence. |
+| `LeaderboardAPI` | Global and kit leaderboard reads/updates. |
+| `KnockbackHandler` | Custom knockback hook integration for supported server forks. |
+
+## Arena API
+
+`ArenaAPI` was added in BoltAPI 1.0.5. Use it when your plugin needs to list arenas, validate maps, or let players select a preferred arena before queueing or dueling.
 
 ```java
-import xyz.refinedev.practice.api.queue.QueueAPI;
-import xyz.refinedev.practice.api.queue.IQueue;
+ArenaAPI arenaAPI = api.getArenaAPI();
 
+Collection<IArena> arenas = arenaAPI.getArenas();
+Collection<IArena> nodebuffArenas = arenaAPI.getAvailableArenas(nodebuffKit);
+
+IArena arena = arenaAPI.getArena("desert");
+if (arena != null && arena.isPlayable() && arena.isWhitelisted(nodebuffKit)) {
+    String displayName = arena.getDisplayName();
+}
+```
+
+Useful `IArena` methods:
+
+```java
+String name = arena.getName();
+String displayName = arena.getDisplayName();
+ItemStack icon = arena.getDisplayIcon();
+boolean enabled = arena.isEnabled();
+boolean inUse = arena.isInUse();
+boolean playable = arena.isPlayable();
+boolean whitelisted = arena.isWhitelisted(kit);
+String type = arena.getTypeName();
+```
+
+## Queue API
+
+```java
 QueueAPI queueAPI = api.getQueueAPI();
 
-// Get a queue by ID
-IQueue queue = queueAPI.getQueue(queueUUID);
-
-// Get all solo queues
 List<IQueue> soloQueues = queueAPI.getSoloQueues();
-
-// Get all duo queues
 List<IQueue> duoQueues = queueAPI.getDuoQueues();
 
-// Add player to queue
-queueAPI.addToQueue(player, queue);
+int totalQueued = queueAPI.getQueuedCount();
+int rankedQueued = queueAPI.getQueuedCount(QueueType.RANKED);
 
-// Remove player from queue
-queueAPI.removeFromQueue(player);
+boolean joined = queueAPI.joinQueue(player, kit, QueueType.UNRANKED);
+boolean left = queueAPI.leaveQueue(player);
 ```
 
-### Kit API (Example)
+Preferred arena queueing:
 
 ```java
-import xyz.refinedev.practice.api.kit.KitAPI;
-import xyz.refinedev.practice.api.kit.IKit;
-import xyz.refinedev.practice.api.kit.IKitBuilder;
+IArena preferredArena = api.getArenaAPI().getArena("desert");
+boolean joined = queueAPI.joinQueue(player, kit, QueueType.UNRANKED, preferredArena);
+```
 
+Bolt will prefer the selected arena when the match is created and fall back to an available duplicate/arena if needed.
+
+## Duel API
+
+```java
+DuelAPI duelAPI = api.getDuelAPI();
+
+IProfileDuelRequest request = duelAPI.request(sender, target, kit);
+IProfileDuelRequest sameRequest = duelAPI.getRequest(sender, target);
+
+if (request != null && request.isActive()) {
+    request.accept();
+}
+```
+
+Selected arena duels:
+
+```java
+IArena arena = api.getArenaAPI().getArena("desert");
+IProfileDuelRequest request = duelAPI.request(sender, target, kit, arena);
+```
+
+Party duel requests:
+
+```java
+IPartyDuelRequest partyRequest = duelAPI.request(partyA, partyB, kit);
+IPartyDuelRequest arenaPartyRequest = duelAPI.request(partyA, partyB, kit, arena);
+
+Collection<IDuelRequest> activeRequests = duelAPI.getActiveRequests();
+duelAPI.cancel(partyRequest);
+```
+
+## Match API
+
+```java
+MatchAPI matchAPI = api.getMatchAPI();
+
+IMatch match = matchAPI.getMatchByPlayer(player);
+IMatch sameMatch = matchAPI.getMatch(player);
+IMatch spectated = matchAPI.getMatchBySpectator(spectator);
+
+Collection<IMatch> activeMatches = matchAPI.getMatches();
+int fighting = matchAPI.getFightingCount();
+int botMatches = matchAPI.getBotMatchesCount();
+```
+
+Creating matches:
+
+```java
+IMatch ranked = matchAPI.createSoloRankedMatch(playerA, playerB, kit);
+IMatch unranked = matchAPI.createSoloUnrankedMatch(playerA, playerB, kit);
+IMatch directSolo = matchAPI.createSoloMatch(playerA, playerB, kit, false);
+
+IMatch team = matchAPI.createTeamMatch(teamAPlayers, teamBPlayers, kit, true);
+IMatch partyFfa = matchAPI.createPartyFFAMatch(partyPlayers, kit);
+IMatch partySplit = matchAPI.createPartySplitMatch(partyPlayers, kit);
+IMatch partyVsParty = matchAPI.createPartyVsPartyMatch(partyAPlayers, partyBPlayers, kit, false);
+```
+
+Ending and cleanup:
+
+```java
+matchAPI.end(match, MatchEndReason.NORMAL);
+matchAPI.terminateMatch(match);
+matchAPI.fatalEnd(match, "Unexpected integration failure");
+
+CompletableFuture<Boolean> blocksReset = matchAPI.resetBlocks(match);
+CompletableFuture<Boolean> arenaReset = matchAPI.resetArena(match);
+```
+
+Spectator management:
+
+```java
+boolean added = matchAPI.addSpectator(match, spectator, playerA);
+boolean removed = matchAPI.removeSpectator(match, spectator);
+List<Player> spectators = match.getSpectatingPlayers();
+```
+
+Runtime match information:
+
+```java
+List<Player> alive = match.getAlivePlayers();
+List<? extends IMatchPlayer> players = match.getMatchPlayers();
+List<? extends IMatchTeam> teams = match.getMatchTeams();
+
+IMatchPlayer winner = match.getWinningPlayer();
+IMatchTeam winningTeam = match.getWinningTeam();
+
+String duration = match.getDuration();
+String lasted = match.getLasted();
+boolean partyMode = match.isPartyMode();
+```
+
+## Party API
+
+```java
+PartyAPI partyAPI = api.getPartyAPI();
+
+IParty party = partyAPI.createParty(leader);
+partyAPI.invite(leader, invitedPlayer);
+partyAPI.join(invitedPlayer, party);
+partyAPI.promote(leader, newLeader);
+partyAPI.kick(newLeader, kickedMember);
+partyAPI.leave(member);
+partyAPI.disband(newLeader);
+```
+
+Party match creation:
+
+```java
+boolean canQueueRanked = partyAPI.canQueue(party, true);
+
+IMatch ffa = partyAPI.startFFA(party, kit);
+IMatch split = partyAPI.startSplit(party, kit);
+IMatch partyVsParty = partyAPI.startMatch(partyA, partyB, kit, false);
+
+partyAPI.spectatePartyMatch(spectator, party);
+```
+
+Party settings:
+
+```java
+partyAPI.setOpen(party, true);
+partyAPI.setAllInvite(party, true);
+partyAPI.setMute(party, false);
+partyAPI.setDuelRequests(party, true);
+partyAPI.setLimit(party, 8);
+```
+
+Useful `IParty` methods:
+
+```java
+String name = party.getName();
+PartyState state = party.getState();
+boolean busy = party.isBusy();
+boolean member = party.isMember(player.getUniqueId());
+boolean leader = party.isLeader(player.getUniqueId());
+
+IQueue queue = party.getQueue();
+IMatch match = party.getMatch();
+party.reloadHotbar();
+party.reloadNameTag();
+```
+
+## Tournament API
+
+```java
+TournamentAPI tournamentAPI = api.getTournamentAPI();
+
+ITournament tournament = tournamentAPI.getCurrentTournament();
+ITournament byId = tournamentAPI.getTournament(tournamentId);
+
+ITournament solo = tournamentAPI.startTournament(sender, kit, TournamentType.SOLO);
+ITournament team = tournamentAPI.startTournament(sender, kit, TournamentType.TEAM, 2);
+
+tournamentAPI.join(player);
+tournamentAPI.leave(player);
+tournamentAPI.forceStart();
+tournamentAPI.cancelTournament();
+tournamentAPI.end(TournamentEndReason.CANCELLED);
+```
+
+Useful `ITournament` methods:
+
+```java
+List<? extends IMatch> matches = tournament.getMatches();
+List<Player> players = tournament.getPlayerParticipants();
+List<IParty> parties = tournament.getPartyParticipants();
+
+Player winningPlayer = tournament.getWinningPlayer();
+IParty winningParty = tournament.getWinningParty();
+Object winner = tournament.getWinningSubject();
+boolean started = tournament.hasStarted();
+```
+
+In BoltAPI 1.0.6, `ITournament#hasStarted()` returns true only while the tournament state is `FIGHTING`. Waiting, starting, ended, and cleaned-up tournaments should be treated as not actively started.
+
+## Kit API
+
+```java
 KitAPI kitAPI = api.getKitAPI();
 
-// Create a new kit
-IKitBuilder builder = kitAPI.createBuilder();
-IKit kit = builder
-    .name("nodebuff")
-    .displayName("&cNo Debuff")
-    .displayIcon(new ItemStack(Material.POTION))
+IKit kit = kitAPI.getKit("nodebuff");
+List<IKit> kits = kitAPI.getKits();
+kitAPI.save();
+```
+
+Creating and registering a kit:
+
+```java
+IKit kit = kitAPI.builder()
+    .name("customkit")
+    .displayName("&6Custom Kit")
+    .displayIcon(new ItemStack(Material.DIAMOND_SWORD))
     .build();
 
-kit.setDefaultInventory(new ItemStack[] { /* items */ });
-kit.setDefaultArmor(new ItemStack[] { /* armor */ });
-
-kitAPI.registerKit(kit, true); // register and save the kit
-
-// Apply kit to player
-kit.applyKit(player);
-
-// Get all kits
-List<IKit> allKits = kitAPI.getAllKits(); // Immutable list
-
-// Get a kit by name
-IKit kit = kitAPI.getKit("nodebuff");
+kitAPI.registerKit(kit, true);
 ```
 
-### Stats API (Example)
+Custom kit layouts:
 
 ```java
-import xyz.refinedev.practice.api.stats.StatsAPI;
-import xyz.refinedev.practice.api.stats.IStatsProfile;
+boolean hasLayouts = kitAPI.hasCustomInventories(player, kit);
+IKitInventory[] layouts = kitAPI.getKitInventories(player, kit);
 
+IKitInventory layout = kitAPI.getKitInventory(player, kit, 0);
+boolean created = kitAPI.createKitInventory(player, kit, 0, "Main");
+boolean saved = kitAPI.saveKitInventory(player, kit, 0, contents);
+boolean renamed = kitAPI.renameKitInventory(player, kit, 0, "Potions");
+boolean deleted = kitAPI.deleteKitInventory(player, kit, 0);
+
+boolean openedManager = kitAPI.openKitEditManageMenu(player, kit);
+boolean openedEditor = kitAPI.openKitEditor(player, kit, 0, true);
+```
+
+Layout wiping:
+
+```java
+kitAPI.wipeCustomInventories(player, kit);
+kitAPI.wipeCustomInventories(player);
+
+CompletableFuture<Long> wipedForKit = kitAPI.wipeKitsForKit(kit);
+CompletableFuture<Long> wipedAll = kitAPI.wipeAllCustomInventories();
+```
+
+## Profile API
+
+```java
+ProfileAPI profileAPI = api.getProfileAPI();
+
+IProfile profile = profileAPI.getProfile(player);
+IProfile byUuid = profileAPI.getProfile(player.getUniqueId());
+
+CompletableFuture<IProfile> fetched = profileAPI.fetchProfile(playerUuid);
+profileAPI.saveProfile(profile, true);
+```
+
+Profile UI/state helpers:
+
+```java
+profileAPI.refreshHotbar(profile);
+profileAPI.refreshVisibility(profile);
+profileAPI.refreshVisibilityOthers(profile);
+profileAPI.refreshNametag(player);
+```
+
+Match history:
+
+```java
+CompletableFuture<List<IProfileHistory>> histories = profileAPI.getProfileHistories(profile);
+CompletableFuture<Optional<IProfileHistory>> history = profileAPI.fetchProfileHistory(historyId);
+```
+
+## Stats And Leaderboards
+
+```java
 StatsAPI statsAPI = api.getStatsAPI();
 
-// Get player's stats profile
 IStatsProfile stats = statsAPI.getStatsProfile(player);
-
-// Get stats asynchronously from the database
-CompletableFuture<IStatsProfile> statsFuture = statsAPI.getStatsProfile(playerUUID);
-
-// Save stats profile
-statsAPI.saveStatsProfile(stats, true); // async save
+CompletableFuture<IStatsProfile> offlineStats = statsAPI.getStatsProfile(playerUuid);
+statsAPI.saveStatsProfile(stats, true);
 ```
 
-### Leaderboard API (Example)
-
 ```java
-import xyz.refinedev.practice.api.leaderboard.LeaderboardAPI;
-import xyz.refinedev.practice.api.leaderboard.meta.IKitLeaderboard;
-
 LeaderboardAPI leaderboardAPI = api.getLeaderboardAPI();
 
-// Get leaderboard for a specific kit
-CompletableFuture<IKitLeaderboard> leaderboard = leaderboardAPI.getKitLeaderboard(kit, 10);
-
-// Get global leaderboard
+CompletableFuture<IKitLeaderboard> kitLeaderboard = leaderboardAPI.getKitLeaderboard(kit, 10);
 CompletableFuture<IKitLeaderboard> globalLeaderboard = leaderboardAPI.getGlobalLeaderboard(10);
 
-// Update leaderboards (should be called asynchronously)
 leaderboardAPI.update();
-
-// Clear cached leaderboard data
 leaderboardAPI.clearCache();
 ```
 
-### Knockback API (Example)
+## Knockback Hook
 
 ```java
-import xyz.refinedev.api.knockback.IKnockbackHandler;
-import xyz.refinedev.api.knockback.KnockbackHook;
-
 IKnockbackHandler knockbackHandler = api.getKnockbackHandler();
 
-// Implement custom knockback
-KnockbackHook customHook = new KnockbackHook() {
-    
+KnockbackHook hook = new KnockbackHook() {
     @Override
     public String getName() {
-        return "Paper";
+        return "MyKnockback";
     }
-    
+
     @Override
     public boolean isApplicable() {
         return true;
     }
 
     @Override
-    public void setKnockback(@NotNull Player player, @NotNull String knockbackProfile) {
-        // Custom knockback logic here
+    public void setKnockback(@NotNull Player player, @NotNull String profile) {
+        // Apply your server fork's knockback profile.
     }
 };
 
-// Set your custom knockback implementation
-knockbackHandler.setHook(customHook);
+knockbackHandler.setHook(hook);
 ```
 
-### Events
-The API provides several events, here is an example on how you can implement them:
+## Events
+
+BoltAPI exposes match, spectator, profile, party, and tournament lifecycle events.
+
+### Match Events
 
 ```java
-import xyz.refinedev.practice.api.profile.events.*;
-
 @EventHandler
-public void onProfileJoin(ProfileJoinEvent event) {
-    IProfile profile = event.getProfile();
-    // Handle profile join
+public void onMatchStart(MatchStartEvent event) {
+    IMatch match = event.getMatch();
 }
 
 @EventHandler
-public void onProfileLeave(ProfileLeaveEvent event) {
-    IProfile profile = event.getProfile();
-    // Handle profile leave
+public void onMatchEnd(MatchEndEvent event) {
+    IMatch match = event.getMatch();
+    MatchEndReason reason = event.getReason();
 }
 
 @EventHandler
-public void onProfileKnockback(ProfileKnockbackEvent event) {
-    Player player = event.getPlayer();
-    // Triggered when knockback is applied, use priority above NORMAL to override behavior
+public void onSoloWin(MatchWinEvent event) {
+    IMatchPlayer winner = event.getWinner();
+}
+
+@EventHandler
+public void onTeamWin(MatchTeamWinEvent event) {
+    IMatchTeam winningTeam = event.getWinningTeam();
 }
 ```
+
+### Spectator Events
+
+```java
+@EventHandler
+public void onSpectatorJoin(MatchSpectatorJoinEvent event) {
+    Player spectator = event.getSpectator();
+    IMatch match = event.getMatch();
+}
+```
+
+### Party Events
+
+```java
+@EventHandler
+public void onPartyCreate(PartyCreateEvent event) {
+    IParty party = event.getParty();
+}
+
+@EventHandler
+public void onPartyJoin(PartyJoinEvent event) {
+    IParty party = event.getParty();
+    Player player = event.getPlayer();
+}
+```
+
+### Tournament Events
+
+```java
+@EventHandler
+public void onTournamentStart(TournamentStartEvent event) {
+    ITournament tournament = event.getTournament();
+}
+
+@EventHandler
+public void onTournamentEnd(TournamentEndEvent event) {
+    TournamentEndReason reason = event.getReason();
+}
+```
+
+## Version Information
+
+| Item | Value |
+| :--- | :--- |
+| Latest BoltAPI version | `1.0.6` |
+| Recommended Bolt version | `1.7.1+` |
+| Java target | `8+` |
+| Repository | `https://maven.refinedev.org/public-repo/` |

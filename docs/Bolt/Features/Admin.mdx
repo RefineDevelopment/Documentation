@@ -2,18 +2,76 @@
 sidebar_position: 9
 ---
 
-# Admin
+Admin commands are used for maintenance, setup, troubleshooting, data correction, arena repair, and staff-only match control.
 
-These commands are mainly used for certain things, such as giving yourself certain kit items, reset a user's profile etc. 
+## Core Admin Commands
 
-| Command                   | Permission                | Description                                    |
-| ------------------------- | ------------------------- | ---------------------------------------------- |
-| `/bolt reload`            | `bolt.admin.reload`       | Reload all configuration files                 |
-| `/bolt save`              | `bolt.admin.save`         | Save all configuration files                   |
-| `/bolt refill`            | `bolt.admin.refill`       | Refill your inventory with potions or soup     |
-| `/bolt setLobby`          | `bolt.admin.setup`        | Set the lobby to the player’s current location |
-| `/bolt goldenHead`        | `bolt.admin.setup`        | Receive a pre-made Golden Head                 |
-| `/bolt fireball`          | `bolt.admin.setup`        | Receive a pre-made Fireball                    |
-| `/bolt updateData`        | `bolt.admin.leaderboard`  | Save and update all leaderboards               |
-| `/bolt reset`             | `bolt.admin.reset`        | Reset Bolt’s database and collections          |
-| `/bolt resetStats <name>` | `bolt.admin.resetprofile` | Reset a player’s profile                       |
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/bolt info` | View Bolt information. | None |
+| `/bolt reload` | Reload configuration files. | `bolt.admin.reload` |
+| `/bolt theme <color>` | Set the global theme color. | `bolt.admin.theme` |
+| `/bolt save` | Save configuration files. | `bolt.admin.save` |
+| `/bolt update` | Force leaderboard/data update. | `bolt.admin.leaderboard` |
+| `/bolt checkArenas` | Scan arenas for invalid/broken state. | `bolt.admin.arenas` |
+| `/bolt reset` | Reset Bolt database collections. | `bolt.admin.reset` |
+
+## Setup Item Commands
+
+These are useful while creating kits, maps, and special items.
+
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/bolt setspawn` | Set lobby spawn. | `bolt.admin.setup` |
+| `/bolt goldenHead` | Get the configured Golden Head item. | `bolt.admin.setup` |
+| `/bolt instantHead` | Get the configured InstantUHC head item. | `bolt.admin.setup` |
+| `/bolt fireball` | Get a pre-made Fireball item. | `bolt.admin.setup` |
+| `/bolt rename <name>` | Rename the held item. | `bolt.admin.setup` |
+| `/bolt unbreakable` | Mark the held item as unbreakable. | `bolt.admin.setup` |
+| `/bolt effect <effect> <amplifier>` | Give yourself an infinite potion effect. | `bolt.admin.setup` |
+| `/bolt head <player>` | Get a player's head. | `bolt.admin.head` |
+
+## Match And Queue Staff Commands
+
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/bolt refill` | Refill potions/soup quietly. | `bolt.admin.refill` |
+| `/bolt forfeit [player]` | Force end a match. | `bolt.admin.forfeit` |
+| `/queue forceQueue <player> <kit> <type>` | Force a player into a queue. | `bolt.queue.admin` |
+| `/randomqueue other <player>` | Force a player into a random unranked solo queue. | `bolt.queue.admin` |
+| `/bolt randomQueue <player>` | Staff shortcut for random queueing. | `bolt.queue.admin` |
+
+## Data And Layout Commands
+
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/bolt resetStats <player> [total]` | Reset profile/stat data for a player. | `bolt.admin.resetprofile` |
+| `/resetelo <type>` | Reset ELO/stat data globally by type. | `bolt.admin.resetelo` |
+| `/elo add <player> <kit> <amount>` | Add ELO. | `bolt.elo.admin` |
+| `/elo remove <player> <kit> <amount>` | Remove ELO. | `bolt.elo.admin` |
+| `/elo set <player> <kit> <amount>` | Set ELO. | `bolt.elo.admin` |
+| `/elo reset <player> <kit>` | Reset ELO. | `bolt.elo.admin` |
+| `/coins add/remove/set <player> <amount>` | Manage coins. | `bolt.profile.coins` |
+| `/xp add/remove/set <player> <amount>` | Manage experience. | `bolt.profile.experience` |
+| `/unlock <player> <permission>` | Unlock a cosmetic/product. | `bolt.profile.unlock` |
+| `/bolt deleteEveryoneKitLayout <kit>` | Delete all custom layouts for a kit. | `bolt.admin.kitlayouts` |
+| `/bolt deletePlayerKitLayout <player> [kit]` | Delete one player's custom layouts. | `bolt.admin.kitlayouts` |
+
+## Debug And Hologram Commands
+
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/bolt debugPaste <schematic>` | Paste a schematic at your location for debugging. | `bolt.admin.debugpaste` |
+| `/boltholo list` | List Bolt holograms. | `bolt.holo.admin` |
+| `/boltholo create <name>` | Create a hologram. | `bolt.holo.admin` |
+| `/boltholo delete <name>` | Delete a hologram. | `bolt.holo.admin` |
+| `/boltholo teleport <name>` | Teleport to a hologram. | `bolt.holo.admin` |
+| `/boltholo move <name>` | Move a hologram. | `bolt.holo.admin` |
+
+## Safety Notes
+
+- Restart the server after adding or updating required plugins such as FastAsyncWorldEdit.
+- Use `/bolt save` before large manual config changes.
+- Use `/bolt reset` only when you intentionally want to clear Bolt data.
+- Use `/bolt deleteEveryoneKitLayout` carefully; it removes player-created kit layouts for the selected kit.
+- Use `/arena saveChanges` after editing standalone arenas so future resets use the newest schematic.

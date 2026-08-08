@@ -4,276 +4,263 @@ title: Commands & Permissions
 description: Complete reference for Bolt commands and permissions
 ---
 
-# Bolt Practice Plugin - Commands and Permissions
+# Bolt Commands
 
-## Commands
+This page lists the most important Bolt commands and the permissions checked by the current Bolt codebase. Some commands also have aliases; the main command name is shown first.
 
-### Main Commands
-
-| Command | Description | Permission |
-| :--- | :--- | :--- |
-| `/bolt` | View bolt commands (admin) or info (player) | - |
-| `/bolt info` | View information about Bolt | - |
-| `/bolt reload` | Reload bolt's configuration files | `bolt.admin.reload` |
-| `/bolt theme <color>` | Set bolt's theme color | `bolt.admin.theme` |
-| `/bolt save` | Save bolt's configuration files | `bolt.admin.save` |
-| `/bolt update` | Force update leaderboards | `bolt.admin.leaderboard` |
-| `/bolt checkArenas` | Scan arenas to find broken/invalid arena | `bolt.admin.arenas` |
-| `/bolt reset` | Reset the Bolt's DB Collections (Console only) | `bolt.admin.reset` |
-| `/bolt setspawn` | Set spawn location | `bolt.admin.setup` |
-| `/bolt goldenHead` | Receive a pre-made Golden Head | `bolt.admin.setup` |
-| `/bolt instantHead` | Receive a pre-made InstantUHC Golden Head | `bolt.admin.setup` |
-| `/bolt fireball` | Receive a pre-made Fireball | `bolt.admin.setup` |
-| `/bolt rename <name>` | Rename the item in your hand | `bolt.admin.setup` |
-| `/bolt unbreakable` | Mark the item in your hand as unbreakable | `bolt.admin.setup` |
-| `/bolt effect <type> <lvl>` | Give yourself an infinite potion effect | `bolt.admin.setup` |
-| `/bolt refill` | Refill your Inventory with Soup or Potions quietly | `bolt.admin.refill` |
-| `/bolt forfeit [target]` | Force end someone's match | `bolt.admin.forfeit` |
-| `/bolt resetStats <target>` | Reset a target's profile | `bolt.admin.resetprofile` |
-| `/bolt head <target>` | Get a player's head | `bolt.admin.head` |
-| `/bolt debugPaste` | Debug paste a schematic at your location | `bolt.admin.debugpaste` |
-| `/bolt developerDebug` | Developer only command to toggle internal debugging | (Hidden) |
-
-### Party Commands
+## Player Commands
 
 | Command | Description | Permission |
 | :--- | :--- | :--- |
-| `/party` | View all party commands or create/invite | - |
-| `/party create` | Create a party | - |
-| `/party info [target]` | View information about a party | - |
-| `/party chat` | Toggle party chat mode | - |
-| `/party privacy` | Open your party to the public | - |
-| `/party invite <target>` | Invite a player to your party | - |
-| `/party join <target>` | Join a party | - |
-| `/party leave` | Leave your party | - |
-| `/party disband` | Disband your party | - |
-| `/party events` | Start events/games for your party | - |
-| `/party settings` | View party settings | - |
-| `/party promote <target>` | Promote a member, and you step-down | - |
-| `/party kick <target>` | Remove a member of your party | - |
-| `/party duel` | View other parties, or duel them | - |
-| `/party open` | Open your party to the public | `bolt.party.public` |
-| `/party announce` | Broadcast invite message to the public | `bolt.party.announce` |
+| `/help` | View the practice help message. | None |
+| `/profile` | Open your profile menu. | None |
+| `/settings` | Open profile settings. | None |
+| `/stats [player]` | View player statistics. | None |
+| `/leaderboard` or `/lb` | Open leaderboards. | None |
+| `/divisions` | Open the divisions menu. | None |
+| `/cosmetics` | Open cosmetics. | None |
+| `/shop` | Open the coin shop. | None |
+| `/reward` | Claim the daily reward. | None |
+| `/matchhistory` | View match history. | None |
+| `/postmatch <player>` | View a post-match inventory. | None |
+| `/duel <player>` | Send a duel request. | None |
+| `/accept` | Accept a duel request. | None |
+| `/queue select` | Open queue type selection. | None |
+| `/queue join <queue>` | Join a specific queue. | None |
+| `/queue leave` | Leave your current queue. | None |
+| `/randomqueue` | Join a random unranked solo queue. | None |
+| `/playagain` | Queue again or request a rematch after a match. | None |
+| `/leave` | Leave your current match, queue, event, or activity. | None |
+| `/map` | View the arena you are playing on. | None |
+| `/spec <player>` or `/spectate <player>` | Spectate a player's match. | None |
+| `/follow <player>` | Follow a player. | None |
+| `/follow stop` | Stop following. | None |
+| `/toggleduels` | Toggle duel requests. | None |
+| `/togglev` or `/togglevisibility` | Toggle player visibility. | None |
+| `/silent` | Toggle silent spectating mode. | `bolt.profile.silent` |
+| `/edit` | Toggle edit/build mode. | `bolt.profile.edit` |
+| `/spawn` | Teleport to the lobby spawn. | `bolt.profile.admin` |
 
-### Event Commands
-
-| Command | Description | Permission |
-| :--- | :--- | :--- |
-| `/event` | View event commands | - |
-| `/event clearCooldown` | Reset the given event's cooldown | `bolt.event.cooldown` |
-| `/event manage` | Manage a certain event's game rules | - |
-| `/event host` | View event host menu | - |
-| `/event chost` | (Console) Host an event according to type | - |
-| `/event info` | View information about the current event | - |
-| `/event join` | Join the current event | - |
-| `/event leave` | Leave the current event | - |
-| `/event cancel` | Cancel the current event | `bolt.event.admin` |
-| `/event forcestart` | Force-start the current event | `bolt.event.admin` |
-| `/event setIcon` | Set an event type's icon | `bolt.event.admin` |
-| `/event setName` | Set an event's display name | `bolt.event.admin` |
-| `/event arena list` | View a list of all event arenas | `bolt.event.admin` |
-| `/event arena info` | View all information about an arena | `bolt.event.admin` |
-| `/event arena create` | Create an arena by type | `bolt.event.admin` |
-| `/event arena finish` | Finish your event arena setup | `bolt.event.admin` |
-| `/event arena cancel` | Cancel your arena setup | `bolt.arena.setup` |
-| `/event arena wand` | Receive selection wand | `bolt.event.admin` |
-| `/event arena updatePoints` | Update changes to the spawn points of an Arena | `bolt.event.admin` |
-| `/event arena updateCuboid` | Update changes to the cuboid of an Arena | `bolt.event.admin` |
-| `/event arena setVoidHeight` | Set an arena's void death height | `bolt.event.admin` |
-| `/event arena setBuildHeight` | Set an arena's max build height | `bolt.event.admin` |
-| `/event arena teleport` | Teleport to the spawn point of an Arena | `bolt.event.admin` |
-| `/event arena delete` | Delete an arena | `bolt.event.admin` |
-
-### Tournament Commands
+## Party Commands
 
 | Command | Description | Permission |
 | :--- | :--- | :--- |
-| `/tournament` | View tournament help message | - |
-| `/tournament info` | View information about the current tournament | - |
-| `/tournament chost` | (Console) Host a tournament | `bolt.tournament.admin` |
-| `/tournament host` | Host a tournament | `bolt.tournament.host` |
-| `/tournament clearCooldown` | Reset the given tournament's cooldown | `bolt.tournament.cooldown` |
-| `/tournament join` | Join the current tournament | - |
-| `/tournament leave` | Leave the current tournament | - |
-| `/tournament stop` | Cancel the currently on-going tournament | `bolt.tournament.admin` |
-| `/tournament forceEnd` | Force end a participant's match | `bolt.tournament.admin` |
-| `/tournament forceStart` | Force start the current tournament | `bolt.tournament.admin` |
+| `/party` | View party help or create/invite depending on usage. | None |
+| `/party create` | Create a party. | None |
+| `/party invite <player>` | Invite a player. | None |
+| `/party join <player>` | Join a party invite. | None |
+| `/party leave` | Leave your party. | None |
+| `/party disband` | Disband your party. | None |
+| `/party info [player]` | View party information. | None |
+| `/party chat` | Toggle party chat mode. | None |
+| `/party settings` | Open party settings. | None |
+| `/party events` | Open party games/events. | None |
+| `/party promote <player>` | Promote a party member. | None |
+| `/party kick <player>` | Kick a party member. | None |
+| `/party duel` | Open party duel targets. | None |
+| `/party open` or `/party privacy` | Make the party public/open. | `bolt.party.public` |
+| `/party announce` | Broadcast a party invite. | `bolt.party.announce` |
 
-### Queue & Duel Commands
-
-| Command | Description | Permission |
-| :--- | :--- | :--- |
-| `/queue forceQueue` | Force queue a target | `bolt.queue.admin` |
-| `/queue select` | Select a queue type | - |
-| `/queue join` | Join a specific queue | - |
-| `/queue leave` | Leave your current queue | - |
-| `/duel <player>` | Duel a player | - |
-| `/accept` | Accept a duel request | - |
-
-### Profile & Economy Commands
+## Queue Commands
 
 | Command | Description | Permission |
 | :--- | :--- | :--- |
-| `/profile` | View profile menu | - |
-| `/stats [target]` | View statistics | - |
-| `/leaderboards` | View leaderboards | - |
-| `/divisions` | View divisions | - |
-| `/cosmetics` | View cosmetics menu | - |
-| `/shop` | View shop menu | - |
-| `/settings` | View settings menu | - |
-| `/spawn` | Teleport to spawn | `bolt.profile.admin` |
-| `/leave` | Leave current match/queue | - |
-| `/spectate <player>` | Spectate a player's ongoing match | - |
-| `/playagain` | Play again with the same opponent | - |
-| `/map` | View map information | - |
-| `/coins` | View coins commands | `bolt.profile.coins` |
-| `/xp` | View XP commands | `bolt.profile.experience` |
-| `/unlock` | Unlock cosmetic for a player | `bolt.profile.unlock` |
-| `/dailyreward` | Claim daily reward | - |
-| `/eventtoken` | Event token commands | `bolt.event.admin` |
+| `/queue forceQueue <player> <kit> <type>` | Force a player into a queue. | `bolt.queue.admin` |
+| `/randomqueue other <player>` | Force a player into a random unranked solo queue. | `bolt.queue.admin` |
+| `/bolt randomQueue <player>` | Staff shortcut for random queueing a player. | `bolt.queue.admin` |
 
-### Settings & Staff Commands
+## Bot Commands
 
 | Command | Description | Permission |
 | :--- | :--- | :--- |
-| `/toggleduels` | Toggle your profile's duel requests | - |
-| `/togglevisibility` | Toggle your profile's visibility | - |
-| `/togglesilent` | Go into silent mode | `bolt.profile.silent` |
-| `/follow [target]` | Follow the specified target | - |
-| `/edit` | Toggle edit mode | `bolt.profile.edit` |
-| `/matchhistory` | View match history | - |
-| `/reset <type>` | Reset everyone's stats by type | `bolt.admin.resetelo` |
-| `/day/night/sunset` | Set player time | - |
-| `/matchinventory` | View match inventory | - |
-| `/changekit` | Change kit during match | - |
+| `/bot duel <preset>` | Duel a bot preset. | `bolt.bot` |
+| `/bot custom` | Duel a custom bot preset. | `bolt.bot` plus `bolt.bot.custom` for custom preset access |
+| `/bot presets` | View active bot presets. | `bolt.bot` |
+| `/bot info <preset>` | View preset information. | `bolt.bot.admin` |
+| `/bot addkit <preset> <kit>` | Add a kit to a bot preset. | Admin-only command, no annotation in code |
+| `/bot removekit <preset> <kit>` | Remove a kit from a bot preset. | Admin-only command, no annotation in code |
+| `/botkb` | View bot knockback commands. | `bolt.bot.knockback` |
+| `/botkb save` | Save bot knockback profiles. | `bolt.bot.knockback` |
+| `/botkb reload` | Reload bot knockback profiles. | `bolt.bot.knockback` |
+| `/botkb list` | List bot knockback profiles. | `bolt.bot.knockback` |
+| `/botkb view <profile>` | View a knockback profile. | `bolt.bot.knockback` |
+| `/botkb set <profile>` | Set every bot to a knockback profile. | `bolt.bot.knockback` |
+| `/botkb create <profile>` | Create a knockback profile. | `bolt.bot.knockback` |
+| `/botkb edit <profile>` | Edit a knockback value. | `bolt.bot.knockback` |
+| `/botkb delete <profile>` | Delete a knockback profile. | `bolt.bot.knockback` |
+| `/botkb setdefault <profile>` | Set the default bot knockback profile. | `bolt.bot.knockback` |
+| `/botkb getdefault` | View the default bot knockback profile. | `bolt.bot.knockback` |
 
----
+## Tournament Commands
 
-## Permissions
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/tournament` | View tournament help. | None |
+| `/tournament info` | View current tournament status. | None |
+| `/tournament host <type> <kit> [teamSize]` | Host a tournament. | `bolt.tournament.host` or `bolt.tournament.start`; kit may also require `bolt.tournament.<kit>` |
+| `/tournament chost <type> <kit> [teamSize]` | Console/staff tournament host command. | `bolt.tournament.admin` |
+| `/tournament join` | Join the current tournament. | `bolt.tournament.join` or `bolt.tournament.<kit>` |
+| `/tournament leave` | Leave the current tournament. | None |
+| `/tournament clearCooldown <type>` | Reset a tournament cooldown. | `bolt.tournament.cooldown` |
+| `/tournament stop` | Cancel the current tournament. | `bolt.tournament.admin` |
+| `/tournament forceStart` | Force start the tournament. | `bolt.tournament.admin` |
+| `/tournament forceEnd <player>` | Force end a participant's match. | `bolt.tournament.admin` |
 
-### Admin & Staff
+## Event Commands
 
-| Permission | Description |
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/event` | View event help. | None |
+| `/event host` | Open event host menu. | Host menu checks event/token rules |
+| `/event chost <type>` | Console/staff host command. | `bolt.event.admin` |
+| `/event info` | View current event information. | None |
+| `/event join` | Join current event. | None |
+| `/event leave` | Leave current event. | None |
+| `/event clearCooldown <type>` | Reset an event cooldown. | `bolt.event.cooldown` |
+| `/event cancel` | Cancel current event. | `bolt.event.admin` |
+| `/event forcestart` | Force-start current event. | `bolt.event.admin` |
+| `/event setIcon <type>` | Set an event icon. | `bolt.event.admin` |
+| `/event setName <type> <name>` | Set an event display name. | `bolt.event.admin` |
+| `/event arena list` | List event arenas. | `bolt.event.admin` |
+| `/event arena info <arena>` | View event arena information. | `bolt.event.admin` |
+| `/event arena create <type>` | Create an event arena. | `bolt.event.admin` |
+| `/event arena finish` | Finish event arena setup. | `bolt.event.admin` |
+| `/event arena cancel` | Cancel event arena setup. | `bolt.arena.setup` |
+| `/event arena wand` | Get the event arena wand. | `bolt.event.admin` |
+| `/event arena updatePoints <arena>` | Update event arena spawn points. | `bolt.event.admin` |
+| `/event arena updateCuboid <arena>` | Update event arena bounds. | `bolt.event.admin` |
+| `/event arena setFallDeathHeight <arena> <height>` | Set event arena void height. | `bolt.event.admin` |
+| `/event arena setBuildHeight <arena> <height>` | Set event arena build height. | `bolt.event.admin` |
+| `/event arena teleport <arena>` | Teleport to an event arena. | `bolt.event.admin` |
+| `/event arena delete <arena>` | Delete an event arena. | `bolt.event.admin` |
+
+## Arena Commands
+
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/arena` | View arena help. | `bolt.arena.admin` |
+| `/arena manage` | Open arena management. | `bolt.arena.admin` |
+| `/arena list` | List arenas. | `bolt.arena.admin` |
+| `/arena info <arena>` | View arena information. | `bolt.arena.admin` |
+| `/arena duplicates <arena>` | View duplicate arenas. | `bolt.arena.admin` |
+| `/arena create <name> <standard/standalone>` | Create an arena setup. | `bolt.arena.setup` |
+| `/arena delete <arena>` | Delete an arena. | `bolt.arena.setup` |
+| `/arena wand` | Receive selection wand. | `bolt.arena.setup` |
+| `/arena finish` | Finish arena setup. | `bolt.arena.setup` |
+| `/arena cancel` | Cancel arena setup. | `bolt.arena.setup` |
+| `/arena updatePoints <arena>` | Update spawn points. | `bolt.arena.setup` |
+| `/arena updateSpecial <arena>` | Update special locations. | `bolt.arena.setup` |
+| `/arena updateCuboid <arena>` | Update arena bounds. | `bolt.arena.setup` |
+| `/arena updateSpecialCuboid <arena>` | Update special/portal bounds. | `bolt.arena.setup` |
+| `/arena teleport <arena> [copy]` | Teleport to an arena. | `bolt.arena.admin` |
+| `/arena toggle <arena>` | Toggle arena enabled state. | `bolt.arena.admin` |
+| `/arena save` | Save all arenas. | `bolt.arena.admin` |
+| `/arena saveChanges <arena>` | Save arena schematic changes and repaste duplicates. | `bolt.arena.admin` |
+| `/arena saveAllChanges` | Save all schematic changes. | `bolt.arena.admin` |
+| `/arena scale <arena> <amount>` | Create or remove duplicate copies. | `bolt.arena.admin` |
+| `/arena setIcon <arena>` | Set arena icon. | `bolt.arena.admin` |
+| `/arena setName <arena> <name>` | Set arena display name. | `bolt.arena.admin` |
+| `/arena setMidSpawn <arena>` | Set middle spawn. | `bolt.arena.admin` |
+| `/arena setFallDeathHeight <arena> <height>` | Set void death height. | `bolt.arena.admin` |
+| `/arena setPortalRadius <arena> <radius>` | Set portal protection radius. | `bolt.arena.admin` |
+| `/arena setSpawnProtectionRadius <arena> <radius>` | Set spawn protection radius. | `bolt.arena.admin` |
+| `/arena setFFARadius <arena> <radius>` | Set FFA spawn radius. | `bolt.arena.admin` |
+| `/arena setPearlsAllowed <arena> <true/false>` | Toggle pearl use on an arena. | `bolt.arena.admin` |
+| `/arena setBuildHeight <arena> <height>` | Set max build height. | `bolt.arena.admin` |
+| `/arena kits <arena>` | View arena kits. | `bolt.arena.admin` |
+| `/arena copyKit <source> <target>` | Copy kit whitelist. | `bolt.arena.admin` |
+| `/arena addKit <arena> <kit>` | Add a kit to an arena. | `bolt.arena.admin` |
+| `/arena removeKit <arena> <kit>` | Remove a kit from an arena. | `bolt.arena.admin` |
+| `/arena setType <arena> <type>` | Change arena type. | `bolt.arena.admin` |
+| `/arena debug <arena>` | Debug arena state. | `bolt.arena.admin` |
+
+## Kit Commands
+
+All kit management commands use `bolt.kit.admin`.
+
+| Command | Description |
 | :--- | :--- |
-| `bolt.profile.admin` | Main admin permission (help menu) |
-| `bolt.admin.reload` | Reload configuration files |
-| `bolt.admin.theme` | Set theme color |
-| `bolt.admin.save` | Save configuration files |
-| `bolt.admin.leaderboard` | Update leaderboards |
-| `bolt.admin.arenas` | Check arenas |
-| `bolt.admin.reset` | Reset database collections |
-| `bolt.admin.setup` | Setup commands |
-| `bolt.admin.refill` | Refill inventory during matches |
-| `bolt.admin.forfeit` | Force end matches |
-| `bolt.admin.resetprofile` | Reset player profiles |
-| `bolt.admin.head` | Get player heads |
-| `bolt.admin.debugpaste` | Debug paste schematics |
-| `bolt.admin.debug` | Debug commands |
+| `/kit list [page]` | List kits. |
+| `/kit save` | Save kits. |
+| `/kit manage` | Open kit management. |
+| `/kit editor` | Open kit editor. |
+| `/kit create <name>` | Create a kit. |
+| `/kit delete <kit>` | Delete a kit. |
+| `/kit toggle <kit>` | Enable or disable a kit. |
+| `/kit info <kit>` | View kit details. |
+| `/kit getInv <kit>` | Load kit inventory into your inventory. |
+| `/kit setInv <kit>` | Save your inventory as the kit inventory. |
+| `/kit getEditInv <kit>` | Load kit editor inventory. |
+| `/kit setEditInv <kit>` | Save kit editor inventory. |
+| `/kit setIcon <kit>` | Set kit icon from held item. |
+| `/kit setName <kit> <name>` | Set display name. |
+| `/kit setDescription <kit> <description>` | Set description lines. |
+| `/kit setQueueSlot <kit> <slot>` | Set queue slot. |
+| `/kit setKnockback <kit> <profile>` | Set player knockback profile. |
+| `/kit setBotKnockback <kit> <profile>` | Set bot knockback profile. |
+| `/kit setPriority <kit> <priority>` | Set sorting priority. |
+| `/kit viewArenas <kit>` | View arenas available for the kit. |
+| `/kit wipeKits kit <kit>` | Wipe every player's custom layouts for a kit. |
+| `/kit wipeKits player <player>` | Wipe a player's custom layouts. |
+| `/kit deleteAll` | Delete all kits. |
+| `/kit addStartCMD <kit> <command>` | Add a match-start command. |
+| `/kit addEndCMD <kit> <command>` | Add a match-end command. |
+| `/kit removeStartCMD <kit> <command>` | Remove a match-start command. |
+| `/kit removeEndCMD <kit> <command>` | Remove a match-end command. |
+| `/kit addAllowedBlock <kit> <block>` | Add a placeable block. |
+| `/kit removeAllowedBlock <kit> <block>` | Remove a placeable block. |
+| `/kit addDisallowedBlock <kit> <block>` | Add a blocked map block. |
+| `/kit removeDisallowedBlock <kit> <block>` | Remove a blocked map block. |
+| `/kit addExplosionBlacklist <kit> <block>` | Protect a block from explosions. |
+| `/kit removeExplosionBlacklist <kit> <block>` | Remove explosion protection. |
+| `/kit addDropWhitelist <kit> <block>` | Allow drops for a block type. |
+| `/kit removeDropWhitelist <kit> <block>` | Remove drop whitelist entry. |
 
-### Events & Tournaments
+## Bolt Admin Commands
 
-| Permission | Description |
-| :--- | :--- |
-| `bolt.event.admin` | Full event administration |
-| `bolt.event.cooldown` | Clear event cooldowns |
-| `bolt.arena.setup` | Setup event arenas |
-| `bolt.tournament.admin` | Full tournament administration |
-| `bolt.tournament.host` | Host tournaments |
-| `bolt.tournament.cooldown` | Clear tournament cooldowns |
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/bolt info` | View Bolt information. | None |
+| `/bolt reload` | Reload configuration files. | `bolt.admin.reload` |
+| `/bolt theme <color>` | Set theme color. | `bolt.admin.theme` |
+| `/bolt save` | Save configuration files. | `bolt.admin.save` |
+| `/bolt update` | Force update leaderboards/data. | `bolt.admin.leaderboard` |
+| `/bolt checkArenas` | Scan for broken arenas. | `bolt.admin.arenas` |
+| `/bolt reset` | Reset Bolt database collections. Console use recommended. | `bolt.admin.reset` |
+| `/bolt setspawn` | Set lobby spawn. | `bolt.admin.setup` |
+| `/bolt goldenHead` | Get a configured Golden Head item. | `bolt.admin.setup` |
+| `/bolt instantHead` | Get a configured InstantUHC head item. | `bolt.admin.setup` |
+| `/bolt fireball` | Get a pre-made Fireball item. | `bolt.admin.setup` |
+| `/bolt rename <name>` | Rename held item. | `bolt.admin.setup` |
+| `/bolt unbreakable` | Mark held item as unbreakable. | `bolt.admin.setup` |
+| `/bolt effect <effect> <amplifier>` | Give yourself an infinite potion effect. | `bolt.admin.setup` |
+| `/bolt refill` | Refill potions/soup quietly. | `bolt.admin.refill` |
+| `/bolt forfeit [player]` | Force end a match. | `bolt.admin.forfeit` |
+| `/bolt resetStats <player> [total]` | Reset a player's stats/profile data. | `bolt.admin.resetprofile` |
+| `/bolt deleteEveryoneKitLayout <kit>` | Delete all custom layouts for a kit. | `bolt.admin.kitlayouts` |
+| `/bolt deletePlayerKitLayout <player> [kit]` | Delete a player's custom kit layout. | `bolt.admin.kitlayouts` |
+| `/bolt head <player>` | Get a player's head. | `bolt.admin.head` |
+| `/bolt debugPaste <schematic>` | Paste a schematic for debugging. | `bolt.admin.debugpaste` |
 
-### Feature Access
+## Profile Economy And Progression Commands
 
-| Permission | Description |
-| :--- | :--- |
-| `bolt.queue.admin` | Force queue players |
-| `bolt.kit.admin` | Kit administration |
-| `bolt.elo.admin` | ELO management |
-| `bolt.holo.admin` | Hologram administration |
-| `bolt.profile.fly` | Fly in lobby |
-| `bolt.profile.ping` | Bypass ping limits |
-| `bolt.profile.ranked` | Bypass ranked requirements |
-| `bolt.profile.silent` | Silent mode |
-| `bolt.profile.edit` | Edit mode |
-| `bolt.profile.coins` | Manage coins |
-| `bolt.profile.experience` | Manage XP |
-| `bolt.profile.unlock` | Unlock cosmetics |
-| `bolt.profile.revert` | Revert match results |
+| Command | Description | Permission |
+| :--- | :--- | :--- |
+| `/coins add <player> <amount>` | Add coins. | `bolt.profile.coins` |
+| `/coins remove <player> <amount>` | Remove coins. | `bolt.profile.coins` |
+| `/coins set <player> <amount>` | Set coins. | `bolt.profile.coins` |
+| `/xp add <player> <amount>` | Add experience. | `bolt.profile.experience` |
+| `/xp remove <player> <amount>` | Remove experience. | `bolt.profile.experience` |
+| `/xp set <player> <amount>` | Set experience. | `bolt.profile.experience` |
+| `/eventtoken add <player> <amount>` | Add event tokens. | `bolt.event.admin` |
+| `/eventtoken remove <player> <amount>` | Remove event tokens. | `bolt.event.admin` |
+| `/eventtoken set <player> <amount>` | Set event tokens. | `bolt.event.admin` |
+| `/unlock <player> <permission>` | Unlock a cosmetic/product for a player. | `bolt.profile.unlock` |
+| `/elo` | View ELO admin help. | `bolt.elo.admin` |
+| `/elo add <player> <kit> <amount>` | Add ELO. | `bolt.elo.admin` |
+| `/elo remove <player> <kit> <amount>` | Remove ELO. | `bolt.elo.admin` |
+| `/elo set <player> <kit> <amount>` | Set ELO. | `bolt.elo.admin` |
+| `/elo reset <player> <kit>` | Reset ELO. | `bolt.elo.admin` |
+| `/resetelo <type>` | Reset ELO/stat data globally by type. | `bolt.admin.resetelo` |
 
-### Party Permissions
-
-| Permission | Description |
-| :--- | :--- |
-| `bolt.party.public` | Make party public |
-| `bolt.party.announce` | Announce party invites |
-| `bolt.party.limit` | Increase party member limit |
-| `bolt.party.pingfactor` | Use party ping factor setting |
-
-### Cosmetics & Wildcards
-
-| Permission | Description |
-| :--- | :--- |
-| `bolt.trails.*` | All trails |
-| `bolt.killeffect.*` | All kill effects |
-| `bolt.killmessages.*` | All kill messages |
-| `bolt.trails.<name>` | Specific trail |
-| `bolt.killeffect.<name>` | Specific kill effect |
-| `bolt.killmessages.<name>` | Specific kill message |
-| `bolt.profile.coin_multiplier.X.X` | Coin multiplier (e.g. 2.0) |
-
-
----
-
-## Permission Groups Summary
-
-### Player Permissions (Default)
-
-| Type | Description |
-| :--- | :--- |
-| **Basic** | No special permissions required for basic commands like `/duel`, `/party create`, `/queue select`, etc. |
-
-### VIP/Donor Permissions
-
-| Permission | Description |
-| :--- | :--- |
-| `bolt.profile.ping` | Bypass ping limits |
-| `bolt.profile.ranked` | Access ranked queues without requirements |
-| `bolt.profile.fly` | Fly in lobby |
-| `bolt.party.limit` | Larger party sizes |
-| `bolt.party.pingfactor` | Party ping factor |
-| `bolt.party.public` | Public parties |
-| *(Various)* | Cosmetic permissions (trail, kill effects, kill messages) |
-
-### Moderator Permissions
-
-| Permission | Description |
-| :--- | :--- |
-| *(Inherits)* | All player permissions |
-| `bolt.profile.edit` | Edit mode |
-| `bolt.profile.silent` | Silent mode |
-| `bolt.queue.admin` | Force queue |
-| `bolt.tournament.cooldown` | Tournament cooldowns |
-| `bolt.event.cooldown` | Event cooldowns |
-
-### Admin Permissions
-
-| Permission | Description |
-| :--- | :--- |
-| *(Inherits)* | All moderator permissions |
-| `bolt.profile.admin` | Admin access |
-| `bolt.admin.*` | All admin commands |
-| `bolt.event.admin` | Event administration |
-| `bolt.tournament.admin` | Tournament administration |
-| `bolt.kit.admin` | Kit administration |
-| `bolt.elo.admin` | ELO management |
-| `bolt.queue.admin` | Queue administration |
-
----
-
-## Notes
-
-1. Most commands check for player state (in lobby, in match, etc.) before execution
-2. Many commands have built-in cooldowns or rate limiting
-3. Permission checks are done both via `@Requires` annotation and manual `hasPermission()` checks
-4. Some permissions are dynamic (e.g., cosmetic permissions follow pattern `bolt.<type>.<name>`)
-5. Console-only commands are marked and will fail if executed by a player
-6. Some commands have hidden flags (like `developerDebug`) that don't appear in help menus
+For grouped permission explanations, see [Permissions](/Bolt/Permissions).

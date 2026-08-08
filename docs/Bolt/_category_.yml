@@ -1,2 +1,7 @@
 label: Bolt
 position: 3
+collapsed: false
+link:
+  type: generated-index
+  title: Bolt Documentation
+  slug: /bolt

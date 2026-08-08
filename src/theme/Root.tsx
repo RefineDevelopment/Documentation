@@ -1,49 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from '@docusaurus/router';
+import SmoothScroll from '../components/SmoothScroll';
 
-interface RootProps {
-  children: React.ReactNode;
-}
-
-const Root: React.FC<RootProps> = ({ children }) => {
+/**
+ * Puts every new route at the top, then hands scrolling to SmoothScroll.
+ *
+ * `instant` rather than `smooth`: a page that scrolls itself into place after
+ * you have already started reading is worse than one that is simply there.
+ *
+ * There is deliberately no route progress bar. The tarik site has none, and a
+ * full-width accent line firing on every click is the loudest thing on the
+ * page for the shortest reason.
+ */
+const Root: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'instant'
-    });
-
-    const timer = setTimeout(() => {
-      setIsLoading(true);
-    }, 0);
-
-    const finishTimer = setTimeout(() => {
-      setIsLoading(false);
-    }, 300);
-
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(finishTimer);
-    };
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
   }, [location.pathname]);
 
   return (
     <>
-
-      <div
-        className={`fixed top-0 left-0 h-1 bg-primary transition-all duration-300 ease-out z-[9999] ${isLoading ? 'w-full' : 'w-0'
-          }`}
-        style={{
-          boxShadow: isLoading ? '0 0 10px hsl(var(--primary)), 0 0 20px hsl(var(--primary))' : 'none'
-        }}
-      />
-
-      <div key={location.pathname}>
-        {children}
-      </div>
+      {children}
+      <SmoothScroll />
     </>
   );
 };

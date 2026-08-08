@@ -2,125 +2,244 @@
 sidebar_position: 3
 ---
 
-A list of permissions for bolt and all its features.
+A practical permission reference for Bolt. The list below is based on the permission checks registered or used by the current Bolt codebase.
 
-If you use Phoenix, please take a look at [Phoenix/Features/Ranks/Permissions](/Phoenix/Features/Ranks#permissions) for detailed information on permissions and how you can set them up.
+## How To Set Permissions
 
-:::warning
-Bolt feature pages are coming soon, disregard the link to them above the permissions.
-:::
+LuckPerms examples:
 
-## Kits
+```bash
+/lp group admin permission set bolt.admin.reload true
+/lp group builder permission set bolt.arena.setup true
+/lp group vip permission set bolt.profile.fly true
+/lp group vip permission set bolt.tournament.host true
+/lp group default permission set bolt.tournament.join true
+```
 
-Visit [Features/Kits](/Bolt/Features/Kits) for more information regarding kit permissions.
+PermissionsEx examples:
 
-Permission       | Description
----------------- | -----------
-`bolt.kit.admin` | Access to kit management commands.
+```bash
+/pex group admin add bolt.admin.reload
+/pex group builder add bolt.arena.setup
+/pex group vip add bolt.profile.fly
+```
 
-## Arenas
+## Recommended Groups
 
-Visit [Features/Arenas](/Bolt/Features/Arenas) for more information regarding arena permissions.
+| Group | Recommended permissions |
+| :--- | :--- |
+| Default Players | No required permission for basic duels, queues, parties, stats, cosmetics menus, and match history. Add `bolt.tournament.join` if public tournaments should be joinable. |
+| VIP / Donors | `bolt.profile.fly`, `bolt.profile.ranked`, `bolt.profile.ping`, `bolt.profile.arena`, `bolt.party.limit`, `bolt.party.public`, `bolt.party.announce`, cosmetic permissions. |
+| Moderators | `bolt.profile.silent`, `bolt.profile.hidebypass`, `bolt.queue.admin`, `bolt.admin.forfeit`, `bolt.event.cooldown`, `bolt.tournament.cooldown`. |
+| Builders | `bolt.profile.edit`, `bolt.arena.setup`, optional `bolt.arena.admin`. |
+| Admins | `bolt.admin.*` style permission from your permission plugin if supported, plus exact Bolt permissions listed below. |
 
-Permission         | Description
------------------- | -----------
-`bolt.arena.admin` | Access to arena management commands.
-`bolt.arena.setup` | Access to arena setup commands.
+Bolt registers many exact permissions. If your permission plugin supports wildcards, you may use grouped wildcards such as `bolt.admin.*`, but the safest setup is to grant the exact nodes you need.
 
-## Events
+## Player Perks
 
-Visit [Features/Events](/Bolt/Features/Events) for more information regarding event permissions.
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.profile.fly` | Lobby flight when the fly setting is enabled. |
+| `bolt.profile.flymode` | Toggle post-match/lobby fly mode setting. |
+| `bolt.profile.ranked` | Bypass ranked unlock requirements. |
+| `bolt.profile.ping` | Bypass queue ping limits. |
+| `bolt.profile.pingfactor` | Change ping range/ping factor settings. |
+| `bolt.profile.arena` | Select a preferred arena/map for duels, queues, and play-again flows. |
+| `bolt.profile.revert` | Revert match history/ELO from match history tools. |
+| `bolt.profile.edit` | Use `/edit` build mode. |
+| `bolt.profile.silent` | Use silent spectating mode. |
+| `bolt.profile.hidebypass` | See players hidden by forced lobby visibility. |
+| `bolt.profile.admin` | Use profile-admin features such as `/spawn`. |
+| `bolt.profile.deathanimation` | Toggle death animation setting. |
+| `bolt.profile.clearinventory` | Toggle automatic inventory clear setting. |
+| `bolt.profile.dropitems` | Toggle opponent item drop display setting. |
+| `bolt.profile.coins` | Manage player coins with `/coins`. |
+| `bolt.profile.experience` | Manage player experience with `/xp`. |
+| `bolt.profile.unlock` | Unlock cosmetics/products for a player. |
 
-Permission         | Description
------------------- | -----------
-`bolt.event.admin` | Access to event admin commands.
+## Queue Permissions
 
-## Tournaments
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.queue.admin` | Force queue players with `/queue forceQueue`, `/randomqueue other`, and `/bolt randomQueue`. |
 
-Visit [Features/Tournaments](/Bolt/Features/Tournaments) for more information regarding tournament permissions.
+## Party Permissions
 
-Permission              | Description
------------------------ | -----------
-`bolt.tournament.admin` | Access to tournament admin commands.
-`bolt.tournament.host`  | Access to hosting tournaments.
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.party.limit` | Use the higher permission-based party size limit. |
+| `bolt.party.public` | Open a party publicly with `/party open` or `/party privacy`. |
+| `bolt.party.announce` | Broadcast a public party invite. |
+| `bolt.party.pingfactor` | Change party ping range settings. |
 
-## Cosmetics
+## Tournament Permissions
 
-Visit [Features/Cosmetics](/Bolt/Features/Cosmetics) for more information regarding cosmetic permissions.
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.tournament.admin` | Use admin tournament commands, force start, force end, stop, and console host. |
+| `bolt.tournament.host` | Host tournaments. This also bypasses kit-specific host checks. |
+| `bolt.tournament.start` | Alternative host/start permission used by the host menu and command checks. |
+| `bolt.tournament.join` | Join tournaments without needing a kit-specific tournament permission. |
+| `bolt.tournament.cooldown` | Reset tournament cooldowns. |
+| `bolt.tournament.<kit>` | Host or join tournaments for a specific kit, such as `bolt.tournament.nodebuff`. |
 
-Permission                 | Description
--------------------------- | -----------
-`bolt.killeffect.*`        | Access to all kill effects.
-`bolt.killeffect.<name>`   | Access to a specific kill effect.
-`bolt.killmessages.*`      | Access to all kill messages.
-`bolt.killmessages.<name>` | Access to specific kill messages.
-`bolt.trails.*`            | Access to all trails.
-`bolt.trails.<name>`       | Access to specific trails.
+Examples:
 
-## Queues
+```bash
+/lp group vip permission set bolt.tournament.host true
+/lp group default permission set bolt.tournament.join true
+/lp group uhc permission set bolt.tournament.builduhc true
+```
 
-Visit [Features/Queues](/Bolt/Features/Queues) for more information regarding queue permissions.
+## Event Permissions
 
-Permission         | Description
------------------- | -----------
-`bolt.queue.admin` | Access to queue admin commands.
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.event.admin` | Manage, host from console/staff commands, cancel, force-start, edit, and configure events/event arenas. |
+| `bolt.event.cooldown` | Reset event cooldowns. |
+| `bolt.event.<event>` | Bypass event-token requirement for a specific event type when the event host flow checks it. |
 
-## Bots
+## Arena Permissions
 
-Visit [Features/Bots](/Bolt/Features/Bots) for more information regarding bot permissions.
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.arena.setup` | Create arenas, delete arenas, use wand, finish/cancel setup, update points, update cuboids, and update special locations. |
+| `bolt.arena.admin` | Manage arenas, list/info/debug, teleport, toggle, save, save schematics, scale duplicates, set names/icons/heights/radii, and manage kit whitelist. |
 
-Permission           | Description
--------------------- | -----------
-`bolt.bot.custom`    | Allows you to play a custom bot preset.
-`bolt.bot.admin`     | Access to bot admin commands.
-`bolt.bot.knockback` | Access to set bot knockback.
+## Kit Permissions
 
-## Parties
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.kit.admin` | Access all `/kit` management commands and view disabled kits in staff menus. |
 
-Visit [Features/Parties](/Bolt/Features/Parties) for more information regarding party permissions.
+## Bot Permissions
 
-Permission              | Description
------------------------ | -----------
-`bolt.party.limit`      | Bypass the maximum default party limit.
-`bolt.party.public`     | Allows toggling of the party's privacy.
-`bolt.party.announce`   | Alerts players about your open party.
-`bolt.party.pingfactor` | Access to change the party queue ping range.
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.bot` | Use bot duel, custom bot, and preset browsing commands. |
+| `bolt.bot.custom` | Use custom bot presets in the bot menu. |
+| `bolt.bot.admin` | Use bot admin/help/info commands. |
+| `bolt.bot.knockback` | Manage bot knockback profiles with `/botkb`. |
 
-## Profiles
+## Admin Permissions
 
-Visit [Features/Profiles](/Bolt/Features/Profiles) for more information regarding profile permissions.
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.admin.reload` | Reload Bolt configuration. |
+| `bolt.admin.theme` | Change Bolt theme color. |
+| `bolt.admin.save` | Save Bolt configuration. |
+| `bolt.admin.leaderboard` | Force leaderboard/data updates. |
+| `bolt.admin.arenas` | Scan arenas with `/bolt checkArenas`. |
+| `bolt.admin.reset` | Reset Bolt database collections. Use with extreme care. |
+| `bolt.admin.setup` | Use setup item commands such as Golden Head, Instant Head, Fireball, rename, unbreakable, effect, and set spawn. |
+| `bolt.admin.refill` | Refill inventory with potions/soup. |
+| `bolt.admin.forfeit` | Force end matches. |
+| `bolt.admin.resetprofile` | Reset player profile/stat data. |
+| `bolt.admin.resetelo` | Reset ELO/stat data globally by type. |
+| `bolt.admin.kitlayouts` | Delete custom kit layouts globally or per player. |
+| `bolt.admin.head` | Get a player's head item. |
+| `bolt.admin.debugpaste` | Debug paste arena schematics. |
+| `bolt.admin.debug` | Internal/debug-only command permission. |
+| `bolt.elo.admin` | Manage player ELO with `/elo`. |
+| `bolt.holo.admin` | Manage Bolt holograms. |
+| `bolt.import.admin` | Import data from supported legacy systems such as Frost. |
 
-Permission                    | Description
------------------------------ | -----------
-`bolt.profile.revert`         | Allows you to revert matches and elo.
-`bolt.profile.ranked`         | Bypasses the minumum unranked wins requirement.
-`bolt.profile.ping`           | Bypasses the maximum ping requirement for ranked.
-`bolt.profile.arena`          | Access to pick the arena you want to play on.
-`bolt.profile.fly`            | Allows you to fly in the lobby.
-`bolt.profile.flymode`        | Allows toggling of post match flight.
-`bolt.profile.dropitems`      | Allows toggling of opponent item drops.
-`bolt.profile.clearinventory` | Allows toggleing of post match inventory clear.
-`bolt.profile.deathanimation` | Allows toggling of post match death animation.
-`bolt.profile.pingfactor`     | Access to change queue ping range.
-`bolt.profile.edit`           | Access to edit mode for building.
-`bolt.profile.admin`          | Access to admin features (/spawn for now).
-`bolt.profile.silent`         | Access to silent mode for spectating.
+## Cosmetic Permissions
 
-## Admin
+Cosmetic permissions are generated from the cosmetic enum name by removing underscores and lowercasing the result.
 
-Visit [Features/Admin](/Bolt/Features/Admin) for more information regarding profile permissions.
+### Kill Effects
 
-Permission                 | Description
--------------------------- | -----------
-`bolt.admin.reload`        | Access to reload Bolt.
-`bolt.admin.save`          | Access to save config files.
-`bolt.admin.leaderboard`   | Access to leaderboard admin commands.
-`bolt.admin.reset`         | Access to reset Bolt.
-`bolt.admin.setup`         | Access to Bolt setup commands.
-`bolt.admin.refill`        | Access to /bolt refill.
-`bolt.admin.forfeit`       | Access to terminate matches.
-`bolt.admin.debug`         | Access to Bolt debug commands.
-`bolt.admin.resetprofile"` | Access to reset a player's profile.
-`bolt.holo.admin`          | Access to manage holograms.
-`bolt.import.admin`        | Access to import from frost.
-`bolt.elo.admin`           | Access to ELO management commands.
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.killeffect.*` | All kill effects. |
+| `bolt.killeffect.lightning` | Lightning kill effect. |
+| `bolt.killeffect.blood` | Blood kill effect. |
+| `bolt.killeffect.crying` | Crying kill effect. |
+| `bolt.killeffect.laughing` | Laughing kill effect. |
+| `bolt.killeffect.dye` | Dye kill effect. |
+| `bolt.killeffect.explode` | Explosion kill effect. |
+| `bolt.killeffect.tnt` | TNT kill effect. |
+| `bolt.killeffect.love` | Love kill effect. |
+| `bolt.killeffect.raining` | Raining kill effect. |
+| `bolt.killeffect.shatter` | Shatter kill effect. |
+| `bolt.killeffect.squidlauncher` | Squid launcher kill effect. |
+| `bolt.killeffect.volcano` | Volcano kill effect. |
+| `bolt.killeffect.waterballoon` | Water balloon kill effect. |
+
+### Kill Messages
+
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.killmessages.*` | All kill messages. |
+| `bolt.killmessages.ancient` | Ancient kill messages. |
+| `bolt.killmessages.bbq` | BBQ kill messages. |
+| `bolt.killmessages.fire` | Fire kill messages. |
+| `bolt.killmessages.fruit` | Fruit kill messages. |
+| `bolt.killmessages.hacker` | Hacker kill messages. |
+| `bolt.killmessages.honourable` | Honourable kill messages. |
+| `bolt.killmessages.love` | Love kill messages. |
+| `bolt.killmessages.meme` | Meme kill messages. |
+| `bolt.killmessages.pokemon` | Pokemon kill messages. |
+| `bolt.killmessages.rickroll` | Rick Roll kill messages. |
+| `bolt.killmessages.sports` | Sports kill messages. |
+| `bolt.killmessages.toxic` | Toxic kill messages. |
+| `bolt.killmessages.western` | Western kill messages. |
+| `bolt.killmessages.medical` | Medical kill messages. |
+| `bolt.killmessages.twitter` | Twitter kill messages. |
+| `bolt.killmessages.youtuber` | YouTuber kill messages. |
+| `bolt.killmessages.beach` | Beach kill messages. |
+| `bolt.killmessages.bee` | Bee kill messages. |
+| `bolt.killmessages.summer` | Summer kill messages. |
+
+### Trails
+
+| Permission | Allows |
+| :--- | :--- |
+| `bolt.trails.*` | All projectile trails and cloaks. |
+| `bolt.trails.critical` | Critical trail. |
+| `bolt.trails.watersplash` | Water splash trail. |
+| `bolt.trails.angryvillager` | Angry villager trail. |
+| `bolt.trails.happyvillager` | Happy villager trail. |
+| `bolt.trails.ender` | Ender trail. |
+| `bolt.trails.driplava` | Drip lava trail. |
+| `bolt.trails.snowball` | Snowball trail. |
+| `bolt.trails.slime` | Slime trail. |
+| `bolt.trails.redstone` | Redstone trail. |
+| `bolt.trails.smoke` | Smoke trail. |
+| `bolt.trails.explosion` | Explosion trail. |
+| `bolt.trails.cloud` | Cloud trail. |
+| `bolt.trails.enchant` | Enchant trail. |
+| `bolt.trails.magic` | Magic trail. |
+| `bolt.trails.spark` | Spark trail. |
+| `bolt.trails.spell` | Spell trail. |
+| `bolt.trails.heart` | Heart trail. |
+| `bolt.trails.flame` | Flame trail. |
+| `bolt.trails.note` | Note trail. |
+| `bolt.trails.bloody` | Bloody cloak/trail. |
+| `bolt.trails.hot` | Hot cloak/trail. |
+| `bolt.trails.rainy` | Rainy cloak/trail. |
+| `bolt.trails.crystalcloak` | Crystal cloak. |
+| `bolt.trails.smokecloak` | Smoke cloak. |
+| `bolt.trails.waterlava` | Water/lava cloak. |
+| `bolt.trails.yinyang` | Yin Yang cloak. |
+| `bolt.trails.youtuber` | YouTuber trail. |
+| `bolt.trails.rainbow` | Rainbow trail. |
+
+## Tablist Rank Permissions
+
+These permissions are read from `tablist.yml` and control tablist rank sorting:
+
+| Permission |
+| :--- |
+| `bolt.tablist.owner` |
+| `bolt.tablist.manager` |
+| `bolt.tablist.developer` |
+| `bolt.tablist.moderator` |
+| `bolt.tablist.helper` |
+| `bolt.tablist.builder` |
+| `bolt.tablist.trial` |
+| `bolt.tablist.famous` |
+| `bolt.tablist.media` |
+| `bolt.tablist.donator` |

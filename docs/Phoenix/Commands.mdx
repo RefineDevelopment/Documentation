@@ -33,9 +33,30 @@ Commands used by staff to moderate the network.
 | `/history <player>` | `core.command.history` | View a player's moderation history. |
 | `/modmode` | `core.command.modmode` | Toggle staff mod-mode (Vanish, inventory tools, etc). |
 | `/vanish` | `core.command.vanish` | Toggle staff visibility. |
+| `/reports` | `core.command.reports` | Open the report queue. |
+| `/banwave release <wave>` | `core.command.banwave.release` | Send a staged wave of bans out at once. |
 
 :::tip Punishment Ladders
 You can automate punishment severity using ladders. See [Punishment Ladders](/Phoenix/Features/Punishments) for more.
+:::
+
+### Alt Detection Commands
+Finding and managing links between accounts.
+
+| Command | Permission | Description |
+| :--- | :--- | :--- |
+| `/alts <player>` | `core.command.alts` | Accounts linked to a player, grouped by confidence. |
+| `/alts menu <player>` | `core.command.alts.menu` | Browse a player's alts in a menu. |
+| `/alts debug <first> <second>` | `core.command.alts.debug` | Why two accounts scored as linked, signal by signal. |
+| `/alts trust <first> <second>` | `core.command.alts.trust` | Mark two accounts as known siblings, not alts. |
+| `/alts suppress <first> <second>` | `core.command.alts.suppress` | Hide a link from alt lists. |
+| `/alts suppressed <player>` | `core.command.alts.suppressed` | List the links hidden on an account. |
+| `/alts address <player>` | `core.command.alts.address` | Details on the address an account is using. |
+
+:::info Every subcommand is its own permission
+`/alts`, `/banwave`, `/reports` and `/customtagsadmin` gate each subcommand
+separately, so viewing and changing can go to different ranks. The full list is on
+the [Permissions page](/Phoenix/Permissions).
 :::
 
 ### Player & Utility Commands

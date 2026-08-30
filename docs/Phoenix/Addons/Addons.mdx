@@ -12,3 +12,10 @@ Some addons require a paid license to load, they can be purchased on the
 1. In your plugins folder, open Retention's `loader.yml`.
 2. For the addon you would like to load, set `ENABLED` to `true`.
 3. Reboot your server and the plugin will load.
+
+## Translations
+
+Addon translations go in **`plugins/Phoenix/locales/`**, not in the addon's own
+folder. Phoenix loads every overlay from that one directory regardless of which
+plugin registered the config, so a locale file left beside its addon is never
+read. See [Features/Locales](/Phoenix/Features/Locales).

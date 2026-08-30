@@ -1,0 +1,60 @@
+---
+sidebar_position: 5
+---
+
+# Ban waves
+
+A ban wave is a set of punishments staged over time and released together in one
+go. Because everyone is banned in the same moment, a cheater cannot work out
+which of their accounts was detected when, or which check caught them — which is
+the point of banning in waves rather than one at a time.
+
+Waves are staged with `/banwave add`, held until someone releases them, and can be
+scheduled to go out on their own.
+
+## Lifecycle
+
+1. **Create** a wave with a name.
+2. **Stage** accounts into it with `/banwave add`, which records the punishment
+   exactly as if you had issued it — reason, ladder, duration.
+3. **Review** what is queued with `/banwave view`.
+4. **Release** it, either manually with `/banwave release` or automatically at a
+   scheduled time.
+5. **Void** it afterwards if the wave turns out to have been wrong.
+
+A wave that has not gone out yet can be thrown away with `/banwave cancel`. Once
+released, `/banwave void` is the way back — it reverses the punishments the wave
+issued, with a reason.
+
+:::warning Releasing is not reversible on its own
+`/banwave release` punishes everyone staged in the wave across the network at
+once, and asks for confirmation first. Undoing it means `/banwave void`, which is
+a separate permission.
+:::
+
+## Permissions
+
+Every subcommand has its own node, so staging a wave and releasing one can be
+handed to different ranks. In the shipped preset, staging sits at SrMod and
+releasing at Admin.
+
+Command | Permission | Description
+------- | ---------- | -----------
+`/banwave create <name>` | `core.command.banwave.create` | Start a new wave.
+`/banwave add <player> ...` | `core.command.banwave.add` | Stage an account in a wave.
+`/banwave remove <wave> <player>` | `core.command.banwave.remove` | Take an account back out of a wave.
+`/banwave list` | `core.command.banwave.list` | The waves still waiting.
+`/banwave view <wave>` | `core.command.banwave.view` | What is staged in a wave.
+`/banwave schedule <wave> ...` | `core.command.banwave.schedule` | Set the day and time a wave goes out.
+`/banwave unschedule <wave>` | `core.command.banwave.unschedule` | Stop a wave going out on its own.
+`/banwave release <wave>` | `core.command.banwave.release` | Send a wave out now.
+`/banwave void <wave> <reason>` | `core.command.banwave.void` | Take back a wave that has already gone out.
+`/banwave cancel <wave>` | `core.command.banwave.cancel` | Throw a wave away without releasing it.
+
+`core.command.banwave` is required for all of them. Aliases: `/wave`,
+`/punishwave`.
+
+:::note Staging respects your own limits
+`/banwave add` runs the same checks as issuing the punishment directly — you
+cannot stage a punishment you would not be allowed to hand out yourself.
+:::

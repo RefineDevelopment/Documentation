@@ -1,0 +1,115 @@
+---
+sidebar_position: 18
+---
+
+# Locales
+
+Phoenix can speak more than one language at once. Each player reads messages and
+menus in their own, chosen from a settings menu or picked up automatically from
+their client, while the server keeps a single set of config files.
+
+Translations are **overlays**. You do not copy `messages.yml` and translate the
+whole thing — you write a file holding only the lines you actually translate, and
+everything you leave out falls back to the default config. A ten-line overlay is a
+perfectly valid translation.
+
+## Where they live
+
+Every overlay goes in one folder:
+
+```
+plugins/Phoenix/locales/
+```
+
+:::warning Addons use this folder too
+Addon translations live in `plugins/Phoenix/locales/` as well, **not** in the
+addon's own folder. Phoenix loads every overlay from this one directory, whichever
+plugin registered the config it belongs to. If you have put an addon's locale file
+next to the addon, move it here — it is not being read where it is.
+:::
+
+## Naming
+
+A file is picked up when it is named `<config>_<locale>.yml`:
+
+File | Translates
+---- | ----------
+`messages_de.yml` | `messages.yml` into German
+`menus_de.yml` | `menus.yml` into German
+`messages_pt_br.yml` | `messages.yml` into Brazilian Portuguese
+
+The locale code is whatever the client reports, lowercased, with dashes turned
+into underscores — so `pt-BR` becomes `pt_br`. Anything not matching a registered
+config name and ending in `.yml` is ignored.
+
+Keys are written exactly as they appear in the file being translated — a path in
+`menus.yml` is the same path in `menus_de.yml`, with no extra nesting. Proxies
+only have `messages`, since menus are a server-side concept.
+
+## Writing an overlay
+
+Copy only the keys you want to change, keeping the same path:
+
+```yaml
+# plugins/Phoenix/locales/messages_de.yml
+alts:
+  none: "<muted>Keine Alt-Accounts gefunden."
+  disabled: "<main>✗ <middle>Alts sind auf diesem Server deaktiviert."
+```
+
+Everything else in `messages.yml` keeps its configured value for German players.
+Placeholders like `<player>` and `<amount>` work exactly as they do in the default
+file, and so do colour codes.
+
+:::tip Start from the real file
+The safest way to write one is to open `messages.yml`, copy the handful of blocks
+you care about, and translate the values in place. Keys you mistype are silently
+ignored — the default is used instead — so a typo shows up as an untranslated
+message rather than an error.
+:::
+
+## Falling back
+
+Phoenix resolves a message in this order, stopping at the first hit:
+
+1. The exact locale — `pt_br`.
+2. The base language — `pt`.
+3. The value in the default config.
+
+So `messages_pt.yml` covers every Portuguese client on its own, and you only add
+`messages_pt_br.yml` for the lines where Brazilian Portuguese should differ.
+
+## How a player's language is chosen
+
+1. **Their choice**, if they picked one in the settings menu.
+2. **Their client's language**, announced when they join.
+3. **Their last session's language**, kept on the profile — this covers the login
+   window before the client has announced anything.
+
+The settings menu entry only appears once at least one overlay is installed, since
+there is nothing to choose between otherwise. `Automatic` is the default and means
+"follow my client".
+
+## Config sync
+
+Overlays are pushed with `messages.yml` and `menus.yml` by
+[config sync](/Phoenix/Features/ConfigSync). That has one consequence worth
+knowing:
+
+:::warning Add translations on the config master
+A translation added on any other server is replaced the next time the master
+pushes. Add overlays on the master, or make that server the master first.
+:::
+
+## Checking it worked
+
+`/phoenix setup` reports how many overlays loaded and which locales they cover,
+and warns when translations were added on a server that is not the config master.
+The console also logs the count on startup:
+
+```
+Loaded 4 locale overlay(s).
+```
+
+If that line is missing, no file in `plugins/Phoenix/locales/` matched the
+`<config>_<locale>.yml` pattern.

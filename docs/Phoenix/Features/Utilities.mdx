@@ -1,0 +1,116 @@
+---
+sidebar_position: 19
+---
+
+# Utility commands
+
+The everyday commands — the vanilla ones worth replacing, item and world tools,
+teleports, and the small player-facing extras like tips and a welcome message.
+All of them read their messages from `messages.yml`, so the wording is yours.
+
+## God mode
+
+`/god` cancels all damage dealt to the player. It survives relogging.
+
+## Build mode
+
+`/build` toggles whether a player may modify the world. `/build <player>` puts
+someone else into it and needs `core.command.build.others`.
+
+## Tips
+
+Tips are messages sent at a regular interval to players who have them enabled, on
+a rotation configured in `tips.yml`. Players turn them off for themselves with
+`/toggletips` (`core.settings.tips`).
+
+## Welcome message
+
+A configurable message shown when a player joins, toggled by `WELCOME_MESSAGE` in
+the settings config.
+
+## Item and inventory
+
+Command | Permission | Description
+------- | ---------- | -----------
+`/item <material> [player] <amount>` | `core.command.item` | Equivalent to `/give`.
+`/more` | `core.command.more` | Fill the held stack.
+`/enchant <enchantment> <level>` | `core.command.enchant` | Enchant the held item.
+`/rename <name>` | `core.command.rename` | Rename the held item.
+`/addlore <lore>` | `core.command.addlore` | Add a lore line to the held item.
+`/removelore <number>` | `core.command.removelore` | Remove a lore line.
+`/repair <hand\|all\|armor>` | `core.command.repair` | Repair to full durability. Each mode has its own node: `core.command.repair.hand`, `.armor`, `.all`.
+`/skull <player>` | `core.command.skull` | Give yourself a player's head.
+`/craft` | `core.command.craft` | Open a crafting table.
+`/enderchest [player]` | `core.command.enderchest` | Open an ender chest. Another player's needs `core.command.enderchest.other`.
+`/clear [player]` | `core.command.clear` | Clear an inventory. Another player's needs `core.command.clear.others`.
+
+## Player state
+
+Command | Permission | Description
+------- | ---------- | -----------
+`/heal [player]` | `core.command.heal` | Heal to full. Others need `core.command.heal.others`.
+`/feed [player]` | `core.command.feed` | Fill the hunger bar. Others need `core.command.feed.others`.
+`/fly [player]` | `core.command.fly` | Toggle flight. Others need `core.command.fly.others`.
+`/god` | `core.command.god` | Toggle god mode.
+`/build [player]` | `core.command.build` | Toggle build mode. Others need `core.command.build.others`.
+`/speed <fly\|walk> <amount>` | `core.command.speed` | Change fly or walk speed.
+`/kill <player>` | `core.command.kill` | Kill a player.
+
+## Game mode
+
+`/gamemode <mode> [player]` needs `core.command.gamemode`, and changing someone
+else's needs `core.command.gamemode.others`. Each mode is also gated on its own,
+so you can hand out creative without spectator:
+
+Shortcut | Mode | Permission
+-------- | ---- | ----------
+`/gms` | Survival | `core.command.gamemode.survival`
+`/gmc` | Creative | `core.command.gamemode.creative`
+`/gma` | Adventure | `core.command.gamemode.adventure`
+`/gmsp` | Spectator | `core.command.gamemode.spectator`
+
+## Teleporting
+
+Command | Permission | Description
+------- | ---------- | -----------
+`/teleport <player>` | `core.command.teleport` | Teleport to a player.
+`/teleporthere <player>` | `core.command.teleporthere` | Teleport a player to you.
+`/teleportall` | `core.command.teleportall` | Teleport everyone to you.
+`/teleportposition <x> <y> <z>` | `core.command.teleportposition` | Teleport to coordinates.
+`/teleportworld <world>` | `core.command.teleportworld` | Teleport to a world.
+`/top` | `core.command.top` | Teleport to the highest block above you.
+`/spawn [player]` | `core.command.spawn` | Go to spawn. Sending someone else needs `core.command.spawn.others`.
+`/setspawn` | `core.command.setspawn` | Set the spawn point.
+
+## Announcements
+
+Command | Permission | Description
+------- | ---------- | -----------
+`/broadcast <message>` | `core.command.broadcast` | Message everyone on the current server.
+`/alert <message>` | `core.command.alert` | Network-wide alert.
+`/rawalert <message>` | `core.command.rawalert` | Network-wide alert with no formatting applied.
+`/staffalert <message>` | `core.command.staffalert` | Cross-server alert to all staff.
+`/staffbroadcast <message>` | `core.command.staffbroadcast` | Message staff on the current server.
+`/masssay <chat\|command>` | `core.command.masssay` | Make everyone say something or run a command.
+`/sudo <player> <chat\|command>` | `core.command.sudo` | Talk or run a command as another player.
+
+:::warning /sudo and /masssay run commands as other players
+Both execute with the target's permissions, not yours. `/masssay` does it to
+everyone online at once.
+:::
+
+## Information and links
+
+These need no permission. The text each one sends is set in `messages.yml` under
+`basic.social`, so point them wherever you like.
+
+Command | Aliases | Description
+------- | ------- | -----------
+`/ping [player]` | | Show latency.
+`/help` | `/helpme` | The server's help message.
+`/shrug` | | Sends `¯\_(ツ)_/¯` in chat.
+`/store` | | Link to the store.
+`/website` | `/site` | Link to the website.
+`/discord` | `/dc` | Link to the Discord.
+`/teamspeak` | `/ts` | Link to the TeamSpeak.
+`/twitter` | | Link to the Twitter.

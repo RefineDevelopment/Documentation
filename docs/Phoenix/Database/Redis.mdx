@@ -1,12 +1,16 @@
 ---
 sidebar_position: 2
-title: Redis (Required)
+title: Redis (Required for networks)
 description: High-performance Redis configuration for live network synchronization.
 ---
 
 # Redis Synchronization Engine
 
 Redis is the high-speed **messaging backbone** of your network. It facilitates instant cross-server communication, global chat broadcasts, and real-time synchronization of punishments and global staff messages.
+
+:::tip Running a single server?
+You don't need Redis if Phoenix runs on one Spigot/Paper server with no proxy. See [Running without Redis](#6-running-without-redis-single-server).
+:::
 
 ---
 
@@ -76,10 +80,11 @@ requirepass Your_Complex_Redis_Password_Here
 
 ## 4. Phoenix Integration
 
-Apply these settings in your `globa.yml`.
+Apply these settings in your `global.yml`.
 
 ```yaml
 redis:
+  enabled: true         # false runs a single server without Redis
   address: "172.18.0.1" # Internal gateway
   port: 6379
   username: "default"   # Default user for Redis 6.0+
@@ -100,3 +105,42 @@ redis:
 :::danger Warning
 Never expose Redis to the public internet (port 6379) without a strong password and firewall rules. Redis is designed for performance, not security, and can be easily exploited if left open.
 :::
+
+---
+
+## 6. Running without Redis (single server)
+
+If Phoenix runs on **one Spigot/Paper server with no proxy**, you can skip installing Redis. Phoenix then keeps the state it would normally share through Redis on that server instead.
+
+```yaml
+redis:
+  enabled: false
+```
+
+On startup the console confirms it with:
+
+```
+Redis is off in global.yml, so shared state stays on this server. This only works for a single server.
+```
+
+You still need MongoDB or MySQL. Only Redis becomes optional.
+
+### What is kept, and where
+
+Phoenix saves this state to `plugins/Phoenix/local-store.json` every 5 minutes and when the server stops, and loads it again on startup. Vanish, freeze and panic state, the Anti-VPN whitelist, the report watchlist, report rewards and notification read marks all survive a restart, just as they would with Redis.
+
+A few things are rebuilt on every start and are never saved: the profile cache, the server list, setup locks and ban-wave claims.
+
+:::info If the file is damaged
+If `local-store.json` can't be parsed, Phoenix moves it aside as `local-store.json.broken-<timestamp>` and starts with an empty store. It never deletes it. If the file exists but can't be read at all (for example, another program has it locked), Phoenix refuses to start rather than overwrite it.
+:::
+
+### Limits
+
+- **Spigot/Paper only.** Velocity, BungeeCord and the REST API always need Redis. They refuse to start with `redis.enabled: false` and say so in the console.
+- **One server.** Nothing crosses to another server in this mode. Before you add a second server or a proxy, install Redis and set `enabled: true` on every server.
+- **No migration.** The contents of `local-store.json` are not copied into Redis when you switch it back on.
+
+### Checking it
+
+`/phoenix setup` and `/phoenix doctor` list Redis under **Storage** as off, and `/phoenix setup` reminds you to turn it on before adding a server. `/phoenix setup database` tests your MongoDB or MySQL connection and marks Redis as skipped.

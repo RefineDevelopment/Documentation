@@ -34,7 +34,7 @@ Phoenix is designed to work across your entire network. Follow the steps below b
 
 ## Database Configuration
 
-Phoenix requires a database to synchronize data across your network. We support MongoDB, MariaDB/MySQL, and Redis.
+Phoenix requires a database to synchronize data across your network. We support MongoDB, MariaDB/MySQL, and Redis. A single Spigot/Paper server with no proxy can run without Redis; see [Running without Redis](/Phoenix/Database/Redis#6-running-without-redis-single-server).
 
 :::important Setup Required
 You must configure your database details in `global.yml` before Phoenix can start successfully.
@@ -51,7 +51,7 @@ You must configure your database details in `global.yml` before Phoenix can star
   </a>
   <a href="/Phoenix/Database/Redis" className="bg-card/40 border border-white/10 p-4 rounded-xl no-underline text-white hover:border-primary/50 transition-colors">
     <h4 className="mt-0 text-primary text-sm">⚡ Redis</h4>
-    <p className="text-xs mb-0 text-muted-foreground">Required for cross-server synchronization.</p>
+    <p className="text-xs mb-0 text-muted-foreground">Required for networks; optional on a single server.</p>
   </a>
 </div>
 

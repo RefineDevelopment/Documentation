@@ -1,0 +1,42 @@
+---
+title: "Permissions"
+slug: /Prism/Permissions
+description: "Permission nodes and defaults for Prism administrators and bot moderators."
+---
+
+# Permissions
+
+Prism uses two permission nodes. Players don't need any permission to spawn and control
+their own bots.
+
+## Nodes
+
+### `prism.admin`
+
+- **Default:** operators (Bukkit's default for undeclared nodes)
+- **Grants:** `/prism`, `/prism version`, `/prism reload`, `/prism debug` and `/prism mlexport`.
+
+### `prism.bot.admin`
+
+- **Default:** `false`. Operators **don't** get it automatically.
+- **Grants:** opening and editing the management, profile, equipment and inventory menus of
+  bots owned by other players.
+
+Without this node, Shift + Right-Click on someone else's bot does nothing, and
+`MenuAPI.openManagement` and `MenuAPI.openProfile` return `INVALID_PLAYER_STATE`.
+
+## What needs no permission
+
+| Action | Who can do it |
+| --- | --- |
+| `/spawnbot` and all its subcommands | Any player |
+| Controlling a bot you spawned | The bot's owner |
+| Saving your own bot profile | Any player (when [profile storage](database.mdx) is enabled) |
+
+To restrict bot spawning, block `/spawnbot` with your permissions or command-blocking plugin,
+or cancel `BotSpawnEvent` through the [API](api.mdx#events).
+
+:::info Staff bot controls
+`prism.bot.admin` defaults to false. Give it to operators explicitly if they should manage other players' bots.
+:::
+

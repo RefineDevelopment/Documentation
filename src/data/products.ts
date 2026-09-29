@@ -1,5 +1,5 @@
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faShield, faBolt, faMicrochip, faWind } from '@fortawesome/free-solid-svg-icons';
+import { faShield, faBolt, faMicrochip, faWind, faCrosshairs } from '@fortawesome/free-solid-svg-icons';
 
 export interface ProductLink {
     label: string;
@@ -70,6 +70,20 @@ export const products: Product[] = [
             { label: "Kits", href: "/Zephyr/Setup/Kits" },
             { label: "Leaderboards", href: "/Zephyr/Features/Leaderboards" },
             { label: "Permissions", href: "/Zephyr/Permissions" },
+        ],
+    },
+    {
+        title: "Prism",
+        description: "Combat practice bots with eight PvP styles, saved profiles, and a public API.",
+        href: "/Prism/Introduction",
+        colorClass: "bg-primary",
+        icon: faCrosshairs,
+        links: [
+            { label: "Installation", href: "/Prism/Installation" },
+            { label: "Bot styles", href: "/Prism/Features" },
+            { label: "Configuration", href: "/Prism/Configuration" },
+            { label: "Commands", href: "/Prism/CommandsAndPermissions" },
+            { label: "API", href: "/Prism/API" },
         ],
     },
 ];

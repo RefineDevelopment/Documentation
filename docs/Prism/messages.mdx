@@ -1,0 +1,36 @@
+---
+title: "Messages and dialogs"
+slug: /Prism/Messages
+description: "Edit chat, menu, and dialog text with supported formatting and placeholders."
+---
+
+# Messages and dialogs
+
+Prism creates `messages.yml` and `dialogs.yml` under `plugins/Prism/`. Edit the YAML, run `/prism reload`, and reopen menus or dialogs to see the new text.
+
+| File | Controls |
+| --- | --- |
+| `messages.yml` | Chat responses, countdown text, bot nameplates, and inventory-menu text |
+| `dialogs.yml` | Native dialog titles, descriptions, labels, tooltips, and bot profile/editor text |
+
+Success messages, informational text, and menu labels are configurable. Built-in errors such as permission denials, spawn failures, invalid dialog input, and configuration validation are not configurable. Retired error entries may remain in older files but are ignored.
+
+## Formatting
+
+Entries marked **MiniMessage** accept tags such as `<green>`, `<bold>`, and `<gradient:#c084fc:#9333ea>`. Entries marked **Plain text** display formatting tags literally. Write normal sentence case; Prism's text rendering applies its small-caps style where appropriate.
+
+The chat prefix is supplied by `MessageService` and renders Prism in a purple gradient followed by `»`. It is not a `branding.prefix` setting in the current bot plugin. Messages sent with a prefix receive it automatically unless their template already contains `<prefix>`.
+
+## Placeholders
+
+Use only the placeholders listed for the entry being edited. Numbered placeholders such as `{0}` and `{1}` are positional values local to that template. Named placeholders such as `<bot>` identify named values supplied by the caller. They are not interchangeable.
+
+For example, `text.bot-service.spawned-a` uses `{0}` for the profile/difficulty label and `{1}` for the bot style. A literal name passed through a protected placeholder cannot inject MiniMessage formatting. Unknown numbered placeholders remain visible.
+
+See [Placeholders](placeholders.mdx) for the complete current reference.
+
+## Translation and blank values
+
+Set an entry to `""` to make its text blank. A blank value does not remove a control, and a chat call that adds the prefix may still display the prefix. Text changes do not rename commands, permissions, bot types, stored identifiers, or validation rules. Vanilla item names and text supplied by other plugins are managed by those systems.
+
+Keep YAML indentation intact and quote values containing special YAML characters. Reopen controls after reloading because open dialogs keep the text with which they were created.

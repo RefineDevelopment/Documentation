@@ -1,0 +1,116 @@
+---
+title: "Mace bot"
+slug: /Prism/Bots/Mace
+description: "Wind-charge launches and mace smashes: spawning, controls, configuration, and combat mechanics."
+---
+
+# Mace bot
+
+Mace practices aerial approaches, pearl catches, elytra movement, and timed smash attacks.
+
+| | |
+| :--- | :--- |
+| Spawn | `/spawnbot mace medium` |
+| Configuration | `plugins/Prism/bots/mace.yml` |
+| Practice focus | Wind-charge launches and mace smashes |
+| Controls | Shift + right-click the bot |
+
+:::info Configuration paths
+Current generated files group numeric launch/smash/chain controls and humanization under `ADVANCED.MACE`. Technique toggles remain under `BEHAVIOR.MACE`. See [Configuration](bot-configuration.mdx#advanced-settings).
+:::
+
+The mace brain uses `MaceMovementController` for timed movement and projectile
+sequences. It coordinates movement and pearl decisions with native combat execution. Attack damage, shield disabling, fall distance, and item cooldowns
+remain subject to the server's normal combat handling.
+
+New bots use Normal difficulty, with elytra takeoffs and offensive pearl catches
+enabled. The kit includes an elytra and wind charges. Elytra approaches start
+at 8–24 blocks; wind launches handle closer approaches. During takeoff setup,
+the bot stops advancing once it is within launch range and looks at the target's
+eye height. Airborne movement steers and brakes over the target.
+
+To enable both techniques in a customized `bots/mace.yml`, set
+`BEHAVIOR.MACE.PEARLS.OFFENSIVE` and `BEHAVIOR.MACE.ELYTRA.ENABLED` to `true`.
+
+## Movement and pearl decisions
+
+- **Jump launches:** the bot jumps first and only fires the downward launch
+  charge after it is airborne and moving upward.
+- **Alien charges:** an elytra launch fires straight down, flicks upward to
+  45 degrees, and holds that climb direction for four ticks. A gliding bot
+  descending near solid ground can also attempt this boost when its opponent
+  is still more than four blocks away horizontally.
+- **Dive commits:** the bot leads the opponent's movement and considers its
+  own forward motion before ending its glide over the target. It restores the
+  chestplate it swapped out before returning to falling melee combat, including
+  the existing axe-to-mace stun slam.
+- **Pearl catches:** nearby targets favor a straight upward pearl; targets at
+  least six blocks away horizontally favor an upward/forward pearl. The wind
+  charge follows on the next tick and is placed across the pearl's predicted
+  movement segment. Both launches account for the shooter's inherited motion
+  using the server's relative-projectile-velocity setting. Prediction applies
+  pearl gravity and drag before movement, matching Paper's tick order. If the
+  alignment or item use fails, the bot can retry for up to four ticks after
+  throwing the pearl. Elytra catches keep the glide active.
+- **Wind-charge elytra launches:** the gliding bot stages a charge, waits for
+  the native deflection window, and punches it downward. The combat planner
+  advances only after confirmed explosion knockback. Pearl catches use their
+  own projectile intercept sequence and do not wait for a ground teleport.
+- **Apex extensions:** an ordinary wind launch can transition into a glide near
+  its apex when more horizontal distance remains. The movement controller ends
+  the glide over the target before the combat planner resumes the smash.
+- **Offensive grapples:** the bot can pearl toward a rising or gliding opponent
+  above it, leading their motion and aiming within the lower part of their
+  current bounding box. This also gives it a follow-up opportunity if its
+  wind-charge counter launches an opponent. Flight time is recalculated with
+  pearl drag and gravity; unreachable throws and trajectories crossing blocks,
+  unloaded chunks, or the world border are rejected.
+- **Pearl dodges:** an incoming mace dive can trigger a pearl away or sideways.
+  The bot checks for a nearby solid surface, standing clearance, the world
+  border, separation, and hazardous floor materials before attempting the
+  throw. A wind-charge counter remains available when no pearl dodge is found.
+
+Consumables must exist in the bot's inventory and be off cooldown. Pending
+pearl catches and grapples prevent overlapping sequences. Pause, shutdown,
+target changes, and ground-pressure controls cancel pending movement inputs.
+
+## Verification
+
+Run the existing suite and compile with:
+
+```powershell
+.\gradlew.bat test :plugin:compileJava --console=plain
+```
+
+The existing suite does not simulate these projectile and elytra interactions.
+Check the following on a Paper development server before tuning the timings:
+
+1. At medium range, confirm jump, downward charge, and upward elytra flick occur
+   in order. Repeat with no elytra or with wind charges on cooldown.
+2. Descend near ground while the target is out of melee range; confirm the boost
+   spends one charge and does not immediately repeat.
+3. Glide toward moving targets; confirm glide cancellation and chestplate
+   restoration occur before a smash or stun slam.
+4. Compare close upward catches with distant horizontal catches. Confirm one
+   pearl and one charge are consumed, and flight continues during elytra catches.
+   Repeat while ascending, gliding forward, and moving sideways; also check with
+   Paper's relative projectile velocity disabled.
+5. Launch upward and glide as the opponent; check grapple aim against both
+   standing and gliding hitboxes, including intervening walls.
+6. Dive toward the bot on open ground and near obstacles; check dodge direction,
+   landing, and fallback counters. Pearl flight uses a ballistic trajectory, so
+   terrain screening does not guarantee the eventual landing point.
+7. Pause, retarget, or despawn during each sequence; confirm no delayed movement
+   input fires afterward and swapped chest equipment is restored.
+
+Other ideas in the summary, such as airborne healing, deliberate heal baiting,
+enemy-pearl tracking, backstab routes, and double-breach scheduling, are outside
+this movement-focused pass.
+
+## Related guides
+
+<DocCards>
+  <DocCard title="Configuration" href="/Prism/Configuration">Apply style defaults and inherited profile values.</DocCard>
+  <DocCard title="Saved profiles" href="/Prism/Database">Keep a player’s settings for later fights.</DocCard>
+  <DocCard title="All combat styles" href="/Prism/Features">Compare this opponent with the other styles.</DocCard>
+</DocCards>

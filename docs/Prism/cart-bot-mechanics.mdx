@@ -1,0 +1,131 @@
+---
+title: "Cart bot"
+slug: /Prism/Bots/Cart
+description: "TNT minecart placement and burst damage: spawning, controls, configuration, and combat mechanics."
+---
+
+# Cart bot
+
+Cart practices bow-driven minecart sequences, cart spacing, and recovery between burst attacks.
+
+| | |
+| :--- | :--- |
+| Spawn | `/spawnbot cart medium` |
+| Configuration | `plugins/Prism/bots/cart.yml` |
+| Practice focus | TNT minecart placement and burst damage |
+| Controls | Shift + right-click the bot |
+
+:::info Configuration paths
+Use `bots/cart.yml` for Cart settings. Technique/ruleset controls remain under `CART-BOT`; reaction, prediction, healing, mending, and cooldown tuning is grouped under `ADVANCED.CART`. See [Configuration](bot-configuration.mdx#advanced-settings).
+:::
+
+The Cart bot is a Cart PvPer first. Cart Bait, Instacart and Chain Cart are its
+offence; the sword is a short utility bridge that creates the next Cart window.
+Sustained sword play only happens when Carting is actually impossible.
+
+## Cart sequences
+
+| Technique | Execution |
+| --- | --- |
+| Pre-cart | Rail, cart, draw Flame bow, fire at the cart |
+| Pre-rail | Rail, draw and fire Flame bow, place cart into the arrow path |
+| Instacart | Draw and fire Flame bow, rail, cart |
+| Pearl cart | Throw pearl, draw bow during travel, wait for landing, solve a reachable placement, instacart |
+| Block cart | Place cover, jump, draw and fire, rail, cart |
+| Parry cart | Use an observed upward knockback window for an instacart; requires Expert difficulty and sufficient health |
+| Chain cart | Follow observed damage with another bow-driven instacart |
+| Expo | Load an arrow crossbow if necessary, rail, cart, adjacent fire, shoot through fire toward the cart's lower half |
+
+Arrow-first techniques issue the rail/cart placement inputs immediately after
+releasing the arrow within the same server tick. Each placement still uses the
+normal server interaction path and rechecks reach, line of sight, and inventory.
+Bow charge, Flame, projectile speed, ammunition consumption, and explosion
+behavior come from the server. Plain bows and flint alone do not qualify as a
+bow-cart setup. Expo requires a fire source and an arrow-loaded crossbow or loose
+arrows to load one. The existing eight-block Expo spacing requirement is checked
+throughout execution.
+
+## Cart identity
+
+- Every melee selection carries a reason: `ANTI_RUSH`, `CREATE_SPACING`,
+  `BAIT_CHASE`, `CART_COOLDOWN_BRIDGE`, `EMERGENCY`, `FINISH_WINDOW`,
+  `NO_VALID_CART` or `MELEE_MODE`. A proposed swing with no reason is replaced by
+  the best open Cart line, a Cart Bait, or Cart spacing.
+- Tactical reasons (anti-rush, spacing, bait chase, cooldown bridge) share a
+  budget of two server-confirmed hits, or three swings that never connected.
+  After that the bot re-plans toward Cart. The budget resets when a Cart action
+  starts, when a decision is made at Cart spacing, when a true emergency ends,
+  after a heal, and after 40 ticks of failed spacing against a glued opponent.
+- Emergencies (high threat, a fresh pop, being comboed or boxed in) keep full
+  melee rights. So do missing Cart resources, three in-reach decisions with no
+  legal rail cell, carts that cannot reach the hotbar, and Melee Pressure mode.
+- Outside sword reach, melee is never a chase while Cart intent is active. The
+  bot instead creates Cart geometry: `CREATE_CART_DISTANCE` (step back to about
+  4.5 blocks), `BAIT_TARGET_FORWARD` (walk back to about 6.5 blocks while a
+  chaser closes), `CREATE_RAIL_ANGLE` (approach to about 4.2 blocks with wider
+  strafing), or `CREATE_DETONATION_LOS`. Backing off never sprints, and every
+  intent settles at a Cart distance, so spacing cannot turn into running.
+- A Cart Bait held against a chaser stays drawn for up to one extra second.
+  Once a rail cell is in reach, it becomes a real Instacart that keeps its bow
+  charge. If the opponent is already in sword reach, the bait is dropped.
+- A completed cart holds spacing for six ticks through the detonation, then
+  re-plans. Missed, rejected or aborted techniques re-plan immediately, or when
+  the short cart cooldown clears.
+- A feinted Cart Bait is not repeated within two seconds. The fallback is
+  another Cart line or Cart spacing, not a sword phase.
+
+## Combat and recovery
+
+- Melee remains available between tactical decisions under the Cart identity rules above.
+- A safe healing window at or below the configured preferred health takes
+  priority over an ordinary cart attempt. The default is 14 health, or seven
+  hearts. A clear melee finish can still take priority.
+- A low-health bot does not pearl-chase merely because the opponent popped.
+- After escaping to a safe healing window, a recent totem pop no longer triggers
+  another backward pearl instead of healing.
+- Knockback alone does not discard an active cart sequence. The next interaction
+  still rechecks reach, geometry, and health; totem pops still interrupt it.
+- Food and potion timing stays with the existing recovery controllers.
+- Safe inventory windows refill up to two empty cart hotbar slots from carried
+  reserves. Existing items are preserved.
+- Completing a placement sequence does not invent an opponent-damage event.
+  Follow-up opportunities depend on observed combat events.
+
+## Verification
+
+Run `.\gradlew.bat build --console=plain` for compilation, the JUnit suite, and
+plugin packaging.
+
+:::warning Diagnostics are not recommended
+Enabling console diagnostics spams your console with logs for every bot movement and technique. Leave diagnostics disabled during normal use.
+:::
+
+Keep `CART-BOT.DEBUG: false`. When enabled, it logs `[CART-IDENTITY]` (per decision),
+`[CART-CONTINUATION]` (first decision after a Cart action ends, misses, or a
+heal completes) and `[CART-MELEE-BUDGET]` (every utility swing). The always-on
+`[CART-DIAGNOSTIC]` heartbeat also reports `cartIntent` and `meleeReason`.
+
+Live Paper verification is still needed for projectile collision and combat feel:
+
+1. Use a kit with a sword, Flame bow, arrows, rails, and two carts but no flint.
+   Confirm melee pressure and bow-driven cart explosions.
+2. Remove Flame or ammunition. Confirm the bot keeps fighting with its sword.
+3. Chase and retreat to exercise cart openings; damage the bot to verify healing
+   and escape choices.
+4. Exercise pearl carting across open terrain and a blocked landing. Confirm no
+   placement occurs before teleporting or outside reach.
+5. Equip a loaded crossbow and fire source. Confirm Expo fires through actual
+   fire, respects spacing, and consumes the carried projectile.
+
+Placement damage values remain tactical estimates; the server determines actual
+damage and whether an arrow hits. This update does not implement every player
+technique in the reference guide, such as stacked-cart bursts, wall-pearl aiming,
+or a complete shulker regear routine.
+
+## Related guides
+
+<DocCards>
+  <DocCard title="Configuration" href="/Prism/Configuration">Apply style defaults and inherited profile values.</DocCard>
+  <DocCard title="Saved profiles" href="/Prism/Database">Keep a player’s settings for later fights.</DocCard>
+  <DocCard title="All combat styles" href="/Prism/Features">Compare this opponent with the other styles.</DocCard>
+</DocCards>

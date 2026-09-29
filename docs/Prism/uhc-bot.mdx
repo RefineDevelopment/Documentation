@@ -1,0 +1,138 @@
+---
+title: "UHC bot"
+slug: /Prism/Bots/UHC
+description: "Melee, utility sequences, and safe healing: spawning, controls, configuration, and combat mechanics."
+---
+
+# UHC bot
+
+UHC combines sword and axe exchanges with webs, buckets, ranged pressure, and healing.
+
+| | |
+| :--- | :--- |
+| Spawn | `/spawnbot uhc medium` |
+| Configuration | `plugins/Prism/bots/uhc.yml` |
+| Practice focus | Melee, utility sequences, and safe healing |
+| Controls | Shift + right-click the bot |
+
+:::info Configuration paths
+The YAML below names internal engine paths. Generated files move healing, secondary timing, and selected utility limits to `ADVANCED.UHC`; technique toggles remain in `uhc-bot`. See [Configuration](bot-configuration.mdx#advanced-settings) before editing.
+:::
+
+Spawn with `/spawnbot uhc medium` (Easy, Medium, Hard or Expert), or choose **UHC** in `/spawnbot`. Shift-right-click the bot to change its difficulty, crits, shield defense, axe disables and sprint resets. UHC has a golden apple icon and a separate profile from DiamondSMP.
+
+The default loadout uses diamond armor: Protection III helmet and boots, Protection II chestplate and leggings. Weapons include a Sharpness III diamond sword, an Efficiency III diamond axe, a Power I bow, and a Piercing I crossbow. Supplies include eight golden apples, two Golden Heads, 32 webs, water and lava buckets, arrows, oak planks, a diamond pickaxe, and an offhand shield. Items are finite; the bot can recover reachable sources during safe windows. Use the live inventory view to inspect the current equipment.
+
+## Combat
+
+The major states are PREPARE, APPROACH, BAIT, ENGAGE, PRESSURE, SECONDARY_SETUP, DISENGAGE, HEAL, RELOAD, REENGAGE and DEFENSIVE_RECOVERY. Encounters end only after sustained separation; target changes and pauses cancel owned actions and reset fight observations.
+
+The bot prepares a crossbow, optionally pregaps, approaches with spacing, and varies entry baits. It attempts an axe opening against committed movement, switches back to sword, and reacts to shields. Offensive decisions compare immediate damage, utility setup value, follow-up range, remaining supplies and risk. A confirmed shield break can lead into web or lava pressure; a low-health finishing hit takes priority over a speculative trap. Repeated utility choices lose value, while failures and scarce resources tighten the placement threshold.
+
+Utility follows bounded sequences: retreat/S-web, axe-disable/web, crit/web, lava/web, lava/block, box/head-web, lava/water-pickup/web, and water-escape/re-lava/re-web. Medium and above can collect a reachable, visible water source. Hard and Expert add head webs and re-lava responses. A foot trap that survives pickup is extended at the head or kept for damage pressure, rather than receiving another impossible foot placement.
+
+Fresh setups use the configured 3.2–4.2-block window and account for closing speed during hotbar swaps. Confirmed web traps permit a closer follow-up. Short waits hold position; placement backsteps respond to pursuit. Every phase has a timeout and survival can interrupt any sequence. Status includes the active utility phase. New source detection samples visible terrain every two ticks, treats existing water as a baseline, and excludes the bot's defensive source. Rear-water habits use the combat axis, so turning around does not hide the pattern.
+
+Solid blocks close lateral/escape routes without overlapping either player or blocking the bot's attack corridor. Head traps require an observed three-sided box and a legal head placement. Lava drain targets the actual source cell using a native bucket interaction and requires that source to disappear. Re-lava leads observed movement, including movement caused by water flow. Native reach, line-of-sight, border, placement and protection rules still apply.
+
+Successful placements and drains share the encounter budget; rejected interactions and unavailable positions are throttled without spending it. A lava/web placement is credited as a trap only after observing the target affected; block construction and source removal are recorded as completed utility interactions. Multiple pending outcomes are tracked separately. Failure penalties expire after four seconds without another failure. Emergency water keeps its separate budget.
+
+Grounded approaches, shield use and eating also offer basic web/lava opportunities. A selected placement owns the hotbar until its short swap finishes or a survival threat interrupts it. Prediction falls back to the opponent's current cell if the predicted position cannot be reached. After extinguishing itself, the bot checks its own water for recovery after four ticks and briefly stops to collect it before resuming movement; it still refuses pickup under immediate melee pressure.
+
+Bow and crossbow pressure considers opponent health, health disadvantage, retreat habits and endgame risk. The bot leads visible horizontal movement and compensates its aim for projectile drop at its actual draw strength. Bow draws use 10, 14 or 20 ticks according to the available opening. If the opponent rushes, a draw of at least ten ticks can release a partial shot before disengagement; shields, hazards and lost visibility cancel it. Low health with no usable healing supplies does not force permanent retreat.
+
+The danger range extends legal melee reach by observed approach speed and airborne movement. Low health, webs and fire preempt attacks and item use. Recovery seeks knockback before water and creates distance before eating. Full escapes turn and sprint; baits retain opponent-facing backsteps. Movement samples alternate paths around walls, the world border, drops and hazards, including movement requested by the shared sword controller. Item-use safety is rechecked against its remaining duration, so an approaching opponent can interrupt healing or reloading. Completed item use waits for a fresh observation before starting another action.
+
+Navigation requests a normal jump for a reachable one-block step with headroom. It keeps its direction during the ascent, then resumes terrain checks as soon as it clears the step or lands. Higher obstacles require a detour. A short detour commitment reduces left/right oscillation, and a single final movement guard prevents item use, melee and navigation from issuing competing movement corrections.
+
+Difficulty controls reaction delays (2–7 server ticks), hotkey delay, prediction confidence, aim variation, mistakes, utility budgets and learning rate. Easy, Medium, Hard and Expert use learning rates of 0.05, 0.15, 0.35 and 0.60 per event or movement window. Aggression and retreats are sampled over one-second windows, so a single sustained action is not counted as twenty separate examples. Hacker maps to Expert timing for UHC. Predictions use visible movement and fight-local observations, without inspecting opponent inventory or forcing shield cooldowns.
+
+## Configuration
+
+Prism creates `plugins/Prism/bots/uhc.yml` through its existing per-type configuration system. Existing `COMBAT` overrides and `BEHAVIOR.FEATURES` flags apply alongside the `uhc-bot` section. Reload configuration and spawn a new bot to apply file changes.
+
+```yaml
+uhc-bot:
+  pregap-enabled: false
+  adaptation-enabled: true
+  healing:
+    avoid-gap-above: 18.0
+    disengage-below: 10.0
+    emergency-gap-below: 7.0
+  secondaries:
+    enabled: true
+    minimum-interval-ms: 550
+    max-per-encounter: 6
+    lava:
+      enabled: true
+    web:
+      enabled: true
+    water:
+      enabled: true
+  melee:
+    opening-axe: true
+    shield-disable: true
+    crit-chain: true
+  ranged:
+    crossbow: true
+    bow: true
+  advanced:
+    stun-web: true
+    lava-web-followup: true
+    water-dunk: true
+    head-web: true
+    water-drain: true
+    lava-pickup: true
+    gap-bait-enabled: false
+  utility:
+    minimum-range: 3.2
+    maximum-range: 4.2
+    web-reserve: 2
+    conserve-webs-below: 4
+    lava-reserve: 1
+    reaction-min-ms: 100
+    reaction-max-ms: 200
+    bucket-response-min-ms: 100
+    bucket-response-max-ms: 250
+    sequence-timeout-ms: 2000
+    block-traps: true
+    water-deny: true
+    re-lava: true
+    lava-crits: true
+```
+
+Health values use points (two per heart), with emergency ≤ disengage ≤ avoid threshold. Milliseconds round up to ticks and therefore follow server TPS. Easy/Medium/Hard/Expert allow at most 2/3/5/7 placements per encounter, further limited by `max-per-encounter`. The configured minimum interval applies between fresh setups; confirmed follow-ups use the shorter difficulty reaction delay plus hotbar timing. Existing configured values are preserved: raise an old `max-per-encounter: 3` to allow longer chains.
+
+Reserves protect fresh setups. Confirmed chains and healing S-webs may use reserved webs; confirmed re-lava can use reserved lava. Below the conservation threshold, lava/block pressure takes priority when blocks are available. Emergency water has its own retry limit. Pregapping is an explicit exception to the high-health apple limit.
+
+Healthy close lava exchanges can use bounded vanilla liquid-jump inputs and attacks during native falling/cooldown eligibility. Damage and critical-hit determination remain native; low-health fire recovery takes priority. Trapped-target sword pressure suppresses sprint-reset knockback. The current kit includes Prism Golden Heads implemented by `GoldenHeadUtil` and consumed through the UHC item controller. They have their own food, consumption, effects, and cooldown components.
+
+Gap bait is opt-in. It cancels an apple as an opponent reaches punish range, switches to a sword and requests shield defense after the punish. It uses ordinary server item-use rules; it does not emulate a client-specific right-click exploit.
+
+Head webs require `secondaries.web.enabled`, `advanced.head-web` and Hard/Expert. Bucket draining requires `secondaries.water.enabled`, `advanced.water-drain` and Medium or higher. Lava pickup (bucketing lava the opponent places near the bot) requires `advanced.lava-pickup`. `utility.water-deny` pours lava onto a webbed opponent's water. All require `secondaries.enabled`. Disabling auto-food prevents the bot from disengaging solely to eat an apple it cannot use.
+
+## Validation on a Paper server
+
+1. Spawn each difficulty and verify selection, equipment, countdown, pause, retarget, death and despawn. A paused bot must stop movement and item use.
+2. Enable pregapping and start at safe distance. Verify a real apple is consumed and native crossbow loading consumes ammunition; interrupt both by rushing the bot.
+3. Sprint/jump into entries, then raise a shield after sword hits. Verify opening axe attempts, sword returns, variable blocking and actual shield-disable events.
+4. Repeat predictable landings, unsafe apple use, and water reactions. Check lava/web setups and reduced utility use after failed placements or depleted inventory.
+5. Web or ignite the bot inside melee range, then damage it below the healing threshold. Check knockback, a full sprint escape, water and safe eating before re-entry.
+6. Deny block placement/projectiles with server protection or remove line of sight during a draw. Rejected actions must not synthesize blocks, healing, loaded projectiles or successful combos.
+7. At Hard or Expert, escape a web using water with an empty bucket available to the bot. Verify source collection, item conversion, head-web support checks and finite utility budgets. Repeat with the new advanced switches disabled.
+8. Fight at range with both players low, then raise a shield or rush during a bow draw. Verify ranged pressure, interruption and re-entry after apples run out or auto-food is disabled. Retreat near a wall and lava to check alternate escape paths.
+9. Start a utility exchange near 4.2 blocks with a stationary opponent. Check that swapping does not move the bot out of its own placement window. Repeat while approaching it.
+10. Water beside/behind a foot web, collect it before the bot can, and repeat with inaccessible water. Check delayed bucket attempts, head extension, actual source denial, and bounded fallback. Existing terrain water must not count as a new opponent placement.
+11. Reduce webs to two and supply solid blocks. Check lava/block pressure and collision-safe boxing. Escape a trap using water and verify re-lava predicts the exit rather than targeting the old web cell.
+
+For contributor build commands, see the source repository’s `AGENTS.md`. Live combat checks above exercise behavior that a documentation build cannot establish.
+
+Compilation and policy scenarios cannot establish live combat reliability or pacing; the Paper acceptance scenarios above still require a live session.
+
+## Related guides
+
+<DocCards>
+  <DocCard title="Configuration" href="/Prism/Configuration">Apply style defaults and inherited profile values.</DocCard>
+  <DocCard title="Saved profiles" href="/Prism/Database">Keep a player’s settings for later fights.</DocCard>
+  <DocCard title="All combat styles" href="/Prism/Features">Compare this opponent with the other styles.</DocCard>
+</DocCards>

@@ -1,0 +1,199 @@
+---
+title: "Crystal bot"
+slug: /Prism/Bots/Crystal
+description: "Crystal and respawn-anchor combat: spawning, controls, configuration, and combat mechanics."
+---
+
+# Crystal bot
+
+Crystal places and detonates explosives, manages recovery, and selects techniques from the current fight.
+
+| | |
+| :--- | :--- |
+| Spawn | `/spawnbot crystal medium` |
+| Configuration | `plugins/Prism/bots/crystal.yml` |
+| Practice focus | Crystal and respawn-anchor combat |
+| Controls | Shift + right-click the bot |
+
+:::info Configuration paths
+Crystal fine tuning is saved under `ADVANCED` in the generated file. Categories in the tables below are engine category names; for example `TIMING.PLACE-MIN-MS` is written as `ADVANCED.TIMING.PLACE-MIN-MS`. See [Configuration](bot-configuration.mdx#advanced-settings) for the complete mapping.
+:::
+
+Crystal bots now run `CrystalBotBrain`. Each bot owns a combat blackboard, an opponent memory, a utility registry, and one interruptible action sequence. Creation, pop notifications, pearl landings, runtime controls, and the existing learning recorder use this brain. The public plugin API is unchanged.
+
+The bot chooses from the current fight: exposed feet, relative height, holes, ledges, bedrock, shields, eating, fire, damage immunity, visible pops and pearls, its health/absorption/saturation, armor condition, and remaining resources. Opponent reserve inventories are excluded from crystal perception. A retotem estimate is inferred from an observed pop and a totem reappearing in the visible offhand.
+
+## Configuration and menus
+
+The plugin creates `plugins/Prism/bots/crystal.yml` on startup when missing. Every numeric setting includes its description and accepted range, and every registered technique gets a documented entry. Existing files are loaded without being overwritten. Missing keys use defaults. See [the bot folder layout](bot-configuration.mdx).
+
+Open **Crystal profile → Advanced settings** for paginated editors. Basic controls now save skill, crystals, anchors, shield breaking, pearls, healing, strafing, and both minimum/maximum placement and break delays. Saving a page applies only its fields to the current bot, cancels the current sequence, and preserves unrelated profile choices. Invalid values reopen the form with the entered values and an error; no settings are applied.
+
+**Save as server defaults** in Advanced settings is available to bot administrators. It saves the current tuning for future bots. With [profile storage](database.mdx) enabled, saved per-player profiles can be reapplied on later spawns; server defaults are a separate setting. Use Prism's existing reload action to load the file and apply defaults to all active crystal bots. An invalid file preserves the last valid crystal tuning; the console reports the load error. Saving defaults preserves unrelated YAML keys and replaces the file only after writing a temporary file successfully.
+
+| Category | Controls |
+| --- | --- |
+| `FEATURES` | Crystals, anchors, axe switches, pearls, healing, strafing/jumps, mending, potions, shields, arrows, mining, flight, mace and automatic totems |
+| `PROFILE` | Difficulty override, aim precision, hesitation and miss-based confidence |
+| `DAMAGE` | Placement/break ranges, target damage floor, self-damage ceiling/buffer, damage weights and lethal bonus |
+| `TIMING` | Reaction base/minimum/jitter, difficulty and latency adjustments, hesitation, swaps, continuation window, placement/break delays and cooldowns |
+| `AIM` | Turn rate, difficulty scaling, interaction tolerance and confidence adjustments |
+| `SURVIVAL` | Critical/post-pop/fire/hole health, armor danger, safe separation, healing/saturation, mending, shield duration and safe-mode margins |
+| `COMBAT` | Melee/setup/combo ranges, height, attack charge, mace fall distance, immunity damage margin, anchor prediction and placement scoring |
+| `MOVEMENT` | Approach/back-off distances and strength, strafing, circling, sprint distance, reposition duration and knockback pause |
+| `PEARLS` | Health requirements, escape/approach destinations, landing separation and chase thresholds |
+| `ARROWS` | Selection/use ranges, bow draw time, velocity lead and arc correction |
+| `FLIGHT` | Health/armor/range requirements, rocket aim height, duration and stopping distance |
+| `SEQUENCES` | Overall/action/mining/pearl timeouts, displacement/range aborts and fake-anchor turn threshold |
+| `MEMORY` | Failure retry delays and pop, pearl and combo observation windows |
+| `DECISIONS` | Repetition penalties/cap, randomness, aggressive bonus and low-totem reserve penalties |
+| `TECHNIQUES` | Every technique's enablement, minimum tier, priority multiplier/offset, retry delay, distance/health limits and ordered steps |
+
+Health values are **health points**, not hearts; distances are blocks. One tick is 50 ms at 20 TPS. Swaps and separate interactions still occupy separate ticks. `-1` means inherit only where the field description supports it. Profile timing overrides take precedence over per-bot delays; damage and click-cooldown overrides take precedence over `BEHAVIOR.CRYSTAL` in this file. `BEHAVIOR.FEATURES` gates and the bot's crystal/anchor/follow controls also apply. The new reaction settings replace the old `CRYSTAL.MINIMUM-REACTION-TICKS` and `MAXIMUM-REACTION-TICKS` for this sequence brain; old burst/pearl-controller knobs do not control these sequences.
+
+Example changes to the generated file:
+
+```yaml
+ADVANCED:
+  FEATURES:
+    PEARLS: true
+    FLIGHT: false
+  TIMING:
+    PLACE-MIN-MS: 50
+    PLACE-MAX-MS: 100
+    BREAK-MIN-MS: 50
+    BREAK-MAX-MS: 100
+    OTHER-SWAP-TICKS: 1
+  SURVIVAL:
+    HEAL-HEALTH: 16
+  TECHNIQUES:
+    SETUP_CRYSTAL:
+      ENABLED: true
+      MINIMUM-LEVEL: 0
+      PRIORITY-MULTIPLIER: 1.25
+      PRIORITY-OFFSET: 0
+      RETRY-TICKS: 5
+      MINIMUM-DISTANCE: 0
+      MAXIMUM-DISTANCE: 5
+      MINIMUM-HEALTH: 10
+      STEPS: [BASE, CRYSTAL, BREAK]
+    ELYTRA_DTAP:
+      ENABLED: false
+```
+
+Empty `STEPS: []` preserves the built-in sequence. Each generated technique entry shows that sequence; the menu also lists all available step names. Custom steps retain the technique's tactical prerequisites and must have the required items, support, reach and damage opportunity. Distance and minimum-health overrides add conditions to those prerequisites. Priority is the adaptive utility multiplied by `PRIORITY-MULTIPLIER`, then increased by `PRIORITY-OFFSET`. Feature gates inspect the customized steps.
+
+The retired fast-crystal technique is no longer available in combat or the settings menu.
+
+Minecraft physics, collision geometry, actual item use times, event cancellation, damage immunity and reach remain server rules. World-scan budgets remain bounded implementation limits. Timing and damage settings tune decisions; they do not grant impossible actions.
+
+## Difficulty and techniques
+
+Existing crystal difficulty and delay controls still apply. Delays round up to server ticks. Difficulty controls reaction delay, item swaps, turn speed, prediction confidence, and technique access; target latency reduces confidence and increases reaction time. Hesitation changes timing. Recent repetition and unsuccessful outcomes lower technique utility.
+
+| Difficulty | Eligible techniques, when resources and terrain permit |
+| --- | --- |
+| Easy | Setup/hit/overhead crystals, single-charge anchors, block-off, escape pearls, totems, saturation recovery, tactical shield, utility arrows/potions |
+| Medium | D-tap, ledge dash, KO anchor, triple-swap/totem anchor, circling, pearl flash, armor mending, mining out of a hole |
+| Hard | Butterfly crystals, stun D-tap, fake/safe/damage-tick anchors, anchor replacement, D-tap-to-anchor, ledge chains, dual anchors, ravine pursuit |
+| Pro; Expert/Hacker/Master aliases | Skidding, elytra D-tap, rocket/mace-to-crystal pressure, crystal spike, Th3bes anchor on the last crystal base, triple tap |
+
+Names describe tactical sequences, not guaranteed outcomes. A sequence aborts when movement, reach, sight, placement, resources, damage risk, or its time budget no longer supports it. A stronger explosion can follow a melee hit during damage immunity; equal or weaker damage waits for the next window. Explicit multi-tap stages still wait for separate damage windows. Two-anchor and multi-crystal sequences require appropriate reserves; single-anchor pressure can use the last anchor. Interrupted anchors can be charged or detonated again when safe and reachable.
+
+An available crystal takes priority over starting another ordinary melee setup. Repetition penalties preserve a useful pressure option when alternatives are unavailable. Healthy protected hole fights can continue attacking. Reaction delay applies when engaging or changing tasks; continuing pressure against the same opponent does not restart that pause after every combination. Place and break cooldowns still apply, without a second random reaction delay between clicks.
+
+The default kit does not include every optional item. Bow techniques require a vanilla-selected Weakness or Slow Falling arrow; Turtle Master utility requires an appropriate splash potion. Flight requires elytra, rockets, usable armor, and the existing elytra feature flag. Mace pressure additionally requires a mace. Armor mending requires damageable Mending armor and XP bottles; the existing unbreakable default armor is intentionally preserved.
+
+## Execution and safety
+
+- Item selection occupies its own tick; a swap cannot compete with another controller's selection in the same sequence tick.
+- An already held melee weapon needs no swap delay. Crystal breaking keeps the current item unless Weakness requires a weapon. Aim and movement continue during applicable reaction and swap waits.
+- Aim turns at a difficulty-dependent rate. Melee and crystal breaking use entity bounds, the actual interaction-range attribute, and a maximum three-block reach. Wall-range configuration does not authorize attacking through walls.
+- Crystal placement checks both air blocks, entity obstruction, and reach to break the resulting crystal. Block placement uses a reachable, visible supporting face. Anchor replacement means replacing a detonated anchor **only if support still exists**; it does not grant placement in unsupported air. Anchor detonation accepts any non-glowstone item or an empty hand when spare totems are exhausted.
+- Every offensive explosion receives a fresh armor/resistance/exposure estimate and self-lethal rejection. Obsidian setup planning includes the cover that the proposed base would provide, then execution checks the actual terrain again. Estimates sample player bounding boxes and account for world difficulty; they remain approximations of terrain exposure.
+- Crystals and anchors use vanilla attacks/interactions. Pearls and rockets use vanilla item spawning and physics. Pearl planning includes current momentum, gravity, drag, collision, safe ground, and nearby crystals. The bot waits for an actual pearl teleport event before continuing.
+- Pops interrupt nonessential work. Emergency defense can block, pearl, hold two totems, or open a side of a hole. Safe healing remains available at critical health after separation.
+- Apple consumption advances the native item-use channel. XP bottles repair through ordinary orb pickup and Mending; the sequence verifies a reduction in armor damage. No direct armor repair is applied.
+- Mining uses current tool/block break progress, live reach and aim, cancellation notifications, and the ordinary block-breaking callback. A changed block invalidates accumulated progress; an aborted sequence leaves no queued delayed break.
+- The crystal-specific lifecycle advances the fake player's missing nutrition, fire/hurt animation, and XP pickup portions. It does not double-tick potion effects or damage immunity.
+
+Previous-look knockback manipulation is deliberately excluded: its claimed server behavior has not been validated. Normal sprint hits versus controlled non-sprint hits use the existing sprint-reset setting. More elaborate mace breach-swap and rocket stun-slam variants are not claimed by the generic mace approach.
+
+## Additive game sense
+
+The existing brain and sequences now use a small commitment tracker. Significant observed health losses in successive damage windows indicate incoming chain pressure; measured damage from the bot's own crystal/anchor explosions is excluded. Critical health, an immediate lethal explosive threat, or incoming pressure while vulnerable can abort offense even in aggressive mode. Two healthy trades do not trigger retreat. Recovery persists across individual defensive actions and opponent pearl events. A healthy bot with its offhand totem restored can counterattack at close range after a stable interval without first running seven blocks away. Recovery started inside a hole still commits to leaving that hole. Food requirements apply when enabled healing and apples are available.
+
+Retoteming remains the first priority. Under chain pressure the bot can hold a second totem, place cover, then find an escape pearl or mine a way out. Successful defensive cover has a cooldown so block placement does not continually restart at the expense of escaping. Failed placements and blocked pearls still use existing retry delays. Custom offensive step overrides cannot masquerade as defensive actions during recovery.
+
+Chain techniques now require recently observed target damage after an explosion, or a visible target pop. Merely breaking a crystal does not establish a chain. Momentum decays, and the bot abandons it when it takes significant opponent damage, pops, or observes a target pearl. Safe explosive follow-ups gain priority during pop, retotem and eating windows. Anchors gain preference against confined, roofed or fire-ticking targets; ordinary sword setups lose priority against shields. `SHIELD_PUNISH` adds an axe-to-crystal sequence at Medium and above.
+
+Ready crystal and anchor attacks gain `DECISIONS.READY-PRESSURE-BONUS` (default 32) so slower melee/circling setups do not routinely displace them. `SETUP_CRYSTAL` places an obsidian base and crystals directly, including flat-ground fights beyond melee range. Repositioning and pending ordinary melee periodically check for ready pressure, respecting feature gates and configured reaction timing. Target pops retain the current offensive follow-up; switching tactics does not count as a failed mechanic or add the failure retry cooldown.
+
+Already-satisfied base/charge/pearl-wait steps and internal side changes can advance in the same tick, up to eight skipped steps. An existing crystal can go straight to its break step. Actual item swaps, placements, attacks and uses still take separate ticks and obey configured cooldowns, damage immunity and live safety checks.
+
+Anchoring is a level, same-hole totem pop. It is only considered while the bot and target are within `COMBAT.ANCHOR-LEVEL-TOLERANCE` (default 0.6) blocks of each other vertically, and anchors are placed or reused only at the bot's own foot level; height gaps are left to crystals. `ANCHOR_LAUNCH` anchors the target up and follows with a crystal before they can react. Anchor sequences never pearl (`LEDGE_DASH` and `RAVINE_RUSH` no longer pearl, and `PEARL_FLASH` waits out a recent anchor). The one anchor-fight pearl is `HOLE_PEARL`: from off-level, it pearls into the target's hole so the next decision can anchor level with them. Ledge-dash anchor planning checks for roughly 3–4.5 blocks of self separation and 2–3.5 blocks of target separation.
+
+Following an opponent who leaves: with no live crystal or anchor window, `PEARL_FOLLOW` pearls after a target beyond `PEARLS.CHASE-MAX-DISTANCE` (default 18), or one standing above a wall the bot cannot walk over. When no pearl is available, `CLIMB_OUT` pillars up with obsidian until the crater rim toward the target is a single jumpable step. Both are chase techniques, so they ignore `SEQUENCES.ABORT-DISTANCE` and require the bot's follow-player setting.
+
+Smart hole entry stops forward pressure into an unfavorable occupied hole and rejects offensive pearls without a healthy, fueled, totem-protected punish window. Pearl planning and the final throw both validate the landing: no high/front rim or lower-pit entry (the landing must be level with the target), a walkable neighboring exit, and the existing collision, border, hazard and crystal checks. Escape pearls avoid landing in another hole. These checks are conservative heuristics, not a guarantee of a successful entry or escape.
+
+New settings in `bots/crystal.yml` also appear in the existing Advanced settings pages:
+
+```yaml
+ADVANCED:
+  FEATURES:
+    GAME_SENSE: true
+    COMMITTED_RECOVERY: true
+    SMART_HOLE_ENTRY: true
+    ANCHOR_GEOMETRY: true
+  SURVIVAL:
+    RECOVERY-STABLE-TICKS: 10
+    DEFENSIVE-BLOCK-INTERVAL-TICKS: 16
+  MEMORY:
+    CHAIN-MINIMUM-DAMAGE: 2
+  DECISIONS:
+    READY-PRESSURE-BONUS: 32
+  TECHNIQUES:
+    SETUP_CRYSTAL:
+      ENABLED: true
+    HOLE_PEARL:
+      ENABLED: true
+    SHIELD_PUNISH:
+      ENABLED: true
+```
+
+`GAME_SENSE` controls commitment scoring, confirmed chain selection and aggression aborts. `COMMITTED_RECOVERY` controls the persistent recovery latch; immediate danger still interrupts offense. Hole-entry and anchor-geometry controls are independent. The new techniques can be disabled individually. Missing keys use defaults.
+
+The sequence brain focuses on commitment, recovery, hole entry, anchor selection, chaining and shield response. The existing `PEARL_FLASH` technique remains its approach-pearl sequence; it does not implement the proposed ground-pearl knockback timing. Full hole-shape classification, slow-fall/crossbow prediction and additional aerial mechanics require separate engine support.
+
+## Diagnostics and validation
+
+:::warning Diagnostics are not recommended
+Enabling console diagnostics spams your console with logs for every bot movement and technique. Leave diagnostics disabled during normal use.
+:::
+
+`getBlackboard()` exposes the latest immutable encounter. `getDecisionEvents()` returns at most 64 decisions with state, technique, geometry, immunity/pop flags, health, totem count, confidence, utility, last explosion damage estimate, and outcome. These are in-memory diagnostics; the existing learning recorder continues capturing actual inputs separately. No learner emits raw actions through the new technique registry.
+
+
+Live-server acceptance still needs an actual combat session. Useful checks:
+
+1. On flat ground, verify both-side hit crystals, base reuse, natural misses/aborts, and transitions to anchors.
+2. Place an entity or wall in the intended interaction path; confirm rejected placement/attack without an artificial explosion.
+3. Pop the bot during charging, eating, flight, and mining; confirm the offensive action ends, mining stays cancelled, armor returns, and retoteming observes its reaction delay.
+4. Pop and then visibly retotem the opponent; inspect KO utility and verify the bot can abandon a stale finish.
+5. Test a ledge, a bedrock floor, a roofed 1x1 hole, obstructed pearls, and an anchor-capable versus anchor-safe dimension.
+6. With damaged Mending armor and XP bottles, create separation and confirm XP pickup repairs armor. At critical health, confirm a safe apple completes.
+7. With optional flight/arrow/mace gear, inspect actual projectile effects, flight trajectories, chestplate restoration, and subsequent crystal pressure.
+8. Pop or chain the bot inside a hole, then pearl away: verify its exit/recovery continues and it does not start a melee combo before stabilizing. Repeat with healing, pearls, mining or totems disabled/depleted. On open ground, verify healthy trades keep pressure and a recovered, retotemed bot resumes attacking without requiring separation.
+9. Offer frontal and rear hole pearl angles, including obstructed landings and a high rim. Verify unsafe approaches are rejected and supported rim anchors are used when available.
+10. Compare a crystal that causes no damage against one that hits/pops the target; verify only observed damage/pop establishes chain momentum. Toggle the new features and techniques to compare behavior.
+
+Compilation and the existing tests do not establish that every tactical sequence succeeds in live PvP. Timing, exposure estimates, optional aerial combinations, and terrain-specific techniques require this play-testing before making performance claims.
+
+## Related guides
+
+<DocCards>
+  <DocCard title="Configuration" href="/Prism/Configuration">Apply style defaults and inherited profile values.</DocCard>
+  <DocCard title="Saved profiles" href="/Prism/Database">Keep a player’s settings for later fights.</DocCard>
+  <DocCard title="All combat styles" href="/Prism/Features">Compare this opponent with the other styles.</DocCard>
+</DocCards>

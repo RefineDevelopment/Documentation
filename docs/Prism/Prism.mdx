@@ -1,0 +1,48 @@
+---
+title: "Prism"
+slug: /Prism/Overview
+description: "Prism documentation: combat styles, setup, configuration, and developer integrations."
+---
+
+# Prism
+
+Prism is a combat-practice bot plugin for Paper servers. Players pick a fighting style,
+tune an opponent, and practice against a bot that plays that style: crystal chains,
+wind-charge mace smashes, spear lunges, sword combos, TNT minecarts and more.
+
+Prism covers only the bot platform. It doesn't include arenas, queues, kits or an
+economy. Other plugins can build those around Prism through its [public API](api.mdx).
+
+## At a glance
+
+| | |
+| --- | --- |
+| Server | Paper `1.21.11+` |
+| Java | 21 |
+| Loader | Retention |
+| Bot styles | Crystal, Mace, SpearMace, Sword, NetheritePotion, Cart, DiamondSMP, UHC |
+| Difficulties | Easy, Medium, Hard, Expert, Hacker |
+| Storage | Optional MariaDB or MongoDB for saved bot profiles |
+| API | `PrismAPI` Bukkit service with bot, menu and event APIs |
+
+## Quick start
+
+<Steps>
+
+1. Install the Retention loader; see [Installation](installation.mdx).
+2. Join and run `/spawnbot` to open the bot selector.
+3. Pick a style. The bot spawns next to you and fights after a short countdown.
+4. **Shift + Right-Click** the bot to open its controls.
+
+</Steps>
+
+## Documentation
+
+<DocCards>
+  <DocCard title="Introduction" href="/Prism/Introduction">Get a bot fighting and learn the player controls.</DocCard>
+  <DocCard title="Configuration" href="/Prism/Configuration">Files, inherited settings, and reloads.</DocCard>
+  <DocCard title="Bot styles" href="/Prism/Features">Choose the opponent that fits your practice.</DocCard>
+  <DocCard title="Commands" href="/Prism/CommandsAndPermissions">Command syntax, aliases, and permissions.</DocCard>
+  <DocCard title="Database" href="/Prism/Database">Store per-player settings and learned habits.</DocCard>
+  <DocCard title="Developer API" href="/Prism/API">Build bots into your server’s matches and menus.</DocCard>
+</DocCards>

@@ -1,0 +1,60 @@
+---
+title: "Diamond SMP bot"
+slug: /Prism/Bots/DiamondSMP
+description: "Sword, shield, webs, and armor repair: spawning, controls, configuration, and combat mechanics."
+---
+
+# Diamond SMP bot
+
+Diamond SMP practices resource-aware survival combat with melee pressure, shield responses, and utility.
+
+| | |
+| :--- | :--- |
+| Spawn | `/spawnbot diamondsmp medium` |
+| Configuration | `plugins/Prism/bots/diamond-smp.yml` |
+| Practice focus | Sword, shield, webs, and armor repair |
+| Controls | Shift + right-click the bot |
+
+Spawn with `/spawnbot diamondsmp medium`, or select **DiamondSMP** from `/spawnbot`. Aliases include `smp`, `diamond-smp`, and `diamond_smp`. Integrations use `BotType.SMP`.
+
+Diamond SMP combines sword combat, axe shield pressure, web tactics, healing, potions, and armor repair. It uses equipped resources and native server interactions. Its current planner does not select ender-pearl or ranged attacks.
+
+## Decisions and movement
+
+`SmpBotBrain` captures a `DiamondSmpContext` containing the fighters' observed combat state, resources, armor, and positioning. `DiamondSmpEvaluator` chooses a state, posture, and action. Postures are aggressive, defensive, or passive; they are selected from the fight rather than configured as difficulty modes.
+
+States include engage, trade, shield pressure, shield disable, combo, disengage, heal, mend, reset, and reengage. Actions include sword pressure, sprint or critical hits, shield use, sword/axe mixups, chasing, safe apples, healing denial, web tactics, and mending. Decision intervals depend on aim precision; survival and combat events can force an earlier decision.
+
+The shared Sword controller executes ordinary melee. Shield interactions, confirmed hits, knockback, visible armor changes, and resource pressure inform subsequent choices. Recovery retreats have bounded time and incoming-hit limits so the bot can change plan when running fails.
+
+## Webs and recovery
+
+Web tactics distinguish the bot being trapped from a trapped opponent. The bot can try a reachable exit, a legal water interaction, or bounded native web breaking. Opponent traps create pressure opportunities while local movement steers around webs. Native reach, line of sight, world borders, and protection checks still apply.
+
+The bot consumes actual golden apples and potions. Healing, effects, item use, food lifecycle, and XP pickup follow the server rules. Mending requires damaged Mending gear and available XP; attempts can be suspended by a more urgent action. Critical survival states prioritize defense and recovery.
+
+## Configuration
+
+Edit `plugins/Prism/bots/diamond-smp.yml`. Supported combat profile overrides are under `COMBAT`, feature gates under `BEHAVIOR.FEATURES`, and shared numeric tuning under `ADVANCED.TUNING`. Follow the generated comments for the current supported options.
+
+Run `/prism reload`, then respawn the bot. Shift + right-click an active bot for profile and equipment controls. With [profile storage](database.mdx) enabled, saved per-player settings and learned opponent habits can be used by later bots of this style.
+
+The default kit has no ender pearls. The older `diamond-smp.strategy` and `debug.diamond-smp` examples are not current setup options.
+
+## Diagnostics
+
+:::warning Diagnostics are not recommended
+Enabling console diagnostics spams your console with logs for every bot movement and technique. Leave diagnostics disabled during normal use.
+:::
+
+Keep `debug-combat-memory: false` in `config.yml`. When enabled temporarily for troubleshooting, `[SMP-DIAGNOSTIC]` records include the bot, tick, phase, posture, advantage, action, and reason. Disable diagnostics and reload afterward.
+
+For live validation, compare open-ground exchanges, shield pressure, bot and opponent web traps, safe eating, damaged-armor repair, depleted resources, pause, and retargeting. Source documentation describes intended behavior; outcome timing remains subject to the running server.
+
+## Related guides
+
+<DocCards>
+  <DocCard title="Configuration" href="/Prism/Configuration">Apply style defaults and inherited profile values.</DocCard>
+  <DocCard title="Saved profiles" href="/Prism/Database">Keep a player’s settings for later fights.</DocCard>
+  <DocCard title="All combat styles" href="/Prism/Features">Compare this opponent with the other styles.</DocCard>
+</DocCards>

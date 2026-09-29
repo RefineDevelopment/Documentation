@@ -47,6 +47,7 @@ const config: Config = {
                     sidebarPath: "./sidebars.ts",
                     exclude: [
                         "README.md",
+                        "Prism/Prism.mdx",
                         "**/_*",
                         "Template",
                         "Phoenix/Phoenix.mdx",
@@ -121,6 +122,12 @@ const config: Config = {
                     position: "left",
                     label: "Zephyr",
                     activeBaseRegex: "/Zephyr/Introduction"
+                },
+                {
+                    to: "Prism/Introduction",
+                    position: "left",
+                    label: "Prism",
+                    activeBaseRegex: "^/Prism/"
                 },
                 // {
                 //     to: "BoltWebAddon/Introduction/",

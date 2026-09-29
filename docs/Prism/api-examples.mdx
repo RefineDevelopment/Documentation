@@ -1,0 +1,289 @@
+---
+title: "API examples"
+slug: /Prism/APIExamples
+description: "Integrate Prism bot selection, saved profiles, and events into your own matches."
+---
+
+# API Examples
+
+These examples build on the [Developer API](api.mdx) reference. The match integration uses the same division of responsibilities as Bolt:
+
+- **Prism** owns the bot: its AI, kit and difficulty tuning.
+- **Bolt** owns everything around it: the arena, rounds, visibility and match results.
+
+Every call below runs on the main server thread. These are integration snippets: types such as `Kit`, match controllers, visibility helpers, and provider state belong to the integrating plugin and must be supplied by that plugin.
+
+## 1. Declare the Retention dependency
+
+Prism loads through Retention. For an optional integration, add Retention to your `plugin.yml`:
+
+```yaml
+softdepend: [Retention]
+```
+
+Use `depend: [Retention]` instead if your plugin requires Prism.
+
+Look up `PrismAPI.get()` each time you need it. Don't cache it, because Prism can reload or
+disable. Wrap calls in a `try` block that catches `IllegalStateException` in case Prism has
+disabled since you enabled.
+
+```java
+public BotAPI bots() {
+    return PrismAPI.get().bots();
+}
+```
+
+## 2. Map your kits to bot types
+
+Bolt keeps a config section that maps its kits to Prism `BotType`s. It parses the values with
+`Enum.valueOf`:
+
+```yaml
+PRISM-KITS:
+  Sword: SWORD
+  NoDebuff: SWORD_POT
+  Crystal: CRYSTAL
+  Mace: MACE
+  SpearMace: SPEAR_MACE
+  Cart: CART
+  SMP: SMP
+  BuildUHC: UHC
+```
+
+```java
+private final Map<Kit, BotType> kitTypes = new LinkedHashMap<>();
+
+public BotType typeOf(Kit kit) {
+    return kitTypes.getOrDefault(kit, BotType.SWORD);
+}
+
+private static <E extends Enum<E>> E parse(Class<E> type, String value) {
+    try {
+        return Enum.valueOf(type, value.trim().toUpperCase(Locale.ROOT));
+    } catch (IllegalArgumentException | NullPointerException e) {
+        return null;
+    }
+}
+```
+
+## 3. Use Prism's selector, then run your own match
+
+Open Prism's style selector with a callback. Prism passes you the player's pick **without
+spawning a bot**, so you decide what happens next.
+
+```java
+public void openBotMenu(Player player) {
+    OperationResult<Void> result;
+    try {
+        result = PrismAPI.get().menus().openBotSelector(player, this::handleSelection);
+    } catch (IllegalStateException e) {
+        result = null; // Prism disabled since we enabled
+    }
+    if (result == null || !result.successful()) {
+        player.sendMessage("Bots are unavailable right now.");
+    }
+}
+
+private void handleSelection(BotSelection selection) {
+    Player player = selection.player();
+    Kit kit = kitFor(selection.type());
+    if (kit == null) {
+        player.sendMessage("That bot type has no kit set up.");
+        return;
+    }
+
+    // First fight with this style: let the player set up the bot before they fight it.
+    if (bots().profile(player.getUniqueId(), selection.type()).isEmpty()) {
+        OperationResult<Void> editor = PrismAPI.get().menus().openProfileEditor(
+                player, selection.type(),
+                () -> { if (player.isOnline()) openDifficultyMenu(player, kit); });
+        if (editor.successful()) return;
+        // UNAVAILABLE means profile storage is off, so fall back to presets.
+    }
+    openDifficultyMenu(player, kit);
+}
+```
+
+Show a saved profile in your menu lore:
+
+```java
+bots().profile(player.getUniqueId(), type).ifPresent(profile ->
+        lore.add("&7Your settings: &f" + profile.label()));
+```
+
+## 4. Spawn the bot into your arena
+
+Prism spawns the bot **in front of the owner**. Bolt waits until the owner is inside the
+arena, asks Prism for the bot, then teleports it to its spawn point.
+
+```java
+private static final Pattern PLAYER_NAME = Pattern.compile("[A-Za-z0-9_]{3,16}");
+
+private void activate(Player owner, BotType type, BotDifficulty difficulty,
+                      String name, boolean useSavedProfile, Location spawn) {
+    BotSpawnOptions options = BotSpawnOptions.defaults().withSavedProfile(useSavedProfile);
+    if (PLAYER_NAME.matcher(name).matches()) {
+        options = options.withName(name); // otherwise Prism picks one
+    }
+
+    OperationResult<BotSnapshot> result;
+    provider.setSpawningFor(owner.getUniqueId()); // see step 5
+    try {
+        result = bots().spawn(owner, type, difficulty, options);
+    } catch (IllegalStateException | IllegalArgumentException e) {
+        failMatch(OperationFailure.UNAVAILABLE);
+        return;
+    } finally {
+        provider.setSpawningFor(null);
+    }
+
+    if (!result.successful()) {
+        failMatch(result.failure().orElse(null)); // e.g. CANCELLED, INVALID_PLAYER_STATE
+        return;
+    }
+
+    BotSnapshot bot = result.value().orElseThrow();
+    this.botId = bot.id();                       // track Prism's returned bot UUID
+    if (!(Bukkit.getEntity(bot.id()) instanceof Player entity)) {
+        failMatch(OperationFailure.NOT_FOUND);
+        return;
+    }
+    entity.teleport(spawn);
+    hideFromEveryoneOutsideMatch(entity);
+}
+```
+
+API spawns are silent. Prism sends no spawn message, countdown titles or defeat messages, so
+your match shows its own. To start the fight right away, use `.withCountdown(false)`.
+
+For multi-round matches, Bolt despawns the bot at the end of each round and spawns a fresh one
+for the next:
+
+```java
+private void despawnBot() {
+    expectedDespawn = botId; // so our own despawn event is ignored
+    try {
+        bots().despawn(botId);
+    } catch (IllegalStateException e) {
+        // Prism already disabled and removed its bots
+    }
+}
+```
+
+## 5. Listen to Prism's events
+
+```java
+public final class PrismBotListener implements Listener {
+
+    private final PrismBotsProvider provider;
+
+    public PrismBotListener(PrismBotsProvider provider) {
+        this.provider = provider;
+    }
+
+    // Only allow bots inside our matches: block /spawnbot and Prism's own menus.
+    // API spawns fire this event too, so let our own spawns through.
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onBotSpawn(BotSpawnEvent event) {
+        if (provider.isSpawningFor(event.getSpawner().getUniqueId())) return;
+        event.setCancelled(true);
+        event.setCancelReason("<red>Bots can only be fought through a bot duel.</red>");
+    }
+
+    // React when Prism removes one of our bots.
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onBotDespawn(BotDespawnEvent event) {
+        MatchBot bot = provider.getBot(event.getSnapshot().id());
+        if (bot == null) return;
+
+        BotDespawnEvent.DespawnReason reason = event.getReason();
+        boolean forced = reason == BotDespawnEvent.DespawnReason.MANUAL_CLEAR
+                || reason == BotDespawnEvent.DespawnReason.PLUGIN_DISABLE;
+        bot.handleDespawn(event.getSnapshot().id(), forced); // forced → end the match
+    }
+
+    // Keep Prism's Shift + Right-Click management dialog closed during matches.
+    // Prism ignores cancelled interactions, so cancel before its NORMAL listener runs.
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onBotInteract(PlayerInteractEntityEvent event) {
+        if (provider.getBot(event.getRightClicked().getUniqueId()) != null) {
+            event.setCancelled(true);
+        }
+    }
+
+    // Match results are practice, not a reward farm.
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onBotKill(BotKillEvent event) {
+        if (provider.getBot(event.getSnapshot().id()) != null) {
+            event.setCoinReward(BigDecimal.ZERO);
+        }
+    }
+}
+```
+
+**The despawn guard:** when a bot despawns because of `DEATH`, `PLAYER_DEATH` or
+`PLAYER_LEAVE`, your match already knows the outcome, so ignore the event. `MANUAL_CLEAR`
+(the player ran `/spawnbot clear`) and `PLUGIN_DISABLE` mean the bot was taken away mid-match.
+End the match cleanly in those cases.
+
+## Smaller examples
+
+### Spawn a bot from a command
+
+```java
+@Override
+public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    if (!(sender instanceof Player player)) return true;
+
+    OperationResult<BotSnapshot> result = PrismAPI.get().bots()
+            .spawn(player, BotType.CRYSTAL, BotDifficulty.EXPERT);
+    result.failure().ifPresent(failure -> player.sendMessage("Couldn't spawn: " + failure));
+    return true;
+}
+```
+
+### Clear a player's bots when they leave your mode
+
+```java
+PrismAPI.get().bots().despawnForPlayer(player.getUniqueId());
+```
+
+### Ignore Prism bots in your own listeners
+
+```java
+@EventHandler
+public void onDeath(PlayerDeathEvent event) {
+    if (PrismAPI.get().bots().isBot(event.getPlayer().getUniqueId())) return;
+    // ... real-player logic
+}
+```
+
+### Pay players for bot kills
+
+Prism has no economy of its own, so pay the reward in your listener:
+
+```java
+@EventHandler
+public void onBotKill(BotKillEvent event) {
+    Player killer = event.getKiller();
+    if (killer == null) return;
+    BigDecimal reward = switch (event.getSnapshot().difficulty()) {
+        case EASY -> BigDecimal.valueOf(5);
+        case MEDIUM -> BigDecimal.valueOf(10);
+        case HARD -> BigDecimal.valueOf(20);
+        case EXPERT -> BigDecimal.valueOf(35);
+        case HACKER -> BigDecimal.valueOf(50);
+    };
+    economy.depositPlayer(killer, reward.doubleValue());
+}
+```
+
+### List active bots
+
+```java
+for (BotSnapshot bot : PrismAPI.get().bots().active()) {
+    String owner = bot.ownerId().map(Bukkit::getOfflinePlayer)
+            .map(OfflinePlayer::getName).orElse("none");
+    sender.sendMessage(bot.name() + " · " + bot.type() + " · " + bot.difficulty() + " · owner " + owner);
+}
+```

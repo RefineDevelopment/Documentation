@@ -1,0 +1,105 @@
+---
+title: "Netherite Potion bot"
+slug: /Prism/Bots/NetheritePotion
+description: "Potion combat, healing, and durability: spawning, controls, configuration, and combat mechanics."
+---
+
+# Netherite Potion bot
+
+Netherite Potion combines sword pressure with healing potions, recovery, and armor repair.
+
+| | |
+| :--- | :--- |
+| Spawn | `/spawnbot netheritepotion medium` |
+| Configuration | `plugins/Prism/bots/netherite-potion.yml` |
+| Practice focus | Potion combat, healing, and durability |
+| Controls | Shift + right-click the bot |
+
+The NetheritePotion bot uses `NetheritePotStrategy` for encounter decisions and
+`NetheritePotMechanics` for vanilla attacks, item use, thrown potions, and XP
+bottles. `NetheritePotPositioning` checks short escape routes.
+
+New bots start at Medium (normal difficulty). The kit contains exactly two
+totems: one in the offhand and one in the hotbar. Spare inventory slots contain
+healing potions, and consumed totems are not replenished. The totem amount is
+fixed for this kit. Melee attacks are capped at three blocks even when a custom
+combat configuration requests a longer range.
+
+## Fight phases
+
+- **Early resource saving:** prefer a safe apple around 5–5.5 effective hearts.
+  Emergency potions still take priority; a substantial armor deficit also
+  permits earlier potion use.
+- **Midgame aggression:** a completed repair with observed durability recovery
+  starts resource conversion. Valuable pressure windows permit earlier potions
+  and delayed apples while a spare totem is equipped. Keep three healing
+  resources in reserve, except when survival requires spending them.
+- **Durability control:** after two repairs, or with no XP remaining, three or
+  fewer healing resources trigger conservative play. A durability lead suppresses
+  ordinary critical jumps and risky distance punishment.
+
+An attempted repair does not count as a completed mend. Repairs require Mending
+armor and actual XP bottles, use the existing mend threshold, and stop after
+sufficient recovery, exhausted XP, or a bounded timeout. The bot uses the existing
+vitals controller for saturation regeneration and vanilla XP pickup.
+
+## Recovery and punishment
+
+Apple positioning considers separation, relative velocity, facing, attack cooldown,
+cover, and knockback. Escape routes check body clearance, floor support, hazards,
+loaded chunks, and the world border. An apple can continue behind cover. At critical
+health, an available potion interrupts it. A healthy bot can cancel an apple to
+attack an opponent who turns and runs; a cooldown prevents repeated feints.
+
+An opponent's main-hand or offhand apple starts a punish sequence. It aims for
+three confirmed critical hits below 100 ms ping, or two at higher ping, but shortens
+the chain when the observed eating window is almost over. A falling sprint hit
+then creates recovery space. Sprint knockback and critical hits use their distinct
+vanilla sprint conditions; missed, cancelled, and blocked attacks do not advance
+the chain. All attacks retain the configured reach, line-of-sight, and cooldown
+checks.
+
+The optional distance punish requires stable latency and velocity, level terrain,
+a clear retreat, and sufficient health. It waits outside reach for an observed
+swing, then tries an extra critical and the finisher. A timeout returns it to the
+ordinary finisher. Repeated lateral movement uses grounded interception. A healing
+potion held while looking down or turning away predicts a recovery opening.
+
+High-health opponent apples create a temporary aggression window. Totems extend
+pressure only with an equipped spare, sufficient resources, and a favorable
+opening; the bot never forces a totem pop or manufactures healing. Self resources
+are counted from inventory. Opponent decisions use exposed combat state and
+equipped armor, without reading their storage inventory or assuming hidden supplies.
+
+## In-game verification
+
+:::warning Diagnostics are not recommended
+Enabling console diagnostics spams your console with logs for every bot movement and technique. Leave diagnostics disabled during normal use.
+:::
+
+Keep the shared `debug-combat-memory` switch set to `false` in `config.yml`.
+
+1. Fight with a normal netherite potion kit; observe early low-health apples and
+   emergency healing when retreat is unsafe.
+2. Start an apple in either hand, cancel it, and strafe away during the bot's own
+   apple. Check bounded punish sequences and purposeful cancellation.
+3. Repeat near walls, ledges, water, hazards, and the world border. Check that
+   recovery does not deliberately enter an unchecked route.
+4. Damage Mending armor and give the bot XP. Confirm bottle consumption, XP
+   pickup, repaired durability, and the midgame transition.
+5. Run down potions and totems, vary ping, and disable critical hits, auto-food,
+   auto-totem, or auto-mend. Check that the corresponding behavior is gated.
+6. For gap-timing practice, use sword, armor, apples, and XP without potions or
+   totems. Use the existing replay recorder to review healing windows and trades;
+   this change does not add an automatic replay analyst.
+
+These scenarios require a live Paper server; a Gradle build verifies compilation
+and packaging, not combat balance or latency behavior.
+
+## Related guides
+
+<DocCards>
+  <DocCard title="Configuration" href="/Prism/Configuration">Apply style defaults and inherited profile values.</DocCard>
+  <DocCard title="Saved profiles" href="/Prism/Database">Keep a player’s settings for later fights.</DocCard>
+  <DocCard title="All combat styles" href="/Prism/Features">Compare this opponent with the other styles.</DocCard>
+</DocCards>

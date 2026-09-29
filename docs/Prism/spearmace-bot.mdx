@@ -1,0 +1,63 @@
+---
+title: "Spear Mace bot"
+slug: /Prism/Bots/SpearMace
+description: "Lunge pursuit and aerial mace finishers: spawning, controls, configuration, and combat mechanics."
+---
+
+# Spear Mace bot
+
+Spear Mace combines Lunge III spear movement with pearl catches and mace finishers.
+
+| | |
+| :--- | :--- |
+| Spawn | `/spawnbot spearmace medium` |
+| Configuration | `plugins/Prism/bots/spear-mace.yml` |
+| Practice focus | Lunge pursuit and aerial mace finishers |
+| Controls | Shift + right-click the bot |
+
+Spawn with `/spawnbot spearmace medium`, or choose **SpearMace** from `/spawnbot`. The aliases `spear_mace` and `spear-mace` also work. Integrations use `xyz.refinedev.prism.api.bot.BotType.SPEAR_MACE`.
+
+Spear Mace uses Lunge III spear pursuit, pearl/wind-charge catches, and aerial mace finishers. It shares parts of the Mace engine but has a dedicated spear sequence and forbids elytra execution in its current runtime.
+
+## Default equipment
+
+The kit uses Protection IV netherite armor, with Feather Falling IV boots. Its hotbar supplies a netherite sword, pearls, netherite axe, golden apples, cooked beef, wind charges, a Density V/Wind Burst I mace, a Sharpness V/Lunge III netherite spear, and a shield. Reserve slots contain charges, pearls, potions, and a totem. These loadout details follow `BotEquipmentUtil`; active inventory changes are visible in the bot's inventory view.
+
+## Combat sequence
+
+Native spear jabs and Lunge impulses establish pursuit. A neutral-item swap can prepare a spear jab, with the accepted native impulse determining whether a swap actually succeeded. Pearl catches require observed projectile/teleport outcomes and useful airborne height before follow-up.
+
+The controller owns ascent, apex tracking, interception, spear preparation, charged mace strike, and recovery as a bounded sequence. Mace attempts require actual fall distance, attack strength, a current hitbox ray, and a legal position. Damage and totem events confirm outcomes; an attempted strike is not proof of a hit.
+
+Food, defense, tactical escape, item cooldowns, hunger, and server collision rules still apply. Pause or target changes interrupt owned actions.
+
+## Server setting
+
+The full native attribute-swap move set requires this option in `config/paper-global.yml`:
+
+```yaml
+unsupported-settings:
+  update-equipment-on-player-actions: false
+```
+
+Restart after editing. When the option blocks swapping, Prism warns and diagnostics report the blocked action.
+
+## Configuration and controls
+
+Edit `plugins/Prism/bots/spear-mace.yml`. Supported profile overrides live under `COMBAT`, spear/food gates under `BEHAVIOR.FEATURES`, shared numeric tuning under `ADVANCED.TUNING`, and selected mace fine tuning under `ADVANCED.MACE`. Read the generated comments for every supported field.
+
+Reload and respawn after editing files. Shift + right-click the bot to open its management and profile controls. Saved profiles can persist through [profile storage](database.mdx). Keep `BEHAVIOR.MACE.DEBUG` disabled in this style's file. Console diagnostics are not recommended: they spam your console with logs for every bot movement and technique, including swap and chain records.
+
+## Icon and live checks
+
+The selector uses the native netherite spear icon on a 1.21.11 client. A custom resource pack is unnecessary for the material icon.
+
+On a running server, check pursuit, airborne catches, confirmed mace damage, food consumption, blocked swaps, pause, and retargeting. Compare actual height and fall distance with the logged sequence instead of treating planned movement as a successful attack.
+
+## Related guides
+
+<DocCards>
+  <DocCard title="Configuration" href="/Prism/Configuration">Apply style defaults and inherited profile values.</DocCard>
+  <DocCard title="Saved profiles" href="/Prism/Database">Keep a player’s settings for later fights.</DocCard>
+  <DocCard title="All combat styles" href="/Prism/Features">Compare this opponent with the other styles.</DocCard>
+</DocCards>

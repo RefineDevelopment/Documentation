@@ -1,0 +1,96 @@
+---
+title: "Bot configuration"
+slug: /Prism/Configuration
+description: "Shared configuration, style overrides, advanced tuning, and reload behavior."
+---
+
+# Bot configuration
+
+Prism generates configuration under `plugins/Prism/`. Shared settings live in `config.yml`; each bot style has its own YAML file.
+
+```text
+plugins/Prism/
+  config.yml
+  messages.yml
+  dialogs.yml
+  machine-learning.yml
+  bots/
+    crystal.yml
+    mace.yml
+    spear-mace.yml
+    sword.yml
+    netherite-potion.yml
+    cart.yml
+    diamond-smp.yml
+    uhc.yml
+```
+
+## Shared settings
+
+The generated comments describe accepted values. Common controls in `config.yml` include:
+
+| Setting | Default | Purpose |
+| --- | --- | --- |
+| `countdown-seconds` | `5` | Delay before combat; values below 1 are treated as 1 |
+| `debug-combat-memory` | `false` | Movement and technique console logs; not recommended |
+| `usernames` | Bundled name list | Bot identities and skin sources |
+| `death-messages.enabled` | `true` | Prism defeat messages and bot-related death output |
+| `crystal-pvp.disable-explosion-drops` | `false` | Suppress block drops from explosions caused by bots |
+| `profile-storage.enabled` | `false` | Save per-player profiles in MariaDB or MongoDB |
+| `machine-learning.enabled` | `false` | Permit experimental recording configured in `machine-learning.yml` |
+| `machine-learning.inference-enabled` | `false` | Permit experimental model inference |
+
+:::info Reload or restart?
+Run `/prism reload` and respawn bots after editing combat settings. Database connection changes require a full server restart.
+:::
+
+See [Database](database.mdx) for profile storage settings. Machine-learning options are documented in the generated `machine-learning.yml` file.
+
+:::info Machine learning is in beta
+Machine learning documentation will be provided once it is fully out of beta.
+:::
+
+## Combat overrides
+
+The `COMBAT` section contains the supported profile overrides for that style. Use `inherit` to keep the selected profile's value. Explicit values apply to newly spawned bots and can override the chosen difficulty for that field.
+
+Example in `bots/sword.yml`:
+
+```yaml
+COMBAT:
+  ATTACK-RANGE: 2.7
+  AIM-PRECISION: 0.9
+  SPRINT-RESET: true
+  FOLLOW-PLAYER: true
+  CRITICAL-HITS: true
+```
+
+Only options consumed by the selected engine are generated. Archetype-fixed equipment controls are omitted. Generated comments identify types, units, ranges, and inheritance rules. Vanilla reach, cooldowns, collision, and protection checks still apply.
+
+## Advanced settings
+
+Fine-tuning values are written in a trailing `ADVANCED` section. The loaders translate them to internal engine paths before parsing. The following mapping explains paths mentioned in technical guides:
+
+| Engine path in implementation notes | Path in the generated file |
+| --- | --- |
+| `BEHAVIOR.TUNING.*` | `ADVANCED.TUNING.*` |
+| Crystal `BEHAVIOR.CRYSTAL.*` | `ADVANCED.CRYSTAL.*` |
+| Crystal `TIMING.*`, `DAMAGE.*`, `SURVIVAL.*`, `TECHNIQUES.*`, and other tuning categories | `ADVANCED.<category>.*` |
+| Crystal tuning entries in `COMBAT` | `ADVANCED.COMBAT.*`; shared profile overrides stay under `COMBAT` |
+| Mace/Spear Mace `BEHAVIOR.MACE.HUMANIZATION.*` and selected numeric launch/smash/chain controls | `ADVANCED.MACE.*` |
+| Cart reaction, aim, prediction, healing, mending, and cooldown tuning | `ADVANCED.CART.*` |
+| UHC healing, selected utility limits, and secondary timings | `ADVANCED.UHC.*` |
+
+Technique toggles and basic options can stay outside `ADVANCED`. For example, Mace `BEHAVIOR.MACE.PEARLS.OFFENSIVE` remains in its original section. Follow the actual generated file instead of adding a second copy of a setting at its internal path.
+
+## Reload
+
+Run `/prism reload` after editing. Respawn bots to apply new combat overrides and engine settings. Existing Crystal bots receive refreshed advanced tuning and behavior gates. Invalid per-style configuration logs an error and keeps the last valid settings for that style.
+
+## Diagnostics
+
+:::warning Diagnostics are not recommended
+Enabling console diagnostics spams your console with logs for every bot movement and technique. Leave diagnostics disabled during normal use.
+:::
+
+Keep `debug-combat-memory: false` in `config.yml`. Style-specific debug options are documented in each generated bot file and should also remain disabled. If diagnostics are needed for troubleshooting, enable them temporarily, then disable them and reload.

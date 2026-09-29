@@ -1,0 +1,86 @@
+---
+title: "Installation"
+slug: /Prism/Installation
+description: "Load Prism through Retention on Paper 1.21.11+ and start your first fight."
+---
+
+# Installation
+
+Prism supports Paper **1.21.11+** and loads through **Retention**. Enable Prism through your Retention setup.
+
+## Install Prism
+
+<Steps>
+
+1. Stop the server and back up its plugin data.
+2. Install Retention and put it in `plugins/`.
+3. Start the server on Java 21.
+4. Check the console for `Prism bot platform enabled successfully.`
+5. Join and run `/spawnbot sword medium`, then Shift + right-click the bot to open its controls.
+
+</Steps>
+
+:::tip First setup
+Use `/spawnbot` to browse all styles. You can tune a bot through its controls before editing YAML files.
+:::
+
+## If Prism is not in Retention's configuration
+
+If Prism is not in Retention's configuration, add this entry, then restart the server:
+
+```yaml
+  Prism:
+    BRANCH: "default"
+    VERSION: "autoupdate"
+    ENABLED: true
+    SHUTDOWN-ON-ERROR: false
+```
+
+## Plugins integrating with Prism
+
+Plugins that use Prism's API must declare `depend: [Retention]` or `softdepend: [Retention]` in their `plugin.yml`. Use `depend` for a required integration and `softdepend` for an optional one. Check that Prism's API is available after Retention loads. See [Developer API](api.mdx) for the dependency examples.
+
+## Generated files
+
+All paths are relative to `plugins/Prism/`.
+
+| Path | Purpose |
+| --- | --- |
+| `config.yml` | Shared countdown, names, diagnostics, death messages, storage, and ML switches |
+| `bots/*.yml` | Eight combat styles and their overrides |
+| `messages.yml` | Chat, countdown, inventory-menu, and nameplate text |
+| `dialogs.yml` | Native dialog labels and text |
+| `machine-learning.yml` | Experimental recording and ONNX inference configuration |
+
+Paper downloads the MariaDB driver, MongoDB driver, and ONNX Runtime declared by Prism on startup. Check the console if those downloads fail. A database server is needed only when [saved profile storage](database.mdx) is enabled.
+
+## Mace and Spear Mace setup
+
+The full attribute-swap move set requires this setting in `config/paper-global.yml`:
+
+```yaml
+unsupported-settings:
+  update-equipment-on-player-actions: false
+```
+
+:::warning Restart required
+Restart the server after changing this Paper setting. Prism warns when the setting blocks native attribute swaps.
+:::
+
+## First fight
+
+```text
+/spawnbot
+/spawnbot sword hard
+/spawnbot clear
+```
+
+Choose a bot style, let its countdown finish, and use its profile and equipment controls to tune the fight. To enable saved profiles, configure [MariaDB or MongoDB](database.mdx) and restart. Read [Bot configuration](bot-configuration.mdx) before editing combat overrides.
+
+## Continue setup
+
+<DocCards>
+  <DocCard title="Bot configuration" href="/Prism/Configuration">Tune defaults, overrides, and advanced settings.</DocCard>
+  <DocCard title="Saved profiles" href="/Prism/Database">Choose MariaDB or MongoDB for persistence.</DocCard>
+  <DocCard title="Permissions" href="/Prism/Permissions">Give staff access to reload and bot controls.</DocCard>
+</DocCards>

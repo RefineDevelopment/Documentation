@@ -1,0 +1,50 @@
+---
+title: "Arena integration"
+slug: /Prism/ArenaIntegration
+description: "Use Prism bots inside matches and arenas managed by another plugin."
+---
+
+# Arena integration
+
+Prism bots can be used in a training arena managed by your own plugin. Prism owns spawning, bot combat, profiles, and lifecycle events. Your arena plugin owns player teleports, match state, round results, block restoration, and rewards.
+
+## Spawn inside a match
+
+<Steps>
+
+1. Move the online player into the arena on the primary server thread.
+2. Choose a `BotType` and `BotDifficulty`, or open Prism's selector with a callback.
+3. Spawn through `PrismAPI.get().bots().spawn(...)`.
+4. Check the operation result and keep the successful snapshot's bot UUID.
+5. Despawn that bot when the round or match ends.
+
+</Steps>
+
+```java
+import xyz.refinedev.prism.api.PrismAPI;
+import xyz.refinedev.prism.api.bot.BotDifficulty;
+import xyz.refinedev.prism.api.bot.BotSpawnOptions;
+import xyz.refinedev.prism.api.bot.BotType;
+
+// Run on the primary server thread after moving player into the match.
+var options = BotSpawnOptions.defaults().withCountdown(false);
+var result = PrismAPI.get().bots().spawn(player, BotType.SWORD, BotDifficulty.HARD, options);
+if (result.successful()) {
+    var botId = result.value().orElseThrow().id();
+    // Keep botId in your match state and despawn it when the match ends.
+}
+```
+
+Prism selects a spawn in front of the owner. API spawns are silent; display your own countdown and match messages. `withCountdown(false)` starts combat immediately. For a custom bot spawn point, resolve the returned bot UUID through Bukkit and perform the teleport on the server thread, handling an entity that has already disappeared.
+
+## Restrict where bots spawn
+
+Listen for the cancellable `BotSpawnEvent` and reject spawns outside your allowed training area. The event also fires for API spawns, so distinguish your integration's authorized requests when applying restrictions.
+
+Use `BotKillEvent` for a confirmed bot defeat and `BotDespawnEvent` for cleanup. Despawn reasons include death, manual clear, player leave, player death, and plugin shutdown. A manual clear or shutdown can end an in-progress match without a bot kill.
+
+## World and equipment
+
+Provide the player's practice equipment through your arena plugin. Prism equips the bot according to its style and profile. Crystal, Cart, and utility-based styles can interact with the world; arena rollback and protection rules belong to the arena system. Crystal bot-placed obsidian, glowstone, anchors, and end crystals have Prism's scheduled cleanup, which is not a complete arena rollback.
+
+Read [API reference](api.mdx) for operation contracts and [API examples](api-examples.mdx) for menu callbacks, lifecycle listeners, and match integration patterns.

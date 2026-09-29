@@ -1,0 +1,293 @@
+---
+title: "Developer API"
+slug: /Prism/API
+description: "PrismAPI dependencies, bot and menu methods, snapshots, and lifecycle events."
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Developer API
+
+The `PrismAPI` artifact is a small public API for other plugins. It lets you spawn and
+despawn bots, list active bots, open Prism's menus, read saved profiles, and listen for bot
+events. It doesn't depend on Prism's internals, so integrations can compile against its public contracts. Match the API version to the installed Prism release.
+
+## Dependency
+
+| | |
+| --- | --- |
+| Group | `xyz.refinedev.prism` |
+| Artifact | `PrismAPI` |
+| Version | `1.0-SNAPSHOT` |
+| Repository | `https://maven.refinedev.org/public-repo` |
+
+<Tabs groupId="prism-build-tool">
+<TabItem value="gradle" label="Gradle (Kotlin DSL)" default>
+
+```kotlin
+repositories {
+    maven("https://maven.refinedev.org/public-repo")
+}
+
+dependencies {
+    compileOnly("xyz.refinedev.prism:PrismAPI:1.0-SNAPSHOT")
+}
+```
+
+</TabItem>
+<TabItem value="maven" label="Maven">
+
+```xml
+<repository>
+    <id>refine</id>
+    <url>https://maven.refinedev.org/public-repo</url>
+</repository>
+
+<dependency>
+    <groupId>xyz.refinedev.prism</groupId>
+    <artifactId>PrismAPI</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <scope>provided</scope>
+</dependency>
+```
+
+</TabItem>
+</Tabs>
+
+## Retention dependency
+
+Prism loads through Retention. Add **Retention** to your integrating plugin's `plugin.yml` so the loader enables before your plugin.
+
+Use `depend` when your plugin requires Prism:
+
+```yaml
+depend: [Retention]
+```
+
+Use `softdepend` when the Prism integration is optional:
+
+```yaml
+softdepend: [Retention]
+```
+
+With `softdepend`, disable the integration if Retention is unavailable. In both cases, check that `PrismAPI.get()` is available before calling the API; Retention being enabled does not guarantee that Prism has loaded.
+
+:::warning Server thread
+Run bot operations and menu calls on the primary server thread after Prism enables. Off-thread calls throw `IllegalStateException`.
+:::
+
+## API contracts
+
+- **Thread:** every call that touches live server state must run on the main server thread.
+  Calls from other threads throw `IllegalStateException`.
+- **Availability:** `PrismAPI.get()` throws `IllegalStateException` while Prism is disabled.
+  Don't keep the instance after Prism disables.
+- **Errors:** invalid arguments throw `IllegalArgumentException`. Expected failures, such as an
+  unknown bot or an offline player, return an `OperationResult` with an `OperationFailure`.
+- **Snapshots:** queries return immutable records. They never hold live entities.
+
+## Packages
+
+| Package | Contents |
+| --- | --- |
+| `xyz.refinedev.prism.api` | `PrismAPI`: the entry point, registered as a Bukkit service |
+| `xyz.refinedev.prism.api.bot` | `BotAPI`, `BotSnapshot`, `BotProfileSnapshot`, `BotSpawnOptions`, `BotType`, `BotDifficulty` |
+| `xyz.refinedev.prism.api.menu` | `MenuAPI`, `BotSelection` |
+| `xyz.refinedev.prism.api.common` | `OperationResult`, `OperationFailure` |
+| `xyz.refinedev.prism.api.event.bot` | `BotSpawnEvent`, `BotKillEvent`, `BotDespawnEvent` |
+
+## `PrismAPI`
+
+```java
+PrismAPI api = PrismAPI.get();
+BotAPI bots = api.bots();
+MenuAPI menus = api.menus();
+```
+
+| Method | Returns |
+| --- | --- |
+| `static PrismAPI get()` | The registered provider, or throws if Prism isn't enabled |
+| `BotAPI bots()` | The bot API |
+| `MenuAPI menus()` | The menu API |
+
+## `BotAPI`
+
+| Method | Description |
+| --- | --- |
+| `List<BotSnapshot> active()` | All active bots |
+| `Optional<BotSnapshot> find(UUID botId)` | One active bot |
+| `OperationResult<BotSnapshot> spawn(Player, BotType, BotDifficulty)` | Spawn with default options |
+| `OperationResult<BotSnapshot> spawn(Player, BotType, BotDifficulty, BotSpawnOptions)` | Spawn with a custom name, countdown or saved profile |
+| `OperationResult<Void> despawn(UUID botId)` | Despawn one bot. Returns `NOT_FOUND` if it doesn't exist. |
+| `OperationResult<Void> despawnForPlayer(UUID playerId)` | Despawn bots owned by or targeting a player |
+| `boolean isBot(UUID uniqueId)` | Whether an entity UUID is an active bot |
+| `Optional<BotProfileSnapshot> profile(UUID playerId, BotType type)` | A player's saved profile for a style |
+
+### Spawning a bot
+
+```java
+OperationResult<BotSnapshot> result = PrismAPI.get().bots()
+        .spawn(player, BotType.SWORD, BotDifficulty.HARD);
+
+if (result.successful()) {
+    BotSnapshot bot = result.value().orElseThrow();
+    player.sendMessage("Fighting " + bot.name());
+} else {
+    player.sendMessage("Couldn't spawn: " + result.failure().orElseThrow());
+}
+```
+
+### `BotSpawnOptions`
+
+A record: `BotSpawnOptions(Optional<String> name, boolean countdown, boolean savedProfile)`.
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `name` | empty | Requested name: 3–16 letters, digits or underscores. If the name is taken, Prism adds a suffix. `BotSnapshot.name()` always holds the final name. |
+| `countdown` | `true` | Whether to wait for the countdown before fighting |
+| `savedProfile` | `false` | Use the player's saved profile for this style, falling back to the difficulty preset |
+
+```java
+BotSpawnOptions options = BotSpawnOptions.defaults()
+        .withName("Sparring_Bot")
+        .withCountdown(false)
+        .withSavedProfile(true);
+
+PrismAPI.get().bots().spawn(player, BotType.MACE, BotDifficulty.EXPERT, options);
+```
+
+Bots spawned through the API are **silent**. Prism sends no spawn message, countdown titles,
+sounds or defeat messages for them. With `countdown` on, the countdown is only a delay, so
+show your own countdown if you need one.
+
+### Reading saved profiles
+
+```java
+PrismAPI.get().bots().profile(player.getUniqueId(), BotType.UHC).ifPresent(profile ->
+        lore.add("Saved: " + profile.label() + " (" + profile.difficulty() + ")"));
+```
+
+The result is empty if the player hasn't saved a profile, if [profile storage](database.mdx) is
+off, or if the player is offline or their profiles are still loading.
+
+## `MenuAPI`
+
+Every method needs the main thread. Opening a menu closes the player's open inventory.
+
+| Method | Description |
+| --- | --- |
+| `openBotSelector(Player)` | Open the style selector. Picking a style spawns it like `/spawnbot`. |
+| `openBotSelector(Player, Consumer<BotSelection>)` | Open the selector and pass the pick to your handler instead of spawning |
+| `openManagement(Player viewer, UUID botId)` | Open a bot's management dialog, like Shift + Right-Click |
+| `openProfile(Player viewer, UUID botId)` | Open a bot's style-specific profile dialog |
+| `openProfileEditor(Player, BotType, Runnable onClose)` | Edit a saved profile without a bot. Returns `UNAVAILABLE` when storage is off. |
+
+`openManagement` and `openProfile` return `NOT_FOUND` for an unknown bot. They return
+`INVALID_PLAYER_STATE` if the viewer is offline or can't control the bot. Controlling a bot
+requires owning it or having `prism.bot.admin`.
+
+### Using the selector in your own mode
+
+```java
+PrismAPI.get().menus().openBotSelector(player, selection -> {
+    // Nothing has spawned yet. Move the player into your match first.
+    teleportToMatch(selection.player());
+    selection.spawn(BotSpawnOptions.defaults().withCountdown(false));
+});
+```
+
+`BotSelection.spawn()` spawns in front of the player and uses their saved profile or the
+selector defaults. A selection can spawn only once. Later calls return `ALREADY_ACTIVE`.
+Closing the selector doesn't call your handler.
+
+## Records and enums
+
+**`BotSnapshot`** `(UUID id, String name, BotType type, BotDifficulty difficulty, Optional<UUID> ownerId, Optional<UUID> targetId)`
+
+`difficulty` is the named preset. Crystal's Pro preset maps to `EXPERT`. Custom settings
+report `MEDIUM`. Mace has four runtime tiers; requesting `HACKER` selects its Expert tier and its snapshot reports `EXPERT`.
+
+**`BotProfileSnapshot`** `(UUID playerId, BotType type, BotDifficulty difficulty, String label, Map<String, Object> settings)`
+
+`settings` holds `combat`, plus `mace` or `uhc` where they apply. It's for display only, and
+its keys may change between versions.
+
+**`BotType`**: `CRYSTAL`, `MACE`, `CART`, `SMP`, `SWORD_POT`, `SWORD`, `SPEAR_MACE`, `UHC`
+
+**`BotDifficulty`**: `EASY`, `MEDIUM`, `HARD`, `EXPERT`, `HACKER`
+
+**`OperationResult<T>`** `(boolean successful, Optional<T> value, Optional<OperationFailure> failure)`
+
+**`OperationFailure`**: `INVALID_ARGUMENT`, `INVALID_PLAYER_STATE`, `ALREADY_ACTIVE`,
+`NOT_FOUND`, `INSUFFICIENT_FUNDS`, `CANCELLED`, `UNAVAILABLE`, `WORLD_DISABLED`
+
+## Events
+
+All events are in `xyz.refinedev.prism.api.event.bot` and fire on the main thread.
+
+| Event | Cancellable | When | Methods |
+| --- | --- | --- | --- |
+| `BotSpawnEvent` | Yes | Before a bot activates | `getSnapshot()`, `getSpawner()`, `setCancelled(boolean)`, `setCancelReason(String)` |
+| `BotKillEvent` | No | After a player defeats a bot | `getSnapshot()`, `getKiller()`, `getCoinReward()`, `setCoinReward(BigDecimal)` |
+| `BotDespawnEvent` | No | When a bot is removed | `getSnapshot()`, `getReason()` |
+
+`BotDespawnEvent.DespawnReason`: `DEATH`, `MANUAL_CLEAR`, `PLAYER_LEAVE`, `PLAYER_DEATH`,
+`PLUGIN_DISABLE`.
+
+Prism has no economy. It fires `BotKillEvent` with a reward of zero and deposits nothing. To
+pay players for kills, pay them in your listener. `setCoinReward` rejects negative values.
+
+```java
+public final class BotListener implements Listener {
+
+    private final Plugin plugin;
+
+    public BotListener(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onSpawn(BotSpawnEvent event) {
+        if (event.getSpawner().getWorld().getName().equals("lobby")) {
+            event.setCancelled(true);
+            event.setCancelReason("Bots are disabled in the lobby.");
+        }
+    }
+
+    @EventHandler
+    public void onKill(BotKillEvent event) {
+        Player killer = event.getKiller();
+        if (killer != null) {
+            killer.sendMessage("You beat " + event.getSnapshot().name() + "!");
+        }
+    }
+
+    @EventHandler
+    public void onDespawn(BotDespawnEvent event) {
+        plugin.getLogger().info(event.getSnapshot().name() + " despawned: " + event.getReason());
+    }
+}
+```
+
+For a complete integration, such as running bots inside your own duels the way Bolt does,
+see [API Examples](api-examples.mdx).
+
+## Generating Javadoc
+
+The API module publishes a sources jar. To build HTML Javadoc locally:
+
+```powershell
+.\gradlew.bat :api:javadoc --console=plain
+```
+
+The output goes to `api/build/docs/javadoc/index.html`.
+
+## Integration guides
+
+<DocCards>
+  <DocCard title="PlaceholderAPI integration" href="/Prism/Placeholders#placeholderapi-integration">Expose bot data through a custom expansion.</DocCard>
+  <DocCard title="API examples" href="/Prism/APIExamples">Selector callbacks, profiles, and lifecycle listeners.</DocCard>
+  <DocCard title="Arena integration" href="/Prism/ArenaIntegration">Spawn and clean up bots inside a managed match.</DocCard>
+  <DocCard title="Saved profiles" href="/Prism/Database">Set up the storage used by profile snapshots.</DocCard>
+</DocCards>

@@ -1,0 +1,123 @@
+---
+title: "Sword bot"
+slug: /Prism/Bots/Sword
+description: "Combos, sprint resets, and critical exchanges: spawning, controls, configuration, and combat mechanics."
+---
+
+# Sword bot
+
+Sword practices melee spacing, confirmed-hit combos, sprint resets, and timed critical hits.
+
+| | |
+| :--- | :--- |
+| Spawn | `/spawnbot sword medium` |
+| Configuration | `plugins/Prism/bots/sword.yml` |
+| Practice focus | Combos, sprint resets, and critical exchanges |
+| Controls | Shift + right-click the bot |
+
+Select **Sword** in `/spawnbot`, or use `/spawnbot sword hard`.
+The profile dialog controls difficulty, sprint resets, critical exchanges,
+opponent tracking, and practice resistance. The default equipment preset uses Protection III diamond armor, a diamond sword, and an empty offhand. Inspect the inventory view for the equipment on your active bot.
+
+Sword uses the diamond sword sprite. DiamondSMP uses a cobweb sprite and keeps
+its existing survival combat behavior. Integrations can identify the new bot
+with `xyz.refinedev.prism.api.bot.BotType.SWORD`; existing enum identifiers are unchanged.
+
+## Combat behavior
+
+- **Opening:** use an adaptive engagement bait near attack range, then close
+  after an apparent missed swing or a short timeout. Hit selection is reserved
+  for the eight ticks after the bot lands a confirmed critical hit.
+- **Combos:** confirmed sprint hits trigger a brief W-tap, S-tap, or sideways
+  sprint reset before another charged attack. Strafing and spacing continue
+  between hits. Two unanswered hits trigger a short S-tap escape.
+- **Critical exchanges:** retaliate while falling after an incoming crit, and
+  keep moving forward after a crit to maintain contact. This forward pressure
+  attempts the tutorial's no-KB exchange through normal movement; it does not
+  remove or scale server knockback.
+- **Double crits:** after a confirmed punish crit in a close exchange with a
+  recent incoming crit and a non-sprinting opponent, prepare a second jump as
+  soon as grounded and the weapon has begun recovering. Attack only on descent
+  with sufficient charge.
+- **Jump resets:** use a cooldown-limited grounded jump after a recent incoming
+  hit in a close hit-select or double-crit exchange. Ordinary combos favor
+  backing away rather than repeated jumps.
+- **Falling sprint hits:** occasionally choose a sprint knockback hit during
+  descent in a close crit chain. Sprinting is enabled for that attack; normal
+  critical attacks disable it.
+- **Aim and reach:** aim just below the opponent's eye position, following their
+  crouching pose. A ray from the bot's actual gaze must intersect the target's
+  bounding box within the difficulty's reach, capped at three blocks, with
+  line of sight. Aim error and missed attacks scale with difficulty.
+- **Latency:** at a reported ping of 150 ms or more, favor close crit exchanges
+  over repeated knockback combos. This is a heuristic based on reported ping,
+  not a prediction of individual packet delivery.
+
+The brain uses the existing fake-player movement, vanilla jump and attack
+hooks, and confirmed damage events. It respects pauses, PvP disablement,
+weapon cooldowns, and target changes. Its movement and attacks also pass
+through the existing learning recorder.
+
+## Adaptive engagement and tempo
+
+Before a new exchange, Sword chooses among six timed approaches:
+
+- **Double S-tap:** retreat, briefly release movement, then retreat again.
+- **S-tap + strafe:** retreat first, then move sideways near engagement range.
+- **Jump bait:** show grounded forward pressure, wait for the opponent to jump,
+  then delay the bot's own jump by two to three ticks. The attack still waits
+  for descent, charge, and legal reach. This requires critical hits enabled.
+- **Crouch bait:** approach, crouch, release, and crouch again; a descending
+  opponent can prompt a duck just before engagement. Crouching uses the normal
+  pose/hitbox update and the equipped sneaking-speed attribute, including Swift
+  Sneak, so it changes both eye height and closing speed.
+- **Normal retreat:** hold backward briefly before turning toward the opponent.
+- **Aggressive first hit:** immediately press forward, sprinting when enabled.
+
+Tap lengths, pauses, and strafe directions vary. The same technique cannot be
+chosen twice in succession, and after three defensive attempts the bot switches
+to aggression. Every bait has a timeout; a passive opponent cannot keep the bot
+retreating indefinitely. Existing combo escapes and airborne crit sequences take
+priority over selecting another bait.
+
+Each bot keeps a bounded in-memory history for up to 16 opponents during its
+lifetime. It tracks attempts, nearby main-hand swings, inferred misses, first
+hits, and successful punishes. Early swings favor distance baits, apparent aim
+misses favor strafing, jump habits favor crouching, and reactions to grounded
+pressure favor delayed jump baits. Recent results gradually change selection
+weights, with 25% uniform exploration among eligible alternatives. There is no
+cross-session model or guaranteed success percentage.
+
+Swing and damage events are reconciled over a short grace period before grading.
+A miss means an observed nearby swing without confirmed damage to this bot;
+it is an inference, not access to the opponent's client crosshair or intention.
+Invulnerability windows are excluded from miss rewards. The profile displays
+the current opponent's counts after results settle. Pausing, losing the target,
+or losing line of sight releases crouch and cancels the active sequence.
+
+## In-server checks
+
+After building, verify on a Paper development server with two players:
+
+1. Spawn Sword through the picker and command; verify its profile, diamond
+   equipment, empty offhand, and diamond sword icon. Verify DiamondSMP's cobweb.
+2. Start combat and check charged sprint hits and brief sprint resets. Land
+   two unanswered hits to check the backing escape.
+3. Trade close crits and observe punish crits, occasional double crits, and
+   falling sprint hits. Crouch near maximum range to check head tracking.
+4. Disable sprint resets and critical exchanges independently, then pause and
+   resume. Ensure the bot abandons its previous exchange when retargeted.
+5. With a genuinely high-ping opponent, check that it favors close crit
+   pressure. Tune timing against live movement if needed.
+6. Approach repeatedly, swing early, jump, or aim off to the side. Observe the
+   six engagement states, changes in the profile's outcome counts, varied
+   choices, and aggression after defensive attempts. Verify crouch changes the
+   visible pose and actual movement speed and is released when paused.
+
+## Related guides
+
+<DocCards>
+  <DocCard title="Configuration" href="/Prism/Configuration">Apply style defaults and inherited profile values.</DocCard>
+  <DocCard title="Saved profiles" href="/Prism/Database">Keep a player’s settings for later fights.</DocCard>
+  <DocCard title="All combat styles" href="/Prism/Features">Compare this opponent with the other styles.</DocCard>
+</DocCards>

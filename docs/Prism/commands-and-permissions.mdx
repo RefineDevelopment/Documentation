@@ -1,0 +1,63 @@
+---
+title: "Commands and permissions"
+slug: /Prism/CommandsAndPermissions
+description: "Prism command syntax, aliases, and staff permissions."
+---
+
+# Commands & Permissions
+
+Prism registers two command roots: `/spawnbot` for players and `/prism` for administrators.
+
+## Player commands
+
+`/spawnbot` and its subcommands are player-only and need no permission.
+
+| Command | Aliases | Description |
+| --- | --- | --- |
+| `/spawnbot` | `/botspawn`, `/spawnpvpbot` | Open the bot style selector. Picking a style spawns it right away. |
+| `/spawnbot <style>` | | Spawn a style with your saved profile, or the Medium preset if you haven't saved one. |
+| `/spawnbot <style> <difficulty>` | | Spawn a style with a difficulty preset. This doesn't change your saved profile. |
+| `/spawnbot clear` | `despawn`, `remove`, `kill` | Despawn all bots you own or that are targeting you. |
+
+**Styles:** `crystal`, `mace`, `spearmace`, `sword`, `netheritepotion`, `cart`, `diamondsmp`,
+`uhc`. See [Features](features.mdx#bot-styles) for aliases.
+
+**Difficulties:** `easy`, `medium`, `hard`, `expert`, `hacker`. An unrecognized difficulty
+falls back to `medium`.
+
+### Examples
+
+```text
+/spawnbot
+/spawnbot mace
+/spawnbot sword hard
+/spawnbot crystal expert
+/spawnbot clear
+```
+
+### In-game controls
+
+| Action | Result |
+| --- | --- |
+| Shift + Right-Click a bot | Open that bot's management dialog (owner or `prism.bot.admin`). |
+
+## Admin commands
+
+Every `/prism` command requires `prism.admin`. `/dt` is an alias for `/prism`.
+
+| Command | Description |
+| --- | --- |
+| `/prism` | Show the plugin version and status. |
+| `/prism version` | Show the version and build commit. |
+| `/prism reload` | Reload `config.yml`, `bots/*.yml`, `messages.yml`, `dialogs.yml` and services. |
+| `/prism debug` | Show online players, active bots and memory use. |
+| `/prism mlexport` | Export recorded fights to `plugins/Prism/ml/dataset.csv` (beta). |
+
+## Permission summary
+
+| Permission | Default | Grants |
+| --- | --- | --- |
+| `prism.admin` | op | All `/prism` admin commands. |
+| `prism.bot.admin` | false | Control and edit bots owned by other players. |
+
+See [Permissions](permissions.mdx) for details and examples.

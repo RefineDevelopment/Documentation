@@ -1,0 +1,159 @@
+---
+title: "Saved profile storage"
+slug: /Prism/Database
+description: "Save bot profiles and learned habits with MariaDB or MongoDB."
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Saved profile storage
+
+Prism can save each player's bot profile for each style in a database, so their tuning
+comes back the next time they spawn that style. Storage is **off by default**. Without it,
+profile edits last only until the bot despawns.
+
+## What is stored
+
+For each player and each style:
+
+- **Profile:** combat settings, plus mace tactics (Mace, SpearMace), UHC tactics (UHC) or
+  crystal tuning (Crystal), where they apply.
+- **Learned habits:** a blend of what bots observed about the player in earlier fights,
+  stored under the kit key `HABITS_<STYLE>`, for example `HABITS_SWORD`.
+
+Style keys are the internal names: `CRYSTAL`, `MACE`, `CART`, `SMP`, `SWORD_POT`, `SWORD`,
+`SPEAR_MACE` and `UHC`.
+
+## Configuration
+
+Set this in `plugins/Prism/config.yml`:
+
+<Tabs groupId="prism-database">
+<TabItem value="mariadb" label="MariaDB" default>
+
+```yaml
+profile-storage:
+  enabled: true
+  type: "MARIADB"
+  mariadb:
+    host: "localhost"
+    port: 3306
+    database: "prism"
+    username: "prism"
+    password: "your-password"
+    table-prefix: "prism_"
+```
+
+</TabItem>
+<TabItem value="mongodb" label="MongoDB">
+
+```yaml
+profile-storage:
+  enabled: true
+  type: "MONGODB"
+  mongodb:
+    uri: "mongodb://localhost:27017"
+    database: "prism"
+    collection: "bot_profiles"
+```
+
+Add credentials and the authentication database to the URI when required by your MongoDB setup.
+
+</TabItem>
+</Tabs>
+
+:::warning Restart required
+Restart the server after changing storage settings. `/prism reload` does not reconnect the database.
+:::
+
+Paper downloads the MariaDB and MongoDB drivers from Maven Central on first start, so you
+don't need to install them.
+
+## MariaDB
+
+Prism creates the table if it doesn't exist:
+
+```sql
+CREATE TABLE IF NOT EXISTS prism_bot_profiles (
+    player_uuid VARCHAR(36) NOT NULL,
+    kit         VARCHAR(32) NOT NULL,
+    data        MEDIUMTEXT  NOT NULL,  -- JSON document
+    updated_at  BIGINT      NOT NULL,  -- epoch milliseconds
+    PRIMARY KEY (player_uuid, kit)
+);
+```
+
+The table is named `<table-prefix>bot_profiles`. Each save is an upsert on
+`(player_uuid, kit)`. Prism opens a connection for each operation and doesn't keep a pool.
+
+To create a database user:
+
+```sql
+CREATE DATABASE prism;
+CREATE USER 'prism'@'%' IDENTIFIED BY 'change-me';
+GRANT ALL PRIVILEGES ON prism.* TO 'prism'@'%';
+```
+
+## MongoDB
+
+Documents are stored in the configured collection, with an index on `player`:
+
+```json
+{
+  "_id": "069a79f4-44e9-4726-a5be-fca90e38aaf5:SWORD",
+  "player": "069a79f4-44e9-4726-a5be-fca90e38aaf5",
+  "kit": "SWORD",
+  "data": { "version": 1, "combat": { "...": "..." } },
+  "updatedAt": 1790000000000
+}
+```
+
+`uri` is a standard connection string. Put credentials in it if your server needs them, for
+example `mongodb://user:pass@host:27017/?authSource=admin`.
+
+## Profile document
+
+The `data` value (a JSON column in MariaDB, a sub-document in MongoDB) looks like this:
+
+| Key | Present for | Contents |
+| --- | --- | --- |
+| `version` | all | Document format version |
+| `combat` | all | Shared combat settings |
+| `mace` | Mace, SpearMace | Mace technique and movement settings |
+| `uhc` | UHC | UHC tactics |
+| `crystalTuning` | Crystal | Crystal timing tuning, stored as YAML text |
+
+Habit documents contain `version` and a `habits` map of named numeric values.
+
+Field names follow Prism's internal settings and may change between versions. Treat the data
+as Prism-owned, and read it through [`BotAPI.profile`](api.mdx#reading-saved-profiles) instead
+of querying it directly.
+
+## How it runs
+
+- All database work runs on one background thread, `Prism-BotProfiles`, and never on the main
+  thread.
+- A player's profiles load into memory when they join and are cleared when they leave. Right
+  after joining, profiles may still be loading.
+- When the plugin shuts down, Prism waits up to 10 seconds for queued saves to finish.
+- If the database can't be reached at startup, Prism logs a warning and keeps working without
+  storage.
+
+## Troubleshooting
+
+| Console message | Fix |
+| --- | --- |
+| `Bot profile storage (MARIADB) is unavailable` | Check host, port, credentials, and that the database exists. |
+| `TYPE must be MARIADB or MONGODB` | Set `type` to `MARIADB` or `MONGODB`. |
+| `Table prefix may only contain letters, digits and underscores.` | Remove other characters from `table-prefix`. |
+| `JDBC driver org.mariadb.jdbc.Driver is not available` | Let Paper finish downloading libraries; check outbound access to Maven Central. |
+| `Timed out saving bot profiles` | The database was slow at shutdown; the latest edits may be lost. |
+
+## Related guides
+
+<DocCards>
+  <DocCard title="Configuration" href="/Prism/Configuration">Shared settings and per-style defaults.</DocCard>
+  <DocCard title="API profiles" href="/Prism/API#reading-saved-profiles">Read saved settings through immutable snapshots.</DocCard>
+  <DocCard title="API examples" href="/Prism/APIExamples">Let players configure bots inside your own mode.</DocCard>
+</DocCards>

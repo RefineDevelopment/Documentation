@@ -37,6 +37,7 @@ const STARTERS: StarterTask[] = [
       { product: 'Bolt', href: '/Bolt/Introduction#installation' },
       { product: 'Carbon', href: '/Carbon/Installation' },
       { product: 'Zephyr', href: '/Zephyr/Installation' },
+      { product: 'Prism', href: '/Prism/Installation' },
     ],
   },
   {
@@ -46,6 +47,7 @@ const STARTERS: StarterTask[] = [
       { product: 'Phoenix', href: '/Phoenix/Commands' },
       { product: 'Bolt', href: '/Bolt/CommandsAndPermissions' },
       { product: 'Carbon', href: '/Carbon/Commands' },
+      { product: 'Prism', href: '/Prism/CommandsAndPermissions' },
     ],
   },
   {
@@ -55,6 +57,7 @@ const STARTERS: StarterTask[] = [
       { product: 'Phoenix', href: '/Phoenix/Permissions' },
       { product: 'Bolt', href: '/Bolt/Permissions' },
       { product: 'Zephyr', href: '/Zephyr/Permissions' },
+      { product: 'Prism', href: '/Prism/Permissions' },
     ],
   },
   {
@@ -64,6 +67,7 @@ const STARTERS: StarterTask[] = [
       { product: 'Phoenix', href: '/Phoenix/Features/API' },
       { product: 'Bolt', href: '/Bolt/Features/API' },
       { product: 'Carbon', href: '/Carbon/Features/API' },
+      { product: 'Prism', href: '/Prism/API' },
     ],
   },
 ];
@@ -169,7 +173,7 @@ const Home: React.FC = () => {
                 Products
               </h2>
               <p className="m-0 mb-8 text-sm text-muted-foreground">
-                Four products, each with its own documentation set.
+                Each product has its own documentation set.
               </p>
             </Reveal>
 

@@ -1,0 +1,117 @@
+---
+title: "Features"
+slug: /Prism/Features
+description: "Compare Prism’s eight combat styles, profiles, equipment controls, and learning features."
+---
+
+# Features
+
+## Bot styles
+
+Prism ships eight combat styles. Each one has its own AI, equipment and config file in
+`plugins/Prism/bots/`.
+
+| Style | `/spawnbot` name | Config file | What it does |
+| --- | --- | --- | --- |
+| [Crystal PvP](crystal-bot.mdx) | `crystal` | `crystal.yml` | Places obsidian and end crystals for fast detonations, and uses respawn anchors. |
+| [Mace PvP](mace-bot.mdx) | `mace` | `mace.yml` | Launches with wind charges and lands mace smash attacks. Uses pearl catches and elytra. |
+| [SpearMace](spearmace-bot.mdx) | `spearmace` | `spear-mace.yml` | Chases with a Lunge III spear, catches pearls, and finishes with aerial mace hits. |
+| [Sword](sword-bot.mdx) | `sword` | `sword.yml` | Sword combos, sprint resets, spacing and timed critical hits. |
+| [NetheritePotion](netherite-pot-bot.mdx) | `netheritepotion` | `netherite-potion.yml` | Netherite sword combos, throws health potions, jump crits. |
+| [Cart PvP](cart-bot-mechanics.mdx) | `cart` | `cart.yml` | Places rails and TNT minecarts for clustered burst damage. |
+| [DiamondSMP](diamond-smp-combat.mdx) | `diamondsmp` | `diamond-smp.yml` | Diamond survival PvP with swords, axes, shields, webs, healing and armor repair. |
+| [UHC](uhc-bot.mdx) | `uhc` | `uhc.yml` | Spacing, axe openings, sword pressure, controlled utilities and safe healing. |
+
+Style names aren't case-sensitive. Aliases include `cpvp`, `endcrystal`, `windcharge`, `smash`,
+`spear_mace`, `tnt`, `minecart`, `smp` and `diamond-smp`. An unknown name falls back to Crystal.
+
+Mace and SpearMace rely on attribute swapping for spear swap-dashes and charged spear-to-mace
+finishes. If Paper's `unsupported-settings.update-equipment-on-player-actions` is enabled in
+`config/paper-global.yml`, Prism warns the player when those bots spawn. Set it to `false` and
+restart the server to use the full move set.
+
+## Difficulties
+
+| Difficulty | Notes |
+| --- | --- |
+| Easy | Slow reactions and frequent mistakes |
+| Medium | Default when no difficulty is given |
+| Hard | Faster and more accurate |
+| Expert | Close to perfect execution |
+| Hacker | Strongest preset, with the fastest and most accurate play |
+
+:::info Difficulty profiles
+Profiles vary by style. Mace has four runtime tiers, so API requests for Hacker use its Expert tier. UHC uses Expert timing for Hacker. See each style's guide for its controls.
+:::
+
+## Per-bot profiles
+
+Every active bot has its own profile. When you change one bot's settings, other bots aren't
+affected. Each style's profile dialog shows only the settings for that style, such as mace
+technique choices, UHC tactics or crystal timing.
+
+If [profile storage](database.mdx) is enabled:
+
+- saving a profile stores it for your account and that style;
+- `/spawnbot <style>` without a difficulty uses your saved profile;
+- `/spawnbot <style> <difficulty>` uses that difficulty's preset once and doesn't change your
+  saved profile.
+
+## Controls and menus
+
+- **Bot selector:** `/spawnbot` opens a native Paper dialog that lists all eight styles.
+- **Management dialog:** Shift + Right-Click a bot. Start or pause combat, open its profile,
+  equipment and inventory.
+- **Equipment menu:** armor material (Netherite or Diamond), Protection IV or Blast
+  Protection IV, main hand, ranged weapon, off-hand (Totem or Shield), and totem count
+  (2, 4, 8, 16 or 99 for unlimited). Some styles fix parts of the loadout.
+- **Inventory view:** a live view of the bot's hotbar, armor and off-hand.
+- **Nameplate:** shows the bot's name, style and difficulty, and whether it's idle or paused.
+
+Clients that don't support dialogs get a chest-menu fallback.
+
+## Bot lifecycle
+
+- A countdown runs before each fight (`countdown-seconds` in `config.yml`, default 5).
+- Bots take their names and skins from the `usernames` list in `config.yml`.
+- Bots despawn when they die, when their owner runs `/spawnbot clear`, dies or leaves, and
+  when the plugin disables.
+- With death messages on, players see "You defeated…" and "You lost to…" messages.
+
+## Opponent learning
+
+Bots record how a player fights, for example how they space, retreat and use items. They
+adapt to it during the fight. With [profile storage](database.mdx) on, these observations are
+blended across fights and stored per player and per style, so later bots of that style start
+with what earlier ones learned.
+
+## World effects
+
+Crystal PvP bots place and blow up blocks. To stop explosions caused by bots from dropping
+blocks, set `crystal-pvp.disable-explosion-drops: true` in `config.yml`.
+
+## Configuration and reload
+
+- `config.yml` holds shared settings. Each `bots/<style>.yml` holds that style's tuning.
+  Comments in the generated files document every option.
+- Supported combat overrides accept `inherit` to keep the selected profile's value. Fine tuning is grouped under `ADVANCED`; see [Configuration](bot-configuration.mdx).
+- `/prism reload` reloads all configs and messages. Respawn bots to apply combat changes.
+  Changes to profile storage need a full server restart.
+
+## Machine learning (beta)
+
+Machine learning is experimental and turned off by default.
+
+:::info Documentation coming after beta
+Machine learning documentation will be provided once it is fully out of beta.
+:::
+
+- `machine-learning.enabled` records bot fights to `plugins/Prism/ml/` as training data.
+- `/prism mlexport` converts the recorded episodes to `plugins/Prism/ml/dataset.csv`.
+- `machine-learning.inference-enabled` lets bots act on a trained `.onnx` model. Prism doesn't
+  include a model; you need to train and provide your own.
+
+## Developer API
+
+Other plugins can spawn, query and despawn bots, open Prism's menus, read saved profiles, and
+listen for spawn, kill and despawn events. See [Javadoc / API](api.mdx).

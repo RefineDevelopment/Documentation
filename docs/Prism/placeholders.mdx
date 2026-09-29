@@ -1,0 +1,142 @@
+---
+title: "Placeholders"
+slug: /Prism/Placeholders
+description: "Message placeholders and a custom PlaceholderAPI integration using PrismAPI."
+---
+
+# Placeholders
+
+Prism's text lives in `plugins/Prism/messages.yml` (chat) and `plugins/Prism/dialogs.yml`
+(dialogs and menus). Entries use [MiniMessage](https://docs.advntr.dev/minimessage/format.html)
+formatting and two kinds of placeholders.
+
+## Named placeholders
+
+| Placeholder | Replaced with |
+| --- | --- |
+| `<prefix>` | The Prism chat prefix: **Prism** in a purple gradient, followed by `»` |
+| `<bot>` | The bot's name |
+| `<player>` | The player's name, where the template provides it |
+
+Name placeholders (`<bot>`, `<player>`, `<killer>`, `<opponent>`, `<target>`, `<victim>`) are
+inserted as plain text after formatting runs. A name can't inject MiniMessage tags.
+
+Messages sent with the prefix get `<prefix>` added at the start automatically if the template
+doesn't already include it.
+
+## Numbered placeholders
+
+Many templates take positional values `{0}`, `{1}` and so on. What each number means depends
+on the template. The generated file lists it above each entry. Common examples:
+
+| Template (`messages.yml`, under `text`) | `{0}` | `{1}` |
+| --- | --- | --- |
+| `bot-service.spawned-a` | Difficulty or profile name | Bot style |
+| `bot-service.bot-combat-starting-in-seconds` | Seconds left | |
+| `bot-service.you-defeated` | Difficulty or profile name | |
+| `bot-service.you-were-defeated-by` | Difficulty or profile name | |
+| `bot-service.nametag-details` | Bot style | Difficulty |
+| `bot-equipment-menu.current` | Current value | |
+| `bot-inventory-menu.slot-empty` | Slot number | |
+
+Numbers with no value supplied are left as they are.
+
+## Formatting extras
+
+- `<center>…</center>` centers the line in chat.
+- All MiniMessage tags work: colors, `<gradient>`, `<bold>`, `<hover>`, `<click>` and more.
+- Entries that are plain text show tags literally.
+
+Run `/prism reload` after editing, then reopen any open menus.
+
+## PlaceholderAPI integration
+
+To expose Prism bot data in PlaceholderAPI-compatible scoreboards, menus, or chat, your integration plugin can register a custom expansion backed by [PrismAPI](api.mdx).
+
+The source used for this documentation has no built-in PlaceholderAPI expansion. The `%prismbridge_active_bots%` placeholder below is provided by the example bridge after you implement and register it.
+
+### Dependencies
+
+Install PlaceholderAPI alongside Retention and enable Prism through Retention. Compile your integration against PrismAPI and PlaceholderAPI using compile-only dependencies. Follow the [PlaceholderAPI dependency setup](https://wiki.placeholderapi.com/developers/using-placeholderapi/) for its repository and artifact.
+
+If both integrations are required, declare:
+
+```yaml
+depend: [Retention, PlaceholderAPI]
+```
+
+For optional support, declare:
+
+```yaml
+softdepend: [Retention, PlaceholderAPI]
+```
+
+Register the bridge only after PlaceholderAPI is enabled and `PrismAPI.get()` is available. Keep the PlaceholderAPI-dependent class separate so optional support can stay disabled when PlaceholderAPI is absent.
+
+### Example: active bot count
+
+This bridge refreshes the bot count once per second on the server thread. Placeholder requests read the cached value, so scoreboards can resolve it from another thread. The count becomes zero if Prism's API becomes unavailable.
+
+```java
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
+import xyz.refinedev.prism.api.PrismAPI;
+
+public final class PrismPlaceholderBridge extends PlaceholderExpansion {
+    private final JavaPlugin plugin;
+    private volatile int activeBots;
+    private BukkitTask refreshTask;
+
+    public PrismPlaceholderBridge(JavaPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public void start() {
+        refreshTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            try {
+                activeBots = PrismAPI.get().bots().active().size();
+            } catch (IllegalStateException unavailable) {
+                activeBots = 0;
+            }
+        }, 0L, 20L);
+        register();
+    }
+
+    public void stop() {
+        if (refreshTask != null) refreshTask.cancel();
+        unregister();
+    }
+
+    @Override public String getIdentifier() { return "prismbridge"; }
+    @Override public String getAuthor() {
+        return String.join(", ", plugin.getDescription().getAuthors());
+    }
+    @Override public String getVersion() {
+        return plugin.getDescription().getVersion();
+    }
+    @Override public boolean persist() { return true; }
+
+    @Override
+    public String onRequest(OfflinePlayer player, String params) {
+        return params.equalsIgnoreCase("active_bots")
+                ? Integer.toString(activeBots) : null;
+    }
+}
+```
+
+In your plugin's `onEnable()`, check `Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")` and confirm that `PrismAPI.get()` succeeds before creating the bridge. Store it in a field and call `start()`. In `onDisable()`, call `stop()` if the bridge was created.
+
+This follows PlaceholderAPI's [internal expansion registration](https://wiki.placeholderapi.com/developers/creating-a-placeholderexpansion/) pattern. `persist()` keeps the expansion registered across PlaceholderAPI reloads; your plugin still unregisters it when it disables.
+
+### Use the placeholder
+
+After registering the bridge, add `%prismbridge_active_bots%` to a PlaceholderAPI-enabled scoreboard or menu. To check it in-game:
+
+```text
+/papi parse me %prismbridge_active_bots%
+```
+
+The result is the server-wide number of active Prism bots, refreshed every second. Unknown bridge placeholders return `null` and remain unresolved.

@@ -1,0 +1,84 @@
+---
+title: "Introduction"
+slug: /Prism/Introduction
+description: "Get started with Prism combat-practice bots and their player controls."
+---
+
+# Introduction
+
+Prism adds combat-practice bots to your Paper server. Players choose one of eight fighting styles, tune the opponent, and practice with the equipment and tactics that style uses.
+
+<DocCards>
+  <DocCard title="Installation" href="/Prism/Installation">Requirements, setup, and your first fight.</DocCard>
+  <DocCard title="Combat styles" href="/Prism/Features">Crystal, Mace, Spear Mace, Sword, and more.</DocCard>
+  <DocCard title="Commands & Permissions" href="/Prism/CommandsAndPermissions">Player commands and staff access.</DocCard>
+  <DocCard title="Configuration" href="/Prism/Configuration">Shared settings and per-style combat overrides.</DocCard>
+  <DocCard title="Saved profiles" href="/Prism/Database">Keep player profiles in MariaDB or MongoDB.</DocCard>
+  <DocCard title="Developer API" href="/Prism/API">Bots, menus, profile snapshots, and lifecycle events.</DocCard>
+</DocCards>
+
+## Requirements
+
+| Requirement | Notes |
+| :--- | :--- |
+| Paper 1.21.11+ | Minecraft 1.21.11 and newer. |
+| Java 21 | Use the Java runtime required by your Paper version. |
+| Retention | Loads Prism through your Retention setup. |
+| MariaDB or MongoDB | Required only when saved profile storage is enabled. |
+
+:::info Saved profiles
+Prism works with profile storage disabled. Enable [database storage](database.mdx) when players should keep their tuning between sessions.
+:::
+
+## Your first bot
+
+Follow [Installation](installation.mdx), then join the server.
+
+<Steps>
+
+1. Run `/spawnbot` to open the style selector.
+2. Choose a style. Prism spawns the bot and runs a countdown, five seconds by default.
+3. Shift + right-click the bot to open its controls.
+4. Use `/spawnbot clear` when you finish practicing.
+
+</Steps>
+
+To choose the style and difficulty directly:
+
+```text
+/spawnbot sword hard
+```
+
+## Bot controls
+
+| Control | What you can change |
+| :--- | :--- |
+| Combat | Start, pause, or resume the fight. |
+| Profile | Difficulty and tactics available for that style. |
+| Equipment | Supported armor, weapon, offhand, and totem choices. |
+| Inventory | View the bot's current hotbar, armor, and offhand. |
+
+The bot's owner can control it. Staff with `prism.bot.admin` can control other players' bots; see [Permissions](permissions.mdx).
+
+## Common questions
+
+<details>
+<summary>Do I need to create an arena first?</summary>
+
+You can spawn a bot at your current location with `/spawnbot`. For a managed match, your arena plugin can spawn and clean up bots through the [API](api.mdx); see [Arena integration](arenas.mdx).
+
+</details>
+
+<details>
+<summary>Why did my bot settings reset?</summary>
+
+Without profile storage, edits belong to the active bot. Configure [MariaDB or MongoDB](database.mdx) and save a profile to reuse it on later spawns. An explicit difficulty in `/spawnbot <style> <difficulty>` selects that preset for one spawn.
+
+</details>
+
+<details>
+<summary>How do I apply configuration changes?</summary>
+
+Run `/prism reload` and respawn the bot after editing combat settings. Database connection changes require a full restart. See [Configuration](bot-configuration.mdx#reload) for reload behavior.
+
+</details>

@@ -1,0 +1,147 @@
+---
+title: "Database"
+slug: /Rift/Database
+description: "Store player data in MySQL, MariaDB, or MongoDB."
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Database
+
+Rift stores player profiles, stats, and settings. Rift can use MySQL, MariaDB, or MongoDB, so several servers can share the same data.
+
+## What is stored
+
+| Data | Contents |
+| --- | --- |
+| Players | UUID, last known name, first and last join time |
+| Stats | Kills, deaths, current and best killstreak, RTP wins and losses, coins |
+| Settings | Each player's preferences from `/settings` |
+
+Arena and location data is not in the database. It is stored as JSON in `plugins/Rift/data/`.
+
+## Configuration
+
+Edit `plugins/Rift/database.yml`, set `type` to `mariadb` (the default), `mysql`, or `mongodb`, then restart the server. A database server is required, because Rift has no embedded database.
+
+<Tabs groupId="rift-database">
+<TabItem value="mariadb" label="MariaDB" default>
+
+```yaml
+type: "mariadb"
+mariadb:
+  host: "127.0.0.1"
+  port: 3306
+  database: "rift"
+  username: "rift"
+  password: "your-password"
+  ssl: false
+  pool-size: 10
+  connection-timeout: 30000
+```
+
+</TabItem>
+<TabItem value="mysql" label="MySQL">
+
+```yaml
+type: "mysql"
+mysql:
+  host: "127.0.0.1"
+  port: 3306
+  database: "rift"
+  username: "rift"
+  password: "your-password"
+  ssl: false
+  pool-size: 10
+  connection-timeout: 30000
+```
+
+</TabItem>
+<TabItem value="mongodb" label="MongoDB">
+
+```yaml
+type: "mongodb"
+mongodb:
+  uri: "mongodb://localhost:27017"
+  database: "rift"
+  collection-prefix: "rift_"
+```
+
+Put credentials and the authentication database in the URI, for example `mongodb://user:pass@host:27017/?authSource=admin`.
+
+</TabItem>
+</Tabs>
+
+:::warning Change the default names
+The generated `database.yml` uses `prism` as the default database name, and `prism_` as the MongoDB collection prefix. Set your own names (the examples above use `rift`), so Rift doesn't share a database with a Prism install.
+:::
+
+:::warning Restart required
+Restart the server after changing storage settings. `/rift reload` does not switch backends.
+:::
+
+An unrecognized `type` stops Rift from enabling and logs `Unsupported storage type`. Use `mysql`, `mariadb`, or `mongodb`.
+
+## MySQL and MariaDB
+
+MySQL and MariaDB use a HikariCP connection pool: `pool-size` connections, with `connection-timeout` in milliseconds. Rift creates the tables on startup, but you must create the database and user first:
+
+```sql
+CREATE DATABASE rift;
+CREATE USER 'rift'@'%' IDENTIFIED BY 'change-me';
+GRANT ALL PRIVILEGES ON rift.* TO 'rift'@'%';
+```
+
+Schema:
+
+```sql
+CREATE TABLE IF NOT EXISTS players (
+    uuid            VARCHAR(36) PRIMARY KEY,
+    last_known_name VARCHAR(16) NOT NULL,
+    first_join_time BIGINT      NOT NULL,
+    last_join_time  BIGINT      NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS stats (
+    uuid               VARCHAR(36) PRIMARY KEY,
+    kills              INT    DEFAULT 0,
+    deaths             INT    DEFAULT 0,
+    current_killstreak INT    DEFAULT 0,
+    best_killstreak    INT    DEFAULT 0,
+    rtp_wins           INT    DEFAULT 0,
+    rtp_losses         INT    DEFAULT 0,
+    coins              DOUBLE DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS settings (
+    uuid               VARCHAR(36) PRIMARY KEY,
+    scoreboard_enabled INT DEFAULT 1,
+    faster_crystals    INT DEFAULT 0,
+    health_display     INT DEFAULT 1,
+    quick_respawn      INT DEFAULT 1,
+    duels_enabled      INT DEFAULT 1,
+    player_visibility  INT DEFAULT 1,
+    dropping_items     INT DEFAULT 0,
+    chat_enabled       INT DEFAULT 1
+);
+```
+
+An older `stats` table without the `coins` column gets it added automatically.
+
+## MongoDB
+
+Rift uses three collections named `<collection-prefix>players`, `<collection-prefix>stats`, and `<collection-prefix>settings`, for example `rift_players`.
+
+## Saving
+
+Profiles load when a player joins. Rift also saves them in the background every `storage.save-interval-seconds` (300 by default in `config.yml`). Leaderboards recompute every `leaderboards.update-interval-seconds`.
+
+## Troubleshooting
+
+| Problem | Fix |
+| --- | --- |
+| `Unsupported storage type` | Set `type` in `database.yml` to `mysql`, `mariadb`, or `mongodb`. |
+| `SQL schema initialization failed` | Check host, port, credentials, that the database exists, and that the user can create tables. |
+| Data didn't switch backends | Restart the server after editing `type`. |
+| Servers show different stats | Point every server at the same database. |

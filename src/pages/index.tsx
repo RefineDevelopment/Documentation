@@ -38,6 +38,7 @@ const STARTERS: StarterTask[] = [
       { product: 'Carbon', href: '/Carbon/Installation' },
       { product: 'Zephyr', href: '/Zephyr/Installation' },
       { product: 'Prism', href: '/Prism/Installation' },
+      { product: 'Rift', href: '/Rift/Installation' },
     ],
   },
   {
@@ -48,6 +49,7 @@ const STARTERS: StarterTask[] = [
       { product: 'Bolt', href: '/Bolt/CommandsAndPermissions' },
       { product: 'Carbon', href: '/Carbon/Commands' },
       { product: 'Prism', href: '/Prism/CommandsAndPermissions' },
+      { product: 'Rift', href: '/Rift/CommandsAndPermissions' },
     ],
   },
   {
@@ -58,6 +60,7 @@ const STARTERS: StarterTask[] = [
       { product: 'Bolt', href: '/Bolt/Permissions' },
       { product: 'Zephyr', href: '/Zephyr/Permissions' },
       { product: 'Prism', href: '/Prism/Permissions' },
+      { product: 'Rift', href: '/Rift/CommandsAndPermissions#permissions' },
     ],
   },
   {
@@ -68,6 +71,7 @@ const STARTERS: StarterTask[] = [
       { product: 'Bolt', href: '/Bolt/Features/API' },
       { product: 'Carbon', href: '/Carbon/Features/API' },
       { product: 'Prism', href: '/Prism/API' },
+      { product: 'Rift', href: '/Rift/API' },
     ],
   },
 ];

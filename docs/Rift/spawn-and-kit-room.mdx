@@ -1,0 +1,75 @@
+---
+title: "Spawn and kit room"
+slug: /Rift/SpawnAndKitRoom
+description: "Set the lobby spawn, its protection bounds, and the physical kit room."
+---
+
+# Spawn and kit room
+
+Every mode starts and ends at spawn, so set it up first. All commands need `rift.admin` and are run in-game.
+
+## Spawn
+
+<Steps>
+
+1. Stand where players should arrive and run `/rift setspawn location`.
+2. Stand in one corner of the lobby and run `/rift setspawn min`.
+3. Stand in the opposite corner and run `/rift setspawn max`.
+
+</Steps>
+
+`/spawn set` (permission `rift.admin.spawn`) also sets the spawn location.
+
+Players use `/spawn` to return, after the `spawn.cooldown-seconds` cooldown (5 seconds by default). Holders of `rift.bypass.spawn` skip the cooldown and the protections below.
+
+### Spawn protection
+
+Protection is configured under `spawn.protection` in `config.yml`.
+
+| Setting | Default | Effect |
+| --- | --- | --- |
+| `radius` | `30.0` | Protected radius around spawn, in blocks |
+| `prevent-damage` | `true` | No damage at spawn |
+| `prevent-block-placement` / `prevent-block-breaking` | `true` | No building |
+| `prevent-crystal-placement` / `prevent-crystal-breaking` | `true` | No end crystals |
+| `prevent-explosions` | `true` | No explosion damage |
+| `prevent-projectiles` | `true` | No projectiles |
+| `prevent-item-dropping` | `true` | No dropping items |
+
+## Kit room
+
+The kit room is the physical area where players arrange their kits. Stations are clickable hologram points that open the editor tools.
+
+<Steps>
+
+1. Stand at the room's center and run `/rift setkitroom`. This saves the center without placing stations.
+2. For each station, stand where it should go and run `/rift setkitroomstation <station>`.
+3. Run `/rift spawnkitroom` to respawn the stations and their holograms.
+
+</Steps>
+
+### Stations
+
+| Station | Purpose |
+| --- | --- |
+| `confirm` | Save the kit and return to spawn |
+| `cancel` | Discard changes and return to spawn |
+| `rename` | Rename the held item (permission `rift.kiteditor.rename`) |
+| `trims` | Apply armor trims (permission `rift.kiteditor.trims`) |
+| `npc` | Mirror NPC that shows your kit and movement |
+| `vanilla_items` | Browse items to add to the kit |
+| `enchant_table` | Enchant the held item |
+| `shulker_box` | Edit shulker box contents |
+| `loom` | Design shield banners |
+
+`/rift setkitroomblock <station>` places and configures the physical block for a station. Set `stations.auto-place-blocks: true` in `kiteditor.yml` to place blocks automatically when stations spawn.
+
+The same setup is also available under `/kiteditor` as `setroom`, `set`, `setblock`, `spawnstations`, and `clearstations`, with the permission `rift.admin.kiteditor`.
+
+### Hologram text
+
+Station titles and subtitles in `kiteditor.yml` accept MiniMessage, `{sprite:key}` tokens, and PlaceholderAPI placeholders when PlaceholderAPI is installed. Set `stations.holograms.native-atlas: false` to use plain text glyphs instead of sprites. Text edits apply on `/rift reload`.
+
+## Premade kit
+
+Run `/rift setpremadekit` to save your current inventory as the server premade kit. Players can load it with `/getpremadekit`. Staff can load it with `/rift getpremadekit`.

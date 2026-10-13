@@ -1,0 +1,107 @@
+---
+title: "Set up FFA"
+slug: /Rift/SettingUpFfa
+description: "Create an FFA arena, set its bounds and spawn, choose its kit, and tune the rules."
+---
+
+# Set up FFA
+
+FFA arenas are void worlds. Rift creates the world, you build the arena in it, then you tell Rift where the arena is. Run these commands in-game with `rift.admin.arena`.
+
+<Steps>
+
+1. Create the arena:
+
+   ```text
+   /arena create <id> ffa
+   ```
+
+   Rift creates a void world, loads it, and teleports you in. IDs may contain letters, numbers, `_` and `-`.
+
+2. Build the arena. A 3x3 bedrock platform is placed at `0, 64, 0` to stand on. Turn this off with `arenas.spawn-platform: false` in `config.yml`.
+3. Stand where players should spawn and run `/arena setspawn <id>`.
+4. Stand in one corner of the playable area and run `/arena setmin <id>`, then in the opposite corner and run `/arena setmax <id>`. You must be inside the arena's world.
+5. Choose the kit (see below).
+6. Check it with `/arena info <id>`, then join with `/ffa <id>`.
+
+</Steps>
+
+Arenas are enabled when created. Use `/arena disable <id>` and `/arena enable <id>` to take one out of rotation. `/arena tp <id>` teleports you to an arena, and selects its bounds if WorldEdit is installed.
+
+## World layout
+
+`arenas.world-mode` in `config.yml` decides where FFA arenas live.
+
+| Mode | Result |
+| --- | --- |
+| `SEPARATE` (default) | Every arena gets its own void world, named `arena_<id>`. |
+| `SHARED` | All arenas share one void world, named by `arenas.shared-world-name` (`arenas_void`). Place arenas far apart and set exact bounds. |
+
+## Kit
+
+Players joining FFA receive the **default FFA kit**, or the kit they chose with `/ffakit`. Create and default one with:
+
+```text
+/ffakit create crystal
+/ffakit setdefault crystal
+```
+
+See [Kits](kits.mdx) for the full workflow.
+
+Each arena's JSON also stores a `kit` ID, which defaults to `premade-crystal` for new arenas. To change it, edit `data/ffa/<id>.json` and run `/arena reload`.
+
+## Rules
+
+`ffa.yml` controls death handling.
+
+| Setting | Default | Effect |
+| --- | --- | --- |
+| `rules.drop-items-on-death` | `false` | Drop the player's items on death |
+| `rules.auto-respawn` | `true` | Respawn instantly without the death screen |
+| `rules.auto-rekit-on-respawn` | `true` | Re-equip the kit after respawning |
+
+`config.yml` adds an anti spawn-camp platform around the arena spawn.
+
+```yaml
+ffa-spawn-platform:
+  enabled: true
+  radius: 4.0
+  depth: 2.0
+  grace-seconds: 5
+  end-grace-on-attack: true
+```
+
+Players on the platform can't deal or take damage. Stepping off grants `grace-seconds` of invulnerability, which ends early if they attack while `end-grace-on-attack` is on.
+
+## Combat tag
+
+`combat.yml` tags players for a few seconds after combat in FFA and RTP.
+
+| Setting | Default | Effect |
+| --- | --- | --- |
+| `combat-tag.enabled` | `true` | Turn tagging on |
+| `combat-tag.duration-seconds` | `5.0` | Tag length |
+| `combat-tag.tagged-modes` | `FFA`, `RTP` | Modes where tagging applies |
+| `restrictions.block-leave` | `true` | Block `/leave` while tagged |
+| `restrictions.blocked-commands` | spawn, tpa, rtp and similar | Commands refused while tagged |
+| `logout.kill-on-logout` | `true` | Kill a player who disconnects while tagged |
+
+Give staff `rift.bypass.combattag` to exempt them. Operators don't get it automatically.
+
+## Player commands
+
+| Command | Description |
+| --- | --- |
+| `/ffa` | Open the arena menu, or join an arena by ID. |
+| `/ffa join [id]` | Join an arena. |
+| `/ffa leave` | Leave FFA and return to spawn. |
+| `/ffakit` | Choose and arrange an FFA kit. |
+
+## Troubleshooting
+
+| Problem | Fix |
+| --- | --- |
+| "You must be in the arena world" | `setmin`, `setmax` and `setspawn` only work while standing in that arena's world. Use `/arena tp <id>` first. |
+| Players can leave the area | Check `/arena info <id>` for the bounds. New arenas default to -500..500 on X/Z until you set them. |
+| Arena doesn't appear in the menu | Make sure it's enabled: `/arena list ffa`. |
+| Edited JSON not applied | Run `/arena reload`. |

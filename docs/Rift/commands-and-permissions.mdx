@@ -1,0 +1,117 @@
+---
+title: "Commands and permissions"
+slug: /Rift/CommandsAndPermissions
+description: "Every Rift command, alias, and permission node."
+---
+
+# Commands & Permissions
+
+## Player commands
+
+These need no permission.
+
+| Command | Aliases | Description |
+| --- | --- | --- |
+| `/ffa [id]` | | Open the FFA arena menu, or join an arena. Also `join`, `leave`, `menu`. |
+| `/ffakit` | `/ffakits` | Choose and arrange your FFA kit. Also `select`, `edit`, `reset`, `list`. |
+| `/rtp [id]` | `/wild` | Open the RTP menu, or teleport into an arena. Also `leave`, `menu`. |
+| `/queue` | `/rtpqueue`, `/rtpq`, `/duel` | Join or leave the RTP duel queue. Also `join`, `leave`. |
+| `/leave` | `/quit`, `/l` | Leave your current match, arena, or queue. |
+| `/spawn` | | Teleport to spawn. |
+| `/kiteditor` | `/editkit`, `/layout`, `/trims`, `/armortrims` | Open the kit room. Also `trims`, `enchant`, `shulker`, `layout`, `rename`. |
+| `/kitroom` | `/kitsupply`, `/supply` | Open the kit room supply menu. |
+| `/getpremadekit` | `/premadekit`, `/premadekits` | Open the premade kit menu. |
+| `/cosmetics` | | Open the cosmetics shop and wardrobe. Also `effects`, `messages`, `sounds`, `trails`, `elytra`, `mace`. |
+| `/leaderboard [category]` | `/top`, `/lb` | Open the leaderboards, or one category. |
+| `/stats [player]` | `/stat`, `/profile` | View statistics. |
+| `/balance` | `/bal`, `/coins` | Check your coin balance. |
+| `/settings` | `/preferences`, `/prefs` | Open your preferences. |
+| `/totempractice` | `/totem` | Practice totem reaction speed, at spawn. |
+| `/tpa <player>` | | Ask to teleport to a player. |
+| `/tpahere <player>` | | Ask a player to teleport to you. |
+| `/tpaccept [player]` | | Accept a request. No name selects the newest. |
+| `/tpdeny [player]` | | Deny a request. No name selects the newest. |
+
+Leaderboard categories: `kills`, `deaths`, `kdr`, `wins`, `killstreak`, `balance`.
+
+### Teleport requests
+
+Requests expire after `teleport-requests.expire-seconds` (60) and there is a `cooldown-seconds` (5) between sends. Each player has one outgoing request, and sending another replaces it. Both players must be at spawn or in RTP, and queue, duel, FFA, and kit-editor states can't be interrupted. Acceptance re-checks both players and verifies a safe destination before teleporting.
+
+## Admin commands
+
+### `/rift` (`rift.admin`)
+
+| Command | Description |
+| --- | --- |
+| `/rift` | Show plugin info. |
+| `/rift reload` | Reload configs, messages, and services. |
+| `/rift debug` | Print online players, cached profiles, queue size, and memory use. |
+| `/rift setspawn <location\|min\|max>` | Set the spawn point or one of its boundary corners. |
+| `/rift setkitroom` | Set the kit room center (alias `setroom`). |
+| `/rift setkitroomstation <station>` | Set and place one station (alias `setroomstation`). |
+| `/rift setkitroomblock <station>` | Set one station's physical block (alias `setroomblock`). |
+| `/rift spawnkitroom` | Respawn all stations and displays (alias `spawnroom`). |
+| `/rift setpremadekit` | Save your inventory as the premade kit. |
+| `/rift getpremadekit` | Equip the premade kit. |
+
+### `/arena` (`rift.admin.arena`)
+
+Alias: `/arenas`.
+
+| Command | Description |
+| --- | --- |
+| `/arena list [ffa\|rtp]` | List arenas. |
+| `/arena info <id>` | Show an arena's JSON. |
+| `/arena create <id> <ffa\|rtp> [preset] [baseHeight] [hillScale]` | Create an arena. |
+| `/arena delete <id>` | Delete an arena's JSON (alias `remove`). |
+| `/arena enable <id>` / `disable <id>` | Toggle an arena. |
+| `/arena setspawn <id>` | Set the arena spawn to your position. |
+| `/arena setmin <id>` / `setmax <id>` | Set the bounds corners to your position. |
+| `/arena setcenter <id>` | Set the RTP center. |
+| `/arena setradius <id> <min> <max>` | Set the RTP teleport radius. |
+| `/arena setseparation <id> <blocks>` | Set the duel player separation. |
+| `/arena regen <id> [damaged\|radius]` | Restore RTP terrain. |
+| `/arena tp <id>` | Teleport to an arena (alias `teleport`). |
+| `/arena reload` | Reload arena JSON from disk. |
+| `/arena setkitffa` / `getkitffa` | Save or fetch the single FFA kit. |
+
+### Other admin commands
+
+| Command | Permission | Description |
+| --- | --- | --- |
+| `/ffa setspawn` | `rift.admin.ffa` | Set the default FFA spawn. |
+| `/ffakit create`, `setinventory`, `load`, `seticon`, `rename`, `setdefault`, `delete` | `rift.admin.ffakit` | Manage [FFA kits](kits.mdx). |
+| `/spawn set` | `rift.admin.spawn` | Set spawn to your position. |
+| `/kiteditor setroom`, `set`, `setblock`, `spawnstations`, `clearstations` | `rift.admin.kiteditor` | Manage the kit room. |
+| `/leaderboard spawn <category> [id]` | `rift.admin.leaderboard` | Place a leaderboard hologram (alias `create`). |
+| `/leaderboard remove [id]` | `rift.admin.leaderboard` | Remove a hologram by ID, or the nearest (alias `delete`). |
+| `/leaderboard list` | `rift.admin.leaderboard` | List holograms. |
+| `/leaderboard reload` | `rift.admin.leaderboard` | Reload holograms and their configs. |
+| `/queue cancel` | `rift.admin.rtp` | Cancel the RTP duel you are in. |
+| `/edit` | `rift.admin.edit` | Toggle edit mode: build freely with no mode queueing. |
+
+## Permissions
+
+| Permission | Default | Grants |
+| --- | --- | --- |
+| `rift.admin` | op | `/rift` and every `rift.admin.*` child below. |
+| `rift.admin.arena` | op | All `/arena` commands. |
+| `rift.admin.ffa` | op | `/ffa setspawn`. |
+| `rift.admin.ffakit` | op | FFA kit management. |
+| `rift.admin.kiteditor` | op | Kit room setup commands. |
+| `rift.admin.leaderboard` | op | Leaderboard hologram commands. |
+| `rift.admin.rtp` | op | `/queue cancel`. |
+| `rift.admin.spawn` | op | `/spawn set`. |
+| `rift.admin.edit` | op | `/edit`. |
+| `rift.bypass.combattag` | false | Never combat tagged. Operators don't get it automatically. |
+| `rift.bypass.spawn` | not declared | Skip the spawn cooldown and spawn protection. |
+| `rift.bypass.rtpcooldown` | not declared | Skip the `/rtp` cooldown. |
+| `rift.kiteditor.rename` | not declared | Rename items at the rename station. |
+| `rift.kiteditor.trims` | not declared | Apply armor trims at the trims station. |
+| `rift.cosmetics.all` | not declared | Every cosmetic. |
+| `rift.cosmetics.<category>.<name>` | not declared | One cosmetic, for example `rift.cosmetics.killeffect.lightning`. |
+
+Nodes marked "not declared" aren't in `plugin.yml`, so Bukkit defaults them to operators. Grant or deny them explicitly with your permissions plugin if you want different behavior.
+
+Cosmetic categories: `killeffect`, `killmessage`, `killsound`, `trail`, `elytra`, `mace`.

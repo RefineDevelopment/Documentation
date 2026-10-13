@@ -1,0 +1,80 @@
+---
+title: "Installation"
+slug: /Rift/Installation
+description: "Install Rift on Paper 1.21.11+, start the server, and find the generated files."
+---
+
+# Installation
+
+Rift supports Paper **1.21.11+** and loads through **Retention**. Enable Rift through your Retention setup.
+
+## Install Rift
+
+<Steps>
+
+1. Stop the server and back up its plugin data.
+2. Install Retention and put it in `plugins/`.
+3. Start the server on Java 21.
+4. Check the console for Rift enabling without errors.
+5. Join and run `/rift` to confirm the plugin is loaded. Operators have `rift.admin` by default.
+
+</Steps>
+
+## If Rift is not in Retention's configuration
+
+If Rift is not in Retention's configuration, add this entry, then restart the server:
+
+```yaml
+  Rift:
+    BRANCH: "default"
+    VERSION: "autoupdate"
+    ENABLED: true
+    SHUTDOWN-ON-ERROR: false
+```
+
+## Plugins integrating with Rift
+
+Plugins that use Rift's API must declare `depend: [Retention]` or `softdepend: [Retention]` in their `plugin.yml`, and depend on Rift itself. Use `depend` for a required integration and `softdepend` for an optional one. See [Developer API](api.mdx).
+
+Next, [set up spawn and the kit room](spawn-and-kit-room.mdx), then an [FFA arena](setting-up-ffa.mdx) or [RTP arena](setting-up-rtp.mdx).
+
+## Optional plugins
+
+Rift soft-depends on these. None are required.
+
+| Plugin | Used for |
+| --- | --- |
+| Vault | Economy integration. |
+| WorldEdit / FastAsyncWorldEdit | `/arena tp` selects the arena bounds so you can see them. |
+| PlaceholderAPI | Placeholders in kit-room hologram text and other rendered text. |
+| FancyHolograms, FancyNpcs | Leaderboard holograms and kit-room NPCs. |
+| Oraxen, ItemsAdder, Nexo | Custom items in the kit editor. |
+| Prism | Combat practice bots. |
+
+## Generated files
+
+All paths are relative to `plugins/Rift/`.
+
+| Path | Purpose |
+| --- | --- |
+| `config.yml` | Features, economy, arenas, RTP, terrain regen, spawn protection, leaderboards |
+| `database.yml` | [Storage backend](database.mdx) |
+| `ffa.yml` | FFA rules: drop items, auto respawn, auto re-kit |
+| `combat.yml` | Combat tag and logout rules |
+| `features.yml` | Trim workshop, shield designer, golden head, totem practice |
+| `kiteditor.yml` | Kit editor, kit room stations and holograms |
+| `scoreboard.yml` | Sidebar layouts per state |
+| `holograms.yml` | Leaderboard hologram formats |
+| `hotbar.yml` | Spawn hotbar items |
+| `messages.yml`, `dialogs.yml` | All player-facing text |
+| `data/spawn.json` | Spawn location and bounds |
+| `data/kitroom.json` | Kit room center and stations |
+| `data/ffa/<id>.json` | One file per FFA arena |
+| `data/rtp/<id>.json` | One file per RTP arena |
+| `data/terrain-damage.json` | Recorded RTP block damage awaiting restore |
+
+Locations and arenas live in `data/` as JSON and are managed by commands. Behavior settings live in the YAML files.
+
+## Reloading
+
+`/rift reload` reloads the YAML files, messages, and every service. Changes to [database settings](database.mdx) need a full restart.

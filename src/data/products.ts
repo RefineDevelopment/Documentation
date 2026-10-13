@@ -1,5 +1,5 @@
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faShield, faBolt, faMicrochip, faWind, faCrosshairs } from '@fortawesome/free-solid-svg-icons';
+import { faShield, faBolt, faMicrochip, faWind, faCrosshairs, faGem } from '@fortawesome/free-solid-svg-icons';
 
 export interface ProductLink {
     label: string;
@@ -84,6 +84,20 @@ export const products: Product[] = [
             { label: "Configuration", href: "/Prism/Configuration" },
             { label: "Commands", href: "/Prism/CommandsAndPermissions" },
             { label: "API", href: "/Prism/API" },
+        ],
+    },
+    {
+        title: "Rift",
+        description: "FFA and RTP PvP platform with kits, duels, cosmetics, leaderboards, and a public API.",
+        href: "/Rift/Introduction",
+        colorClass: "bg-primary",
+        icon: faGem,
+        links: [
+            { label: "Installation", href: "/Rift/Installation" },
+            { label: "Set up FFA", href: "/Rift/SettingUpFfa" },
+            { label: "Set up RTP", href: "/Rift/SettingUpRtp" },
+            { label: "Database", href: "/Rift/Database" },
+            { label: "Commands", href: "/Rift/CommandsAndPermissions" },
         ],
     },
 ];

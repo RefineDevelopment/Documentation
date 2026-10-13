@@ -129,6 +129,12 @@ const config: Config = {
                     label: "Prism",
                     activeBaseRegex: "^/Prism/"
                 },
+                {
+                    to: "Rift/Introduction",
+                    position: "left",
+                    label: "Rift",
+                    activeBaseRegex: "^/Rift/"
+                },
                 // {
                 //     to: "BoltWebAddon/Introduction/",
                 //     position: "left",

@@ -1,0 +1,161 @@
+---
+title: "Configuration"
+slug: /Rift/Configuration
+description: "Every Rift config file, the settings in config.yml, scoreboards, holograms, and messages."
+---
+
+# Configuration
+
+Rift's behavior settings are YAML files in `plugins/Rift/`. Run `/rift reload` after editing them. [Database](database.mdx) changes need a restart.
+
+| File | Controls |
+| --- | --- |
+| `config.yml` | Features, economy, arenas, RTP, terrain regen, spawn, leaderboards |
+| `ffa.yml` | FFA death and respawn rules |
+| `combat.yml` | Combat tag and logout |
+| `features.yml` | Trim workshop, shield designer, golden head, totem practice |
+| `kiteditor.yml` | Kit editor, stations, holograms, menu titles |
+| `scoreboard.yml` | Sidebar layouts |
+| `holograms.yml` | Leaderboard hologram text |
+| `hotbar.yml` | Spawn hotbar items |
+| `messages.yml`, `dialogs.yml` | Chat, menu, and dialog text |
+
+## config.yml
+
+### Features
+
+Turn whole systems on or off under `features`.
+
+| Key | Default |
+| --- | --- |
+| `scoreboard-enabled` | `true` |
+| `economy-enabled` | `true` |
+| `leaderboards-enabled` | `true` |
+| `ffa-enabled` | `true` |
+| `rtp-enabled` | `true` |
+
+### Branding
+
+```yaml
+branding:
+  prefix: "<#8ab4f8>ʀɪꜰᴛ</#8ab4f8> <dark_gray>|</dark_gray> <reset><gray>"
+  accent-color: "#8ab4f8"
+```
+
+`prefix` is MiniMessage and starts every chat message from Rift.
+
+### Economy
+
+Players earn coins for kills and wins. Display names and the symbol are configurable.
+
+```yaml
+economy:
+  rewards:
+    ffa-kill-coins: 10.0
+    world-rtp-kill-coins: 10.0
+    rtp-win-coins: 25.0
+    death-penalty-coins: 0.0
+  currency:
+    name-singular: "Coin"
+    name-plural: "Coins"
+    symbol: "⛃"
+```
+
+### Arenas
+
+```yaml
+arenas:
+  world-mode: "SEPARATE"      # or SHARED
+  shared-world-name: "arenas_void"
+  separate-world-prefix: "arena_"
+  spawn-platform: true
+```
+
+See [Set up FFA](setting-up-ffa.mdx) and [Set up RTP](setting-up-rtp.mdx) for the arena, RTP, queue, and terrain-regen sections.
+
+### Dialogs
+
+Rift uses Paper's native dialog UI. Each menu can be switched off individually:
+
+```yaml
+dialogs:
+  enabled: true
+  ffa-arenas: true
+  rtp-arenas: true
+  settings: true
+  leaderboards: true
+```
+
+### Leaderboards
+
+```yaml
+leaderboards:
+  update-interval-seconds: 300
+  top-limit: 10
+```
+
+## Recommended server configuration
+
+Set these on the server itself, outside Rift's own config files.
+
+### Disable the locator bar
+
+The vanilla locator bar re-evaluates every transmitter and receiver pair on each movement packet. That dominates the tick time once many players share an arena. Disable it with the gamerule in every world Rift uses: the spawn world, FFA arena worlds (`arena_<id>` or the shared void world), and each `rtp_<id>` world.
+
+```text
+/gamerule locator_bar false
+```
+
+On versions before 1.21.11 the rule is named `locatorBar`. Run the command in each world, or from the console with `execute in <world> run gamerule locator_bar false`.
+
+## Scoreboard
+
+`scoreboard.yml` defines the sidebar `title`, `update-interval-ticks`, and a `lines` list per state: `spawn`, `ffa`, `world-rtp`, `rtp-queue`, `rtp-match`, and `kit-editor`. Lines accept MiniMessage, `{sprite:key}` icons, and these placeholders:
+
+| Placeholder | Value |
+| --- | --- |
+| `{player}`, `{online}`, `{ping}` | Name, online count, ping |
+| `{kills}`, `{deaths}`, `{kdr}` | Combat stats |
+| `{killstreak}`, `{best_streak}` | Current and best streak |
+| `{coins}` | Coin balance |
+| `{rtp_wins}`, `{rtp_losses}` | Duel record |
+| `{arena}` | Current arena name |
+| `{opponent}`, `{duration}`, `{waiting}` | Duel and queue values |
+| `{server_ip}` | The `footer.server-ip` value |
+
+Players can hide their own scoreboard in `/settings`.
+
+## Leaderboard holograms
+
+Stand where the hologram should go and run `/leaderboard spawn <category> [id]`. Categories are `kills`, `deaths`, `kdr`, `rtp-wins`, `killstreak`, and `balance`. Holograms need FancyHolograms.
+
+`holograms.yml` sets the refresh interval, view distance, and the header, entry, and footer text for each category:
+
+```yaml
+update-interval-seconds: 5
+view-distance: 48.0
+billboard: "CENTER"
+top-limit: 10
+kills:
+  header: "<#00FF66><bold>TOP KILLS</bold>"
+  entry: "<#00FF66><bold><rank>.</bold></#00FF66> <white><player></white> <white>–</white> <#00FF66><bold><value> Kills</bold></#00FF66>"
+```
+
+Entries use `<rank>`, `<player>`, and `<value>`. Footers use `<position>`.
+
+## Messages
+
+`messages.yml` and `dialogs.yml` hold every player-facing string, grouped by feature. Text is MiniMessage, and numbered placeholders such as `{0}` are positional values specific to each entry. Edit the YAML, run `/rift reload`, and reopen menus to see changes. Open dialogs keep the text they were created with.
+
+Keep YAML indentation intact and quote values containing special YAML characters.
+
+## Features file
+
+`features.yml` configures the extras players can use. Each has an `enabled` flag, and some have an optional `permission` (empty means everyone).
+
+| Section | What it does |
+| --- | --- |
+| `armor-trimmer` | The trim workshop at the kit room `trims` station |
+| `shield-designer` | The banner designer at the `loom` station |
+| `golden-head` | Golden head consumable: effects, particles, cooldown, stack size |
+| `totem-practice` | `/totempractice` reaction trainer: score reset time, max misses |

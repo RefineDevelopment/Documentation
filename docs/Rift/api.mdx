@@ -1,0 +1,349 @@
+---
+title: "Developer API"
+slug: /Rift/API
+description: "RiftAPI dependencies, player, FFA, duel, economy and kit methods, snapshots, and lifecycle events."
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Developer API
+
+The Rift API artifact is a small public API for other plugins. It lets you move players between modes, join and leave FFA and duel queues, read player stats, manage coin balances, apply kits, equip cosmetics, query leaderboards, and listen for gameplay events. It doesn't depend on Rift's internals, so integrations can compile against its public contracts. Match the API version to the installed Rift release.
+
+## Dependency
+
+| | |
+| --- | --- |
+| Group | `me.meng` |
+| Artifact | `rift-api` |
+| Version | `1.0-SNAPSHOT` |
+
+The API is built from the Rift repository. Run `.\gradlew.bat :api:build` and use `api/build/libs/rift-api-1.0-SNAPSHOT.jar`. A `-sources.jar` is built next to it. Don't shade the API into your plugin.
+
+<Tabs groupId="rift-build-tool">
+<TabItem value="gradle" label="Gradle (Kotlin DSL)" default>
+
+```kotlin
+dependencies {
+    compileOnly(files("libs/rift-api-1.0-SNAPSHOT.jar"))
+}
+```
+
+</TabItem>
+<TabItem value="maven" label="Maven">
+
+Install the jar into your local repository once:
+
+```bash
+mvn install:install-file -Dfile=rift-api-1.0-SNAPSHOT.jar -DgroupId=me.meng -DartifactId=rift-api -Dversion=1.0-SNAPSHOT -Dpackaging=jar
+```
+
+Then depend on it:
+
+```xml
+<dependency>
+    <groupId>me.meng</groupId>
+    <artifactId>rift-api</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <scope>provided</scope>
+</dependency>
+```
+
+</TabItem>
+</Tabs>
+
+## Retention dependency
+
+Rift loads through Retention. Add **Retention** to your integrating plugin's `plugin.yml` so the loader enables before your plugin.
+
+Use `depend` when your plugin requires Rift:
+
+```yaml
+depend: [Retention]
+```
+
+Use `softdepend` when the Rift integration is optional:
+
+```yaml
+softdepend: [Retention]
+```
+
+With `softdepend`, disable the integration if Retention is unavailable. In both cases, check that `RiftAPI.get()` is available before calling the API. Retention being enabled does not guarantee that Rift has loaded.
+
+:::warning Server thread
+Run calls that touch live server state on the primary server thread after Rift enables. Off-thread calls throw `IllegalStateException`.
+:::
+
+## API contracts
+
+- **Thread:** every call that reads or changes live server state must run on the main server thread. Calls from other threads throw `IllegalStateException`. The thread-safe exceptions are `PlayerAPI.findCached`, `LeaderboardAPI.cachedTop`, and `ResetAPI.isChunkLeased`.
+- **Availability:** `RiftAPI.get()` throws `IllegalStateException` while Rift is disabled. Rift withdraws the service before shutdown, so don't keep the instance or any child API after Rift disables. Keep immutable snapshots, IDs, and copied values instead.
+- **Errors:** invalid arguments throw `IllegalArgumentException`. Expected failures, such as an unknown kit or a player in the wrong state, return an `ActionResult` with an `ActionFailure`.
+- **Snapshots:** queries return immutable records and defensive copies. They never hold live entities.
+- **Async:** storage-backed methods return a `CompletionStage`. Its callback has no main-thread guarantee, so schedule Bukkit calls from it with the scheduler. A failed stage means a storage or unexpected failure, which is separate from a normal rejection.
+
+## Packages
+
+| Package | Contents |
+| --- | --- |
+| `me.meng.rift.api` | `RiftAPI`: the entry point, registered as a Bukkit service |
+| `me.meng.rift.api.player` | `PlayerAPI`, `PlayerSnapshot`, `PlayerStatsSnapshot`, `PlayerSettingsSnapshot`, `PlayerState`, `PlayerSetting` |
+| `me.meng.rift.api.ffa` | `FfaAPI` |
+| `me.meng.rift.api.duel` | `DuelAPI`, `DuelQueueAPI`, `DuelMatchAPI`, `MatchSnapshot`, `MatchState` |
+| `me.meng.rift.api.rtp` | `WorldRtpAPI` |
+| `me.meng.rift.api.economy` | `EconomyAPI`, `EconomyTransaction` |
+| `me.meng.rift.api.leaderboard` | `LeaderboardAPI`, `LeaderboardEntry`, `LeaderboardMetric` |
+| `me.meng.rift.api.kit` | `KitAPI`, `KitSummary`, `KitSlotSummary` |
+| `me.meng.rift.api.cosmetics` | `CosmeticsAPI`, `CosmeticDefinition`, `CosmeticProfile`, `CosmeticCategory` |
+| `me.meng.rift.api.reset` | `ResetAPI`, `ResetRequest`, `ResetResult`, `ChunkKey` |
+| `me.meng.rift.api.common` | `ActionResult`, `ActionFailure` |
+| `me.meng.rift.api.event.*` | `ffa`, `match`, `player`, `economy`, and `settings` events |
+
+## `RiftAPI`
+
+```java
+RiftAPI rift = RiftAPI.get();
+FfaAPI ffa = rift.ffa();
+EconomyAPI economy = rift.economy();
+```
+
+| Method | Returns |
+| --- | --- |
+| `static RiftAPI get()` | The registered provider, or throws if Rift isn't enabled |
+| `PlayerAPI players()` | Player state, stats, and settings |
+| `FfaAPI ffa()` | FFA participation |
+| `DuelAPI duels()` | The duel queue and matches |
+| `WorldRtpAPI worldRtp()` | Solo wilderness RTP |
+| `EconomyAPI economy()` | Coin balances |
+| `LeaderboardAPI leaderboards()` | Rankings |
+| `KitAPI kits()` | Kits |
+| `CosmeticsAPI cosmetics()` | Cosmetics |
+| `ResetAPI resets()` | Arena reset requests and chunk leases |
+
+## `PlayerAPI`
+
+| Method | Description |
+| --- | --- |
+| `Optional<PlayerSnapshot> findCached(UUID)` | A cached profile. Thread-safe, and empty on a cache miss. |
+| `CompletionStage<PlayerSnapshot> load(UUID, String name)` | Load a profile from storage |
+| `PlayerState state(UUID)` | The player's current state |
+| `ActionResult<Void> transition(Player, PlayerState)` | Request a state change |
+| `ActionResult<Void> updateSetting(Player, PlayerSetting, boolean)` | Change one of the player's preferences |
+
+```java
+RiftAPI.get().players().findCached(player.getUniqueId()).ifPresent(snapshot -> {
+    PlayerStatsSnapshot stats = snapshot.stats();
+    player.sendMessage("Kills: " + stats.kills() + ", best streak: " + stats.bestKillstreak());
+});
+```
+
+## `FfaAPI`
+
+| Method | Description |
+| --- | --- |
+| `Set<UUID> participantIds()` | Everyone currently in FFA |
+| `boolean isParticipant(UUID)` | Whether a player is in FFA |
+| `ActionResult<Void> join(Player)` | Join FFA. Returns `INVALID_STATE` from a state that can't enter. |
+| `ActionResult<Void> leave(Player)` | Leave FFA and return to spawn |
+| `boolean isInSpawnProtection(Location)` | Whether a location is inside spawn protection |
+
+### Joining FFA
+
+```java
+ActionResult<Void> result = RiftAPI.get().ffa().join(player);
+if (result.isFailure()) {
+    switch (result.failure().orElseThrow()) {
+        case CANCELLED -> player.sendMessage("FFA entry was cancelled.");
+        case INVALID_STATE -> player.sendMessage("You cannot enter FFA from your current state.");
+        default -> player.sendMessage("FFA is unavailable right now.");
+    }
+}
+```
+
+## `DuelAPI` and `WorldRtpAPI`
+
+`DuelAPI` has two parts. `queue()` returns `DuelQueueAPI`, and `matches()` returns `DuelMatchAPI`.
+
+| Method | Description |
+| --- | --- |
+| `DuelQueueAPI.join(Player)` / `leave(Player)` | Enter or leave the public duel queue |
+| `DuelQueueAPI.size()` | Players waiting |
+| `DuelQueueAPI.participantIds()` / `isParticipant(UUID)` | Queue membership |
+| `DuelMatchAPI.active()` | All active matches as `MatchSnapshot` |
+| `DuelMatchAPI.find(UUID matchId)` | One match |
+| `DuelMatchAPI.findByPlayer(UUID)` | The match a player is in |
+| `DuelMatchAPI.end(UUID matchId, UUID winnerId)` | End a match with the `ADMIN_TERMINATION` reason and normal win and loss processing |
+
+Ending a match succeeds when the resolution is accepted. It doesn't mean players are cleaned up, profiles are saved, or terrain is restored yet. A lookup can still return `ENDING` until cleanup finishes.
+
+`WorldRtpAPI` covers solo RTP: `enter(Player)`, `leave(Player)`, `participantIds()`, `isParticipant(UUID)`, and `currentArenaId()`.
+
+## `EconomyAPI`
+
+| Method | Description |
+| --- | --- |
+| `BigDecimal balance(UUID)` | A player's coin balance |
+| `ActionResult<EconomyTransaction> deposit(UUID, BigDecimal)` | Add coins |
+| `ActionResult<EconomyTransaction> withdraw(UUID, BigDecimal)` | Remove coins. Returns `INSUFFICIENT_FUNDS` if the balance is too low. |
+| `ActionResult<EconomyTransaction> setBalance(UUID, BigDecimal)` | Set the balance |
+
+```java
+ActionResult<EconomyTransaction> paid = RiftAPI.get().economy()
+        .withdraw(player.getUniqueId(), BigDecimal.valueOf(50));
+if (paid.isFailure()) {
+    player.sendMessage("You need 50 coins.");
+}
+```
+
+## `KitAPI`
+
+| Method | Description |
+| --- | --- |
+| `List<KitSummary> list()` | All FFA kits |
+| `Optional<KitSummary> find(String kitId)` | One kit |
+| `Optional<KitSummary> defaultKit()` | The default FFA kit |
+| `CompletionStage<List<KitSlotSummary>> savedSlots(UUID)` | A player's saved kit slots |
+| `ActionResult<Void> apply(Player, String kitId)` | Equip a kit |
+| `ActionResult<Void> applyDefault(Player)` | Equip the default kit |
+| `ActionResult<Void> applySlot(Player, int slot)` | Equip a saved slot (0 through 7) |
+| `ActionResult<KitSlotSummary> saveSlot(Player, int slot)` | Save to a saved slot (0 through 7) |
+| `ActionResult<Void> clearInventory(Player)` | Clear the player's inventory |
+
+## `LeaderboardAPI`
+
+| Method | Description |
+| --- | --- |
+| `List<LeaderboardEntry> cachedTop(LeaderboardMetric)` | The cached top list. Thread-safe, never touches storage or Bukkit. |
+| `CompletionStage<List<LeaderboardEntry>> top(LeaderboardMetric, int limit)` | Query the top entries |
+| `CompletionStage<OptionalInt> rank(UUID, LeaderboardMetric)` | A player's rank |
+
+## `CosmeticsAPI`
+
+| Method | Description |
+| --- | --- |
+| `CosmeticProfile profile(UUID)` | What a player owns and has equipped |
+| `List<CosmeticDefinition> definitions(CosmeticCategory)` | Every cosmetic in a category |
+| `ActionResult<Void> unlock(Player, CosmeticCategory, String id)` | Unlock a cosmetic |
+| `ActionResult<Void> equip(Player, CosmeticCategory, String id)` | Equip a cosmetic |
+| `ActionResult<Void> playKillEffect(Player killer, Location)` | Play the killer's equipped kill effect |
+
+## `ResetAPI`
+
+`reset(ResetRequest)` returns a `CompletionStage<ResetResult>`. Call it on the main thread. `isChunkLeased(ChunkKey)` is thread-safe. If Rift disables while a reset is running, the stage settles with `ActionFailure.UNAVAILABLE` and terrain may be only partly restored.
+
+## Records and enums
+
+**`PlayerSnapshot`** `(UUID id, String name, Instant firstJoinedAt, Instant lastJoinedAt, PlayerState state, PlayerStatsSnapshot stats, PlayerSettingsSnapshot settings)`
+
+**`PlayerStatsSnapshot`** has kills, deaths, current and best killstreak, RTP wins, and RTP losses.
+
+**`MatchSnapshot`** `(UUID id, UUID playerA, UUID playerB, MatchState state, Instant startedAt, Optional<UUID> winnerId)`
+
+**`ActionResult<T>`** has `isSuccess()`, `isFailure()`, `value()`, and `failure()`. Check the result before reading `value()`.
+
+**`PlayerState`**: `SPAWN`, `FFA`, `RTP`, `RTP_QUEUE`, `RTP_MATCH`, `KIT_EDITOR`, `TRANSITION`
+
+**`PlayerSetting`**: `SCOREBOARD`, `FASTER_CRYSTALS`, `HEALTH_DISPLAY`, `QUICK_RESPAWN`, `DUELS_ENABLED`, `PLAYER_VISIBILITY`, `DROPPING_ITEMS`, `CHAT_ENABLED`
+
+**`MatchState`**: `STARTING`, `COUNTDOWN`, `ACTIVE`, `ENDING`, `FINISHED`, `CANCELLED`
+
+**`LeaderboardMetric`**: `KILLS`, `DEATHS`, `KDR`, `RTP_WINS`, `KILLSTREAK`
+
+**`CosmeticCategory`**: `KILL_EFFECT`, `KILL_MESSAGE`, `KILL_SOUND`, `PROJECTILE_TRAIL`, `ELYTRA_TRAIL`, `MACE_SLAM`
+
+**`ActionFailure`**: `NOT_FOUND`, `ALREADY_ACTIVE`, `INVALID_STATE`, `CANCELLED`, `INSUFFICIENT_FUNDS`, `UNAVAILABLE`
+
+## Events
+
+All events fire on the main thread.
+
+| Event | Package | Cancellable | When | Methods |
+| --- | --- | --- | --- | --- |
+| `FfaJoinEvent` | `ffa` | Yes | Before a player enters FFA | `getPlayer()`, `setCancelled(boolean)`, `setCancelReason(String)` |
+| `FfaKillEvent` | `ffa` | No | After a kill, before the reward is paid | `getKiller()`, `getVictim()`, `getCurrentKillstreak()`, `getCoinReward()`, `setCoinReward(BigDecimal)` |
+| `FfaLeaveEvent` | `ffa` | No | When a player leaves FFA | `getPlayer()` |
+| `RtpQueueJoinEvent` | `match` | Yes | Before a player joins the duel queue | `getPlayer()`, `setCancelled(boolean)`, `setCancelReason(String)` |
+| `RtpQueueLeaveEvent` | `match` | No | When a player leaves the queue | `getPlayer()` |
+| `RtpMatchStartEvent` | `match` | No | After kits are applied, before the countdown | `getMatchId()`, `getPlayerA()`, `getPlayerB()`, `getArenaCenter()` |
+| `RtpMatchEndEvent` | `match` | No | When a match enters `ENDING` | `getMatchId()`, `getWinner()`, `getLoser()`, `getDurationMillis()`, `getReason()` |
+| `PlayerStateChangeEvent` | `player` | Yes | Before a state change | `getPlayer()`, `getFromState()`, `getToState()`, `setCancelled(boolean)`, `setCancelReason(String)` |
+| `PlayerSettingChangeEvent` | `settings` | No | After a setting changes | `getPlayer()`, `getSetting()`, `getOldValue()`, `getNewValue()` |
+| `CoinBalanceChangeEvent` | `economy` | No | After a balance changes | `getPlayerId()`, `getTransaction()`, `getType()` |
+
+`RtpMatchEndEvent.EndReason`: `KILL`, `DISCONNECT`, `FORFEIT`, `ADMIN_TERMINATION`.
+
+Setting a cancellation reason does not cancel an event. Call `setCancelled(true)` to veto the attempt. `FfaKillEvent` fires before the reward is deposited. Replace the reward with `setCoinReward`, and zero suppresses the payment. `RtpMatchEndEvent` fires before cosmetics, win and loss stats, rewards, and messages. Player cleanup and match removal follow 40 ticks later. Canceling a pending match doesn't fire the end event, so don't rely on it for cleanup.
+
+```java
+public final class RiftListener implements Listener {
+
+    private final Plugin plugin;
+
+    public RiftListener(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onFfaJoin(FfaJoinEvent event) {
+        if (!event.getPlayer().hasPermission("example.ffa.join")) {
+            event.setCancelled(true);
+            event.setCancelReason("You do not have permission to enter FFA.");
+        }
+    }
+
+    @EventHandler
+    public void onKill(FfaKillEvent event) {
+        // Double the reward on a streak of five or more.
+        if (event.getCurrentKillstreak() >= 5) {
+            event.setCoinReward(event.getCoinReward().multiply(BigDecimal.valueOf(2)));
+        }
+    }
+
+    @EventHandler
+    public void onMatchEnd(RtpMatchEndEvent event) {
+        plugin.getLogger().info("Match " + event.getMatchId() + " ended: " + event.getReason());
+    }
+}
+```
+
+## Async queries
+
+Storage calls return a `CompletionStage`. Hop back to the main thread before touching Bukkit, and check that your plugin is still enabled both before submitting work and inside the scheduled task:
+
+```java
+if (!plugin.isEnabled()) {
+    return;
+}
+RiftAPI.get().leaderboards().top(LeaderboardMetric.KILLS, 10).thenAccept(entries -> {
+    if (!plugin.isEnabled()) {
+        return;
+    }
+    Bukkit.getScheduler().runTask(plugin, () -> {
+        for (LeaderboardEntry entry : entries) {
+            plugin.getLogger().info(entry.toString());
+        }
+    });
+});
+```
+
+The `RiftAPI` object isn't retained after the call. Only the immutable `entries` list crosses the thread hop.
+
+## Generating Javadoc
+
+The API module builds with full Doclint and warnings as errors, so every public method is documented. To build HTML Javadoc locally from the Rift repository:
+
+```powershell
+.\gradlew.bat :api:javadoc --console=plain
+```
+
+The output goes to `api/build/docs/javadoc/index.html`.
+
+## Related guides
+
+<DocCards>
+  <DocCard title="Set up FFA" href="/Rift/SettingUpFfa">The arenas and kits the FFA API drives.</DocCard>
+  <DocCard title="Set up RTP" href="/Rift/SettingUpRtp">The arenas and duels behind the match events.</DocCard>
+  <DocCard title="Database" href="/Rift/Database">The storage behind player snapshots and balances.</DocCard>
+  <DocCard title="Commands & Permissions" href="/Rift/CommandsAndPermissions">Player and staff access.</DocCard>
+</DocCards>

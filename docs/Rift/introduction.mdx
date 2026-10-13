@@ -1,0 +1,46 @@
+---
+title: "Introduction"
+slug: /Rift/Introduction
+description: "What Rift does, the player modes, and where to start."
+---
+
+# Introduction
+
+Rift runs the PvP side of a server. Players spawn in a lobby, then join one of three modes and fight with their own saved kit.
+
+| Mode | What it is |
+| :--- | :--- |
+| **FFA** | Free-for-all arenas in void worlds. Players join with `/ffa`, get a kit, and respawn automatically after dying. |
+| **World RTP** | Solo wilderness worlds with generated terrain. `/rtp` drops a player at a random safe spot, and the terrain repairs itself afterwards. |
+| **RTP duels** | A public 1v1 queue. `/queue` pairs two players in an RTP world, and the winner earns coins. |
+
+Around those modes Rift adds a [kit editor and kit room](kits.mdx), cosmetics, a coin economy, leaderboards with holograms, per-state scoreboards, player settings, combat tagging, and TPA.
+
+<DocCards>
+  <DocCard title="Installation" href="/Rift/Installation">Requirements and first start.</DocCard>
+  <DocCard title="Spawn & kit room" href="/Rift/SpawnAndKitRoom">The lobby that every other mode starts from.</DocCard>
+  <DocCard title="Configuration" href="/Rift/Configuration">Every config file and what it controls.</DocCard>
+  <DocCard title="Developer API" href="/Rift/API">Integrate with FFA, duels, economy, and more.</DocCard>
+</DocCards>
+
+## Requirements
+
+| Requirement | Notes |
+| :--- | :--- |
+| Paper 1.21.11+ | Rift uses Paper's native dialog UI, which needs 1.21.9+ clients. |
+| Java 21 | Use the runtime your Paper version requires. |
+| Retention | Loads Rift through your Retention setup. |
+| A database | MySQL, MariaDB, or MongoDB. See [Database](database.mdx). |
+
+## Player state
+
+Rift tracks each player as being in exactly one state: spawn, FFA, RTP, RTP queue, RTP match, kit editor, or a transition between them. Features check that state before acting. For example, TPA only works between players at spawn or in RTP, and queue, duel, FFA, and kit-editor states can't be interrupted by a teleport request.
+
+## Common questions
+
+<details>
+<summary>Do I need Prism?</summary>
+
+No. Prism is a separate bot plugin and Rift works without it. If Prism is installed, Rift connects to it automatically.
+
+</details>

@@ -1,0 +1,153 @@
+---
+title: "Set up RTP"
+slug: /Rift/SettingUpRtp
+description: "Create RTP worlds, pick terrain presets, tune the radius, and run duels."
+---
+
+# Set up RTP
+
+An RTP arena is its own generated world, named `rtp_<id>`. Players use it two ways:
+
+- **World RTP:** `/rtp <id>` drops a player at a random safe spot to fight whoever they find.
+- **RTP duels:** `/queue` pairs two players in an RTP world for a 1v1 match.
+
+## Create an arena
+
+```text
+/arena create <id> rtp [preset] [baseHeight] [hillScale]
+```
+
+If you leave out the preset, an arena ID that matches a preset name uses that preset. Any other ID uses `plains`.
+
+```text
+/arena create desert rtp
+/arena create practice rtp desert
+/arena create highlands rtp frontier 140 2.5
+```
+
+### Terrain presets
+
+| Preset | Surface and features |
+| --- | --- |
+| `plains` | Open grass hills |
+| `desert` | Sand hills |
+| `badlands` | Layered terracotta |
+| `mushroom` | Mycelium |
+| `snowy_fields` | Snow |
+| `wasteland` | Coarse dirt and gravel, dead bushes, collapsed ruins |
+| `frost` | Snow fields with ice spikes |
+| `liminal_abyss` | Flat deepslate-tile plains with jagged spires |
+| `forest` | Grass and podzol, dense oak and birch forest |
+| `steppe` | Savanna grass with gravel patches, small boulders |
+| `frontier` | Open plains, scattered trees and mossy boulders |
+| `liminal_fields` | Low empty grass fields with stone-brick rubble |
+
+There are no caves, structures, or lakes. Spawn points are never placed above the generated surface.
+
+#### Previews
+
+Top-down views of 384 by 384 blocks around the arena center, rendered from the terrain generator with hill shading. They show ground surface and relief only. Trees, ruins, spikes, and boulders are added when chunks populate, so they aren't shown.
+
+<table>
+<tbody>
+<tr><td align="center"><img src="/rift/terrain/plains.png" alt="plains terrain" loading="lazy" /><br /><code>plains</code></td><td align="center"><img src="/rift/terrain/desert.png" alt="desert terrain" loading="lazy" /><br /><code>desert</code></td><td align="center"><img src="/rift/terrain/badlands.png" alt="badlands terrain" loading="lazy" /><br /><code>badlands</code></td></tr>
+<tr><td align="center"><img src="/rift/terrain/mushroom.png" alt="mushroom terrain" loading="lazy" /><br /><code>mushroom</code></td><td align="center"><img src="/rift/terrain/snowy_fields.png" alt="snowy_fields terrain" loading="lazy" /><br /><code>snowy_fields</code></td><td align="center"><img src="/rift/terrain/wasteland.png" alt="wasteland terrain" loading="lazy" /><br /><code>wasteland</code></td></tr>
+<tr><td align="center"><img src="/rift/terrain/frost.png" alt="frost terrain" loading="lazy" /><br /><code>frost</code></td><td align="center"><img src="/rift/terrain/liminal_abyss.png" alt="liminal_abyss terrain" loading="lazy" /><br /><code>liminal_abyss</code></td><td align="center"><img src="/rift/terrain/forest.png" alt="forest terrain" loading="lazy" /><br /><code>forest</code></td></tr>
+<tr><td align="center"><img src="/rift/terrain/steppe.png" alt="steppe terrain" loading="lazy" /><br /><code>steppe</code></td><td align="center"><img src="/rift/terrain/frontier.png" alt="frontier terrain" loading="lazy" /><br /><code>frontier</code></td><td align="center"><img src="/rift/terrain/liminal_fields.png" alt="liminal_fields terrain" loading="lazy" /><br /><code>liminal_fields</code></td></tr>
+</tbody>
+</table>
+
+### Custom height and relief
+
+The two optional numbers after the preset set the mean surface level (`baseHeight`) and the hill scale (`hillScale`: `0` is flat, `1` is the preset's normal relief, up to `4`).
+
+```text
+/arena create flatland rtp liminal_fields 64 0
+```
+
+These are fixed at creation. A custom arena is stored as `generatorVersion: 2`, so older Rift builds refuse to load it rather than produce seams in the world.
+
+:::note Worlds from the old datapack build
+Worlds created by an earlier datapack-based build can't be loaded without that pack. Keep them as backups and create replacements with new IDs. Rift doesn't convert or delete them.
+:::
+
+## Spawn area and radius
+
+Players are teleported to a random safe spot between a minimum and maximum distance from the arena center.
+
+| Command | Description |
+| --- | --- |
+| `/arena setcenter <id>` | Use your position as the RTP center. |
+| `/arena setradius <id> <min> <max>` | Set the minimum and maximum teleport distance. |
+| `/arena setseparation <id> <blocks>` | Distance between paired duel players. |
+
+New arenas default to center `0, 0`, radius `100`–`2500`, and separation `25`.
+
+## Duels
+
+Players run `/queue` (or `/queue join`) to enter the public queue and `/queue leave` to leave. When two players are queued Rift teleports them into an RTP world, applies their kit, and runs a countdown. The winner earns coins.
+
+Staff with `rift.admin.rtp` can end the duel they are in with `/queue cancel`.
+
+```yaml
+rtp:
+  countdown-seconds: 3
+  max-location-attempts: 15
+queue:
+  platform-countdown-seconds: 3
+world-rtp:
+  enabled: true
+  cooldown-seconds: 15
+economy:
+  rewards:
+    rtp-win-coins: 25.0
+    world-rtp-kill-coins: 10.0
+```
+
+`world-rtp.cooldown-seconds` applies between `/rtp` uses. Holders of `rift.bypass.rtpcooldown` skip it.
+
+## Terrain regeneration
+
+Rift records the original state of every block players change in RTP worlds: breaking, placing, explosions, fire, fluids, pistons, and bone meal. A damaged chunk is restored once it has been idle for `terrain-regen.idle-seconds` with no player within `terrain-regen.player-radius` blocks. Only changed blocks are rewritten, so trees and ruins come back exactly. Chunks in use by a duel are left to the match reset. Records persist in `data/terrain-damage.json`.
+
+```yaml
+terrain-regen:
+  enabled: true
+  idle-seconds: 120
+  player-radius: 64
+  check-interval-seconds: 10
+  chunks-per-cycle: 4
+  max-tracked-blocks-per-chunk: 16384
+```
+
+Restore manually:
+
+```text
+/arena regen <id>              # damaged chunk and block counts
+/arena regen <id> damaged      # restore every recorded chunk now
+/arena regen <id> <radius>     # restore and rebuild ground around you (0-16)
+```
+
+The radius form also rebuilds the ground from the generator, repairing damage that was never recorded. Missing trees are not regrown by that fallback. A chunk that exceeds `max-tracked-blocks-per-chunk` is rebuilt from the generator instead of block by block.
+
+Duel matches roll back with the `reset` section of `config.yml` (`blocks-per-tick`, `reset-delay-seconds`, `reset-timeout-seconds`).
+
+## Manage arenas
+
+| Command | Description |
+| --- | --- |
+| `/arena list [ffa\|rtp]` | List arenas. |
+| `/arena info <id>` | Show an arena's JSON. |
+| `/arena enable <id>` / `disable <id>` | Toggle an arena. |
+| `/arena delete <id>` | Delete the arena's JSON file. |
+| `/arena reload` | Reload all arena JSON from disk. |
+
+Deleting an arena removes its JSON file only. The world folder stays on disk.
+
+## Player commands
+
+| Command | Description |
+| --- | --- |
+| `/rtp` | Open the RTP arena menu, or go straight to an arena by ID. |
+| `/rtp leave` | Leave the RTP world and return to spawn. |
+| `/queue` | Join or leave the duel queue. |

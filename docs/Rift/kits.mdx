@@ -1,0 +1,59 @@
+---
+title: "Kits"
+slug: /Rift/Kits
+description: "FFA kits, the player kit editor, bundled presets, and the premade kit."
+---
+
+# Kits
+
+Rift has three kinds of kit.
+
+| Kind | Who makes it | Used for |
+| --- | --- | --- |
+| **FFA kits** | Staff | What a player receives when joining FFA and after each respawn |
+| **Player kits** | Players, in the kit editor | A player's own layout and custom kits |
+| **Presets** | Bundled with Rift | Starting points with IDs beginning `preset-` |
+
+The bundled presets are `crystal`, `cart`, `diamond`, `diamondsmp`, `mace`, `nethpot`, `spearmace`, and `uhc`.
+
+## FFA kits
+
+Build the kit in your inventory, then save it.
+
+```text
+/ffakit create <id>
+```
+
+Manage kits with these `/ffakit` subcommands, all staff-only except `list`, `select`, `edit`, and `reset`:
+
+| Command | Description |
+| --- | --- |
+| `/ffakit create <id>` | Create a kit from your inventory, armor, and offhand. |
+| `/ffakit setinventory <id>` | Replace a kit's items with your inventory. |
+| `/ffakit load <id>` | Put a kit's items in your inventory so you can edit them. |
+| `/ffakit seticon <id> [material]` | Set the icon to your held item or a material. |
+| `/ffakit rename <id> <name>` | Set the display name. |
+| `/ffakit setdefault <id>` | Make the kit the default for players who haven't chosen one. |
+| `/ffakit delete <id>` | Delete the kit. |
+
+Admin subcommands need `rift.admin.ffakit`. Players use `/ffakit` to open the menu, `/ffakit select <id>` to pick one, `/ffakit edit <id>` to arrange it in the kit room, and `/ffakit reset <id>` to restore the default layout.
+
+### Quick single kit
+
+If you only want one kit for everyone, stand with it in your inventory and run `/arena setkitffa`. `/arena getkitffa` gives it back to you for adjusting.
+
+## Kit editor
+
+Players open the editor with `/kiteditor`, which sends them to the [kit room](spawn-and-kit-room.mdx). An edit is a session that must be confirmed or canceled at the confirm and cancel stations. Nothing saves until then.
+
+| Setting (`kiteditor.yml`) | Default | Effect |
+| --- | --- | --- |
+| `max-custom-kits` | `8` | Custom kits per player |
+| `allow-offhand-edit` | `true` | Allow editing the offhand slot |
+| `protection.isolate-players` | `true` | Players in the room can't see each other |
+| `protection.prevent-damage` | `true` | No damage in the room |
+| `protection.prevent-block-changes` | `true` | No block changes in the room |
+
+Add your own items to the editor's supply menus under `custom-items` (`weaponry`, `armor`, `utilities`, `consumables`, `arrows`, `blocks`, `potions`).
+
+Players can also use `/kitroom` to open the supply menu, and `/kiteditor` subcommands such as `trims`, `enchant`, `shulker`, and `rename` for the held item.

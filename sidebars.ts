@@ -40,7 +40,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Start here',
       collapsed: false,
-      items: ['Rift/Rift', 'Rift/introduction', 'Rift/installation'],
+      items: ['Rift/Rift', 'Rift/introduction', 'Rift/installation', 'Rift/premade-server'],
     },
     {
       type: 'category',

@@ -1,0 +1,139 @@
+---
+title: "Premade server"
+slug: /Rift/PremadeServer
+description: "Set up the Rift premade server zip: database, branding, scoreboard, and messages."
+---
+
+# Premade server
+
+The premade is a complete server folder with Rift already configured. It includes the spawn, the FFA arenas, the RTP worlds, the kits, and the configs. You don't build or configure any of that. You unzip it, connect a database, and put your own name on it.
+
+:::info What you don't need to do
+Skip [Set up FFA](setting-up-ffa.mdx), [Set up RTP](setting-up-rtp.mdx), and [Spawn and kit room](spawn-and-kit-room.mdx). The premade already has them. Use those pages if you later want to add or change arenas.
+:::
+
+## Requirements
+
+| Requirement | Notes |
+| :--- | :--- |
+| Java 21 | Use the runtime your Paper version requires. |
+| Retention | Rift loads through Retention, a loader that is not included in the zip. Download it and put it in `plugins/`. See [Installation](installation.mdx). |
+| MariaDB, MySQL, or MongoDB | Rift has no embedded database. Create an empty database first. |
+| A machine with enough memory | RTP worlds are loaded in addition to the spawn and FFA worlds. |
+
+## Set it up
+
+<Steps>
+
+1. Download the zip and unzip it into an empty folder on your server machine.
+2. Download Retention and put it in `plugins/`.
+3. Open `eula.txt` and set `eula=true` once you've read and accepted the Minecraft EULA.
+4. Create your database and [connect Rift to it](#1-connect-the-database).
+5. Change the [branding](#2-branding), [scoreboard](#3-scoreboard), and [messages and holograms](#4-messages-and-holograms).
+6. Start the server on Java 21 and [check that it loaded](#5-start-and-check).
+
+</Steps>
+
+## 1. Connect the database
+
+Most hosts make this easy.
+
+- **Pterodactyl, Pelican, and similar panels:** create a database in the panel and use the host, port, database name, username, and password it gives you.
+- **MongoDB:** ask your host whether they can run custom eggs. [MongoDB Atlas](https://www.mongodb.com/atlas) also offers a free tier for MongoDB hosting.
+- **No database yet?** [WitherHosting](https://witherhosting.com) offers databases, including MongoDB, at a very affordable price.
+
+Then open `plugins/Rift/database.yml`, set `type`, and fill in the matching section with those details.
+
+```yaml
+type: "mariadb"
+mariadb:
+  host: "127.0.0.1"
+  port: 3306
+  database: "rift"
+  username: "rift"
+  password: "your-password"
+```
+
+Rift creates its tables on first start. See [Database](database.mdx) for MySQL, MongoDB, and the full list of options.
+
+:::warning Change the default database name
+The shipped `database.yml` may use `prism` as the database name. Set it to the database you created.
+:::
+
+## 2. Branding
+
+In `plugins/Rift/config.yml`, set your chat prefix and accent color:
+
+```yaml
+branding:
+  prefix: "<#8ab4f8>ʀɪꜰᴛ</#8ab4f8> <dark_gray>|</dark_gray> <reset><gray>"
+  accent-color: "#8ab4f8"
+```
+
+`prefix` is [MiniMessage](https://docs.advntr.dev/minimessage/format.html) and starts every chat message from Rift. Change the currency name and symbol under `economy.currency` if you want something other than "Coins".
+
+## 3. Scoreboard
+
+Open `plugins/Rift/scoreboard.yml`.
+
+| Key | What to change |
+| --- | --- |
+| `title` | The sidebar title shown at the top. |
+| `footer.server-ip` | Your server address, shown by the `{server_ip}` placeholder. |
+| `<state>.lines` | The text on each line for `spawn`, `ffa`, `world-rtp`, `rtp-queue`, `rtp-match`, and `kit-editor`. |
+
+Lines accept MiniMessage, `{sprite:key}` icons, and the placeholders listed in [Configuration](configuration.mdx#scoreboard). Keep the YAML indentation intact and quote values containing special characters. Players can switch their own scoreboard off in `/settings`.
+
+## 4. Messages and holograms
+
+| File | What it controls |
+| --- | --- |
+| `messages.yml` | Chat text for every feature |
+| `dialogs.yml` | Menu and dialog text, such as the FFA and RTP arena pickers |
+| `holograms.yml` | Leaderboard hologram headers, entries, and colors |
+| `kiteditor.yml` | Kit room station titles and subtitles |
+
+Edit the text, then reload instead of restarting:
+
+```text
+/rift reload
+```
+
+Open dialogs keep the text they were created with, so reopen a menu to see changes.
+
+## 5. Start and check
+
+Start the server and watch the console for Rift enabling without errors. Then join and run:
+
+```text
+/rift
+/arena list
+/leaderboard
+```
+
+`/arena list` should show the premade's FFA and RTP arenas. If the console reports a storage error, recheck [step 1](#1-connect-the-database).
+
+Give yourself operator access from the console so you can use the admin commands:
+
+```text
+op <your-name>
+```
+
+Staff permissions are listed in [Commands & Permissions](commands-and-permissions.mdx). Use your permissions plugin to grant `rift.admin` and the other nodes to your team.
+
+## Before you open to players
+
+- Back up the whole folder, since it's your starting point if something gets changed by mistake.
+- Join as a normal player, not an operator, and try `/ffa`, `/rtp`, `/queue`, `/kiteditor`, and `/spawn`.
+- Place or move [leaderboard holograms](configuration.mdx#leaderboard-holograms) at your spawn with `/leaderboard spawn <category>`. FancyHolograms is included in the premade.
+- Disable the vanilla locator bar in every world, as described in [Recommended server configuration](configuration.mdx#recommended-server-configuration).
+
+## Updating
+
+The premade is a one-time download. To change your server later, edit the files in `plugins/Rift/` and run `/rift reload`. Changes to `database.yml` need a restart.
+
+## Sponsor
+
+<a href="https://witherhosting.com" target="_blank" rel="noopener noreferrer"><img src="/rift/witherhosting-logo.webp" alt="WitherHosting" width="320" /></a>
+
+The Rift test server is sponsored by **[WitherHosting](https://witherhosting.com)**. You can host your database with them for cheap.

@@ -125,6 +125,8 @@ On versions before 1.21.11 the rule is named `locatorBar`. Run the command in ea
 
 Players can hide their own scoreboard in `/settings`.
 
+With PlaceholderAPI installed, both the scoreboard title and lines also accept `%...%` tokens, including Rift's player-stat placeholders such as `%rift_kills%`, `%rift_kdr%`, and `%rift_coins_formatted%`. See [Placeholders](placeholders.mdx) for setup, the full list, and a scoreboard example. The `%rift_...%` combat stats are global; built-in brace tokens use the current arena or gamemode counters in FFA and World RTP layouts.
+
 ## Leaderboard holograms
 
 Stand where the hologram should go and run `/leaderboard spawn <category> [id]`. Categories are `kills`, `deaths`, `kdr`, `rtp-wins`, `killstreak`, and `balance`. Holograms need FancyHolograms.

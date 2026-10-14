@@ -1,0 +1,126 @@
+---
+title: "Placeholders"
+slug: /Rift/Placeholders
+description: "PlaceholderAPI setup, player stats, leaderboard names and values, personal ranks, and scoreboard examples."
+---
+
+# Placeholders
+
+Rift supports PlaceholderAPI tokens in scoreboard titles and lines, leaderboard hologram text, and kit editor station titles and subtitles. Its built-in `rift` expansion exposes player stats and global leaderboards to any plugin that supports PlaceholderAPI.
+
+## Setup
+
+1. Install PlaceholderAPI in the server's `plugins/` folder alongside Retention.
+2. Restart the server with Rift enabled through Retention. Rift registers its expansion automatically; no Rift expansion download from eCloud is needed.
+3. Join the server and check a value:
+
+```text
+/papi parse me %rift_kills%
+```
+
+Other plugins' tokens require their corresponding PlaceholderAPI expansions. Rift continues to work without PlaceholderAPI, using its existing built-in placeholders.
+
+## Player stats
+
+These placeholders read the requested player's loaded Rift profile. Combat totals are lifetime values across modes and arenas. Placeholder names are case-insensitive.
+
+| Placeholder | Value | Example |
+| --- | --- | --- |
+| `%rift_kills%` | Lifetime kills | `7` |
+| `%rift_deaths%` | Lifetime deaths | `2` |
+| `%rift_kdr%` | Lifetime kill/death ratio with two decimal places | `3.50` |
+| `%rift_killstreak%` | Current killstreak | `3` |
+| `%rift_current_killstreak%` | Alias for `%rift_killstreak%` | `3` |
+| `%rift_best_streak%` | Lifetime best killstreak | `5` |
+| `%rift_best_killstreak%` | Alias for `%rift_best_streak%` | `5` |
+| `%rift_rtp_wins%` | Lifetime RTP duel wins | `4` |
+| `%rift_rtp_losses%` | Lifetime RTP duel losses | `1` |
+| `%rift_best_totem_score%` | Lifetime best Totem Practice score | `42` |
+| `%rift_coins%` | Cached coin balance, including decimals | `1234.5` |
+| `%rift_coins_formatted%` | Cached coin balance with thousands separators and decimals discarded | `1,234` |
+
+When deaths are zero, KDR uses the kill count: three kills and no deaths returns `3.00`. Number formatting uses a decimal point and comma thousands separators, regardless of the server's locale.
+
+Values come from loaded profiles without database calls. A recognized placeholder returns an empty value if no player or loaded profile is available; it does not load offline data. Unknown placeholders remain unresolved. Coin values use Rift's cached balance, so changes made directly through an external economy provider may not appear until Rift updates that cache.
+
+## Leaderboards
+
+Use these patterns in any PlaceholderAPI-compatible hologram, scoreboard, menu, or chat plugin:
+
+| Pattern | Example | Value |
+| --- | --- | --- |
+| `%rift_top_<metric>_<position>_name%` | `%rift_top_kills_1_name%` | The ranked player's name |
+| `%rift_top_<metric>_<position>_value%` | `%rift_top_kills_1_value%` | The ranked player's score |
+| `%rift_rank_<metric>%` | `%rift_rank_kills%` | The requesting player's rank |
+
+Replace `<metric>` with one of these categories:
+
+| Metric | Ranked value |
+| --- | --- |
+| `kills` | Lifetime kills |
+| `deaths` | Lifetime deaths |
+| `kdr` | Lifetime kill/death ratio |
+| `rtp_wins` | Lifetime RTP duel wins |
+| `killstreak` | Lifetime best killstreak |
+| `balance` | Coin balance |
+| `totem_practice` | Lifetime best Totem Practice score |
+
+Positions start at `1`. Rift caches up to `leaderboards.top-limit` entries per category, so positions beyond that list return an empty value. Top names and values do not need a viewing player. Counts have no decimals; KDR and balance use two decimal places, such as `3.50` and `1234.50`.
+
+For example, put these lines in a PlaceholderAPI-compatible hologram:
+
+```text
+Top kills
+1. %rift_top_kills_1_name% - %rift_top_kills_1_value%
+2. %rift_top_kills_2_name% - %rift_top_kills_2_value%
+Your rank: %rift_rank_kills%
+```
+
+Check the values in-game:
+
+```text
+/papi parse me %rift_top_kills_1_name%
+/papi parse me %rift_top_kdr_1_value%
+/papi parse me %rift_rank_kills%
+```
+
+These are global lifetime rankings. Weekly, monthly, and per-arena filters remain available in Rift's own leaderboard UI and holograms; they are not included in these PAPI patterns.
+
+### Refreshing and missing data
+
+Top entries use Rift's existing leaderboard cache, refreshed every `leaderboards.update-interval-seconds` in `config.yml` (default: `300`). They return empty values until the initial leaderboard load finishes or when a position has no entry.
+
+Personal rank placeholders require a loaded Rift profile. Their first request starts an asynchronous rank query and returns an empty value while it loads. Later requests return the cached rank, including positions beyond `leaderboards.top-limit`. After the configured refresh interval, the next request starts a refresh and keeps showing the previous rank until it completes. A failed refresh keeps the previous value; an unranked player returns an empty value. Placeholder requests never wait for a database query to finish.
+
+Unknown categories, invalid positions, and unsupported fields remain unresolved.
+
+## Scoreboards
+
+Both `title` and state-specific `lines` in `scoreboard.yml` accept `%...%` tokens. Existing brace placeholders continue to work in lines, alongside MiniMessage formatting and `{sprite:key}` icons.
+
+```yaml
+title: "<#8ab4f8><bold>Rift</bold></#8ab4f8> <gray>%rift_kills% kills</gray>"
+update-interval-ticks: 20
+spawn:
+  lines:
+    - "<gray>Player</gray> <white>{player}</white>"
+    - "<gray>Kills</gray> <white>%rift_kills%</white>"
+    - "<gray>Deaths</gray> <white>%rift_deaths%</white>"
+    - "<gray>KDR</gray> <white>%rift_kdr%</white>"
+    - "<gray>Best streak</gray> <white>%rift_best_killstreak%</white>"
+    - "<gray>Coins</gray> <gold>%rift_coins_formatted%</gold>"
+```
+
+Merge the example into the corresponding sections of your existing file, then run `/rift reload`. Titles and lines refresh at the configured scoreboard update interval.
+
+In FFA and World RTP scoreboard lines, `{kills}`, `{deaths}`, `{kdr}`, `{killstreak}`, and `{best_streak}` use the current arena or gamemode counters. The `%rift_...%` placeholders above use the player's global stats. For example, a player with two kills in their current FFA arena and seven lifetime kills sees `2 / 7` from `{kills} / %rift_kills%`.
+
+See [Configuration](configuration.mdx#scoreboard) for the built-in line placeholders and available layouts.
+
+## Holograms and kit editor stations
+
+Use the same `%rift_...%` tokens in `holograms.yml` text or kit editor station titles and subtitles in `kiteditor.yml`. Values are resolved for each viewer, so `%rift_kills%` shows the viewer's kills even when used in a leaderboard entry. Use the hologram's existing entry tokens for the ranked player's values.
+
+## Reloading
+
+The Rift expansion stays registered across `/papi reload` and unregisters when Rift disables. Use `/rift reload` after editing Rift's scoreboard, hologram, or station text.

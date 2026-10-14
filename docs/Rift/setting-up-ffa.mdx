@@ -28,6 +28,22 @@ FFA arenas are void worlds. Rift creates the world, you build the arena in it, t
 
 Arenas are enabled when created. Use `/arena disable <id>` and `/arena enable <id>` to take one out of rotation. `/arena tp <id>` teleports you to an arena, and selects its bounds if WorldEdit is installed.
 
+## Arena names and icons
+
+Set an arena's display name and sprite icon with:
+
+```text
+/arena rename cpvpffa Crystal PvP
+/arena seticon cpvpffa end_crystal
+/arena seticon cpvpffa default
+```
+
+Renaming keeps the arena ID and world unchanged. Icons use case-insensitive Rift SpriteAtlas keys, such as `end_crystal`, `mace`, or `diamond_sword`. Use `default` to clear an arena's icon override.
+
+Browse [Minecraft atlas sprites on Gamer Geeks](https://www.gamergeeks.net/apps/minecraft/list-of-atlas-sprites) and select your Minecraft version. Rift currently accepts its registered SpriteAtlas keys; not every atlas path on that site is supported.
+
+The FFA selector's text, hover lore, default icon, title and close icons, and button columns are configurable in `dialogs.yml`. Arenas without an icon override use the configured default sprite; leave the default sprite empty to hide icons unless assigned. The default hover lore omits the world. Reload with `/rift reload`, then reopen the menu.
+
 ## World layout
 
 `arenas.world-mode` in `config.yml` decides where FFA arenas live.

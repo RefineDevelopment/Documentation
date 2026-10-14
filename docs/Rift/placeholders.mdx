@@ -1,12 +1,12 @@
 ---
 title: "Placeholders"
 slug: /Rift/Placeholders
-description: "PlaceholderAPI setup, player stats, leaderboard names and values, personal ranks, and scoreboard examples."
+description: "PlaceholderAPI setup, player stats, weekly and monthly leaderboards, FFA arena rankings, and personal ranks."
 ---
 
 # Placeholders
 
-Rift supports PlaceholderAPI tokens in scoreboard titles and lines, leaderboard hologram text, and kit editor station titles and subtitles. Its built-in `rift` expansion exposes player stats and global leaderboards to any plugin that supports PlaceholderAPI.
+Rift supports PlaceholderAPI tokens in scoreboard titles and lines, leaderboard hologram text, and kit editor station titles and subtitles. Its built-in `rift` expansion exposes player stats and filtered leaderboards to any plugin that supports PlaceholderAPI.
 
 ## Setup
 
@@ -57,13 +57,13 @@ Replace `<metric>` with one of these categories:
 
 | Metric | Ranked value |
 | --- | --- |
-| `kills` | Lifetime kills |
-| `deaths` | Lifetime deaths |
-| `kdr` | Lifetime kill/death ratio |
-| `rtp_wins` | Lifetime RTP duel wins |
-| `killstreak` | Lifetime best killstreak |
+| `kills` | Kills |
+| `deaths` | Deaths |
+| `kdr` | Kill/death ratio |
+| `rtp_wins` | RTP duel wins |
+| `killstreak` | Best killstreak |
 | `balance` | Coin balance |
-| `totem_practice` | Lifetime best Totem Practice score |
+| `totem_practice` | Best Totem Practice score |
 
 Positions start at `1`. Rift caches up to `leaderboards.top-limit` entries per category, so positions beyond that list return an empty value. Top names and values do not need a viewing player. Counts have no decimals; KDR and balance use two decimal places, such as `3.50` and `1234.50`.
 
@@ -84,15 +84,54 @@ Check the values in-game:
 /papi parse me %rift_rank_kills%
 ```
 
-These are global lifetime rankings. Weekly, monthly, and per-arena filters remain available in Rift's own leaderboard UI and holograms; they are not included in these PAPI patterns.
+### Weekly, monthly, and arena filters
+
+The forms above default to global lifetime rankings. Append an optional period suffix, followed by an optional FFA arena filter:
+
+```text
+%rift_top_<metric>_<position>_name[_<period>][_arena_<id>]%
+%rift_top_<metric>_<position>_value[_<period>][_arena_<id>]%
+%rift_rank_<metric>[_<period>][_arena_<id>]%
+```
+
+Square brackets mark optional parts; omit the brackets in actual placeholders. Periods are `lifetime`, `weekly`, and `monthly`. Put the period before `_arena_<id>` when using both filters. Use the saved FFA arena ID, not its display name. IDs and placeholder names are case-insensitive, and arena IDs may contain underscores, hyphens, or numbers.
+
+| Example | Value |
+| --- | --- |
+| `%rift_top_kills_1_name_weekly%` | Global weekly kill leader's name |
+| `%rift_top_rtp_wins_1_value_monthly%` | Global monthly RTP win leader's score |
+| `%rift_top_deaths_1_value_arena_sword%` | Lifetime death leader's score in the `sword` FFA arena |
+| `%rift_top_kills_1_name_weekly_arena_crystal%` | Weekly kill leader's name in `crystal` |
+| `%rift_top_kdr_1_value_monthly_arena_crystal_2%` | Monthly KDR leader's value in `crystal_2` |
+| `%rift_rank_kills_weekly%` | The requesting player's global weekly kill rank |
+| `%rift_rank_kills_weekly_arena_crystal%` | The requesting player's weekly kill rank in `crystal` |
+| `%rift_rank_deaths_monthly_arena_sword%` | The requesting player's monthly death rank in `sword` |
+| `%rift_rank_kdr_lifetime_arena_crystal%` | The requesting player's lifetime KDR rank in `crystal` |
+
+| Metric | Global periods | FFA arena periods |
+| --- | --- | --- |
+| `kills`, `deaths`, `kdr`, `killstreak` | Lifetime, weekly, monthly | Lifetime, weekly, monthly |
+| `rtp_wins`, `totem_practice` | Lifetime, weekly, monthly | Unsupported |
+| `balance` | Lifetime | Unsupported |
+
+Weeks begin on Monday and months on the first, using `leaderboards.time-zone` in `config.yml` (default: `UTC`). Calendar periods use their own recorded counters; existing lifetime totals are not copied into a week or month. A week or month rollover starts a separate cache entry, so the previous period's rank is not shown for the new period.
+
+For a weekly arena hologram:
+
+```text
+Weekly crystal kills
+1. %rift_top_kills_1_name_weekly_arena_crystal% - %rift_top_kills_1_value_weekly_arena_crystal%
+2. %rift_top_kills_2_name_weekly_arena_crystal% - %rift_top_kills_2_value_weekly_arena_crystal%
+Your rank: %rift_rank_kills_weekly_arena_crystal%
+```
 
 ### Refreshing and missing data
 
-Top entries use Rift's existing leaderboard cache, refreshed every `leaderboards.update-interval-seconds` in `config.yml` (default: `300`). They return empty values until the initial leaderboard load finishes or when a position has no entry.
+Top entries use Rift's existing leaderboard cache, refreshed every `leaderboards.update-interval-seconds` in `config.yml` (default: `300`). Filtered top lists start an asynchronous load on first use. They return empty values until that load finishes or when a position has no entry. Concurrent requests share pending loads, and a failed initial load waits until the refresh interval before retrying.
 
-Personal rank placeholders require a loaded Rift profile. Their first request starts an asynchronous rank query and returns an empty value while it loads. Later requests return the cached rank, including positions beyond `leaderboards.top-limit`. After the configured refresh interval, the next request starts a refresh and keeps showing the previous rank until it completes. A failed refresh keeps the previous value; an unranked player returns an empty value. Placeholder requests never wait for a database query to finish.
+Personal rank placeholders require a loaded Rift profile. Their first request starts an asynchronous rank query and returns an empty value while it loads. Later requests return the cached rank, including positions beyond `leaderboards.top-limit`. Ranks are cached separately for each player, category, arena, and calendar period. After the configured refresh interval, the next request starts a refresh and keeps showing the previous rank until it completes. A failed refresh keeps the previous value; an unranked player returns an empty value. Placeholder requests never wait for a database query to finish.
 
-Unknown categories, invalid positions, and unsupported fields remain unresolved.
+Unknown categories, invalid positions, unknown FFA arena IDs, unsupported fields, and unsupported filter combinations remain unresolved. For example, `%rift_top_balance_1_value_weekly%` is unsupported because balance has no weekly leaderboard.
 
 ## Scoreboards
 

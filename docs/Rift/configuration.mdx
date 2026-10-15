@@ -1,7 +1,7 @@
 ---
 title: "Configuration"
 slug: /Rift/Configuration
-description: "Every Rift config file, the settings in config.yml, scoreboards, holograms, and messages."
+description: "Every Rift config file, dialog and chest-menu switches, scoreboards, holograms, and messages."
 ---
 
 # Configuration
@@ -18,7 +18,8 @@ Rift's behavior settings are YAML files in `plugins/Rift/`. Run `/rift reload` a
 | `scoreboard.yml` | Sidebar layouts |
 | `holograms.yml` | Leaderboard hologram text |
 | `hotbar.yml` | Spawn hotbar items |
-| `messages.yml`, `dialogs.yml` | Chat, menu, and dialog text |
+| `menus.yml` | Chest-menu titles, rows, icons, names, lore, slots, and controls |
+| `messages.yml`, `dialogs.yml` | Chat, native dialog text, and shared setting labels |
 
 ## config.yml
 
@@ -75,7 +76,10 @@ See [Set up FFA](setting-up-ffa.mdx) and [Set up RTP](setting-up-rtp.mdx) for th
 
 ### Dialogs
 
-Rift uses Paper's native dialog UI. Each menu can be switched off individually:
+Rift uses native dialogs by default. Set `enabled: false` to open chest menus for
+the selectors below, or keep it `true` and set individual switches to `false` to
+use a mix of dialogs and chest menus. A native dialog requires both switches to
+be `true`:
 
 ```yaml
 dialogs:
@@ -84,7 +88,18 @@ dialogs:
   rtp-arenas: true
   settings: true
   leaderboards: true
+  ffa-kits: true
+  kit-editor: true
 ```
+
+These switches cover player preferences, FFA/RTP arena selection, leaderboard
+categories and rankings, FFA kit types/layouts, and kit-editor mode/custom-slot/
+preset selection. Aliases and spawn hotbar buttons follow the same switches.
+The player's FFA hotbar selection preference remains available.
+
+Customize the chest screens in `menus.yml`. Run `/rift reload`, then reopen the
+screen. See [Menus & Dialogs](menus-and-dialogs.mdx) for every switch, menu section,
+placeholder, slot rule, and customization example.
 
 ### Leaderboards
 
@@ -147,7 +162,18 @@ Entries use `<rank>`, `<player>`, and `<value>`. Footers use `<position>`.
 
 ## Messages
 
-`messages.yml` and `dialogs.yml` hold every player-facing string, grouped by feature. Text is MiniMessage, and numbered placeholders such as `{0}` are positional values specific to each entry. Edit the YAML, run `/rift reload`, and reopen menus to see changes. Open dialogs keep the text they were created with.
+`messages.yml` and `dialogs.yml` hold chat and native dialog text, grouped by
+feature. FFA kit dialog/hotbar text is under `FFA_KITS` in `messages.yml`; other
+supported selectors use `dialogs.yml`. Chest-menu titles, item names and lore
+are in `menus.yml`. Shared setting labels and descriptions under `SETTING_TOGGLE`
+in `dialogs.yml` also feed chest settings items.
+
+MiniMessage entries accept formatting tags; entries marked as plain text display
+tags literally. Numbered placeholders such as `{0}` are positional values specific
+to each entry; some messages use named placeholders. Follow each file's comments.
+Edit the YAML, run `/rift reload`, and reopen screens to see changes. Open dialogs
+keep their original text, and open chest menus keep their layout snapshot. See
+[Menus & Dialogs](menus-and-dialogs.mdx) for the chest-menu placeholders.
 
 Keep YAML indentation intact and quote values containing special YAML characters.
 

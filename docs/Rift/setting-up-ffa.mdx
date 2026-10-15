@@ -1,12 +1,12 @@
 ---
 title: "Set up FFA"
 slug: /Rift/SettingUpFfa
-description: "Create an FFA arena, set its bounds and spawn, choose its kit, and tune the rules."
+description: "Create an FFA arena, set its bounds and spawn, save its clean schematic with /arena finish, and troubleshoot availability."
 ---
 
 # Set up FFA
 
-FFA arenas are void worlds. Rift creates the world, you build the arena in it, then you tell Rift where the arena is. Run these commands in-game with `rift.admin.arena`.
+FFA arenas are void worlds. Rift creates the world, you build the arena in it, then you finish setup by saving its clean map. Install and enable **WorldEdit or FastAsyncWorldEdit** before using FFA. Run these commands in-game with `rift.admin.arena` (included in `rift.admin`).
 
 <Steps>
 
@@ -20,13 +20,39 @@ FFA arenas are void worlds. Rift creates the world, you build the arena in it, t
 
 2. Build the arena. A 3x3 bedrock platform is placed at `0, 64, 0` to stand on. Turn this off with `arenas.spawn-platform: false` in `config.yml`.
 3. Stand where players should spawn and run `/arena setspawn <id>`.
-4. Stand in one corner of the playable area and run `/arena setmin <id>`, then in the opposite corner and run `/arena setmax <id>`. You must be inside the arena's world.
-5. Choose the kit (see below).
-6. Check it with `/arena info <id>`, then join with `/ffa <id>`.
+4. Stand in one corner of the playable area and run `/arena setmin <id>`, then in the opposite corner and run `/arena setmax <id>`. You must be inside the arena's world. Include the spawn and the air above the floor, keep the bounds within the world's build height, and avoid overlapping other FFA arenas in the same world. New arenas start with broad bounds; tighten them around your map.
+5. Choose the kit (see below). Make sure the map is clean: this is the version that resets will restore.
+6. Have all FFA participants leave this arena, then finish setup:
+
+   ```text
+   /arena finish <id>
+   /arena schemstatus <id>
+   ```
+
+   `finish` checks the spawn and bounds, saves the clean schematic and its recovery manifest, then enables and saves the arena configuration after the schematic succeeds. The spawn must be inside the saved bounds. Wait for the ready-to-join message.
+
+7. Check `/arena info <id>`, then join with `/ffa <id>`. For an existing arena, skip creation and follow the remaining setup steps.
 
 </Steps>
 
-Arenas are enabled when created. Use `/arena disable <id>` and `/arena enable <id>` to take one out of rotation. `/arena tp <id>` teleports you to an arena, and selects its bounds if WorldEdit is installed.
+New arenas have their enabled setting turned on, but FFA entry also requires ready schematic recovery. `/arena enable <id>` does not save a schematic or bypass recovery. An enabled arena can remain hidden from the menu until `/arena finish <id>` succeeds. Use `/arena disable <id>` to take it out of rotation. `/arena tp <id>` teleports you to an arena and selects its bounds in WorldEdit/FAWE.
+
+## Clean maps and recovery
+
+| Command | Purpose |
+| --- | --- |
+| `/arena finish <id>` | Finish FFA setup, save the clean map, then enable the arena after success. |
+| `/arena saveschem <id>` | Update a clean map's template without changing its enabled setting. |
+| `/arena restoreschem <id>` | Restore the saved map. FFA participants must leave; everyone must be outside the bounds before pasting starts. |
+| `/arena schemstatus <id>` | Show readiness, an active save/restore, or the blocking reason. |
+
+These commands are FFA-only and require `rift.admin.arena`. Rift stores the template at `plugins/Rift/schems/<id>.schem` and its matching manifest at `plugins/Rift/schems/<id>.json`. Keep both files together in backups. The schematic includes air, block entity data, and persistent map entities.
+
+Existing arenas need a clean template before players can enter. Repair damage or restore your world backup before the first `finish` or `saveschem`. Both commands refuse to replace a dirty recovery template: restore the arena first, make any intended edits, then save the clean map again. Restarting restores the previously saved template, so save intended map edits before restarting.
+
+Rift marks the arena dirty before admitting a player. The last FFA participant leaving or disconnecting schedules a full restore. Rift also restores saved maps at every startup, including after a crash. The arena stays unavailable while saving or restoring, or when recovery fails. Recovery covers only the saved bounds.
+
+Whole-map saves and restores use `ffa-recovery.blocks-per-tick` in `config.yml` (default `5000`). This controls processing speed, not map size; it is separate from `reset.blocks-per-tick` for tracked damage repairs.
 
 ## Arena names and icons
 
@@ -42,7 +68,20 @@ Renaming keeps the arena ID and world unchanged. Icons use case-insensitive Rift
 
 Browse [Minecraft atlas sprites on Gamer Geeks](https://www.gamergeeks.net/apps/minecraft/list-of-atlas-sprites) and select your Minecraft version. Rift currently accepts its registered SpriteAtlas keys; not every atlas path on that site is supported.
 
-The FFA selector's text, hover lore, default icon, title and close icons, and button columns are configurable in `dialogs.yml`. Arenas without an icon override use the configured default sprite; leave the default sprite empty to hide icons unless assigned. The default hover lore omits the world. Reload with `/rift reload`, then reopen the menu.
+The native FFA selector's text, hover lore, default icon, title and close icons,
+and button columns are configurable under `FFA_DIALOG_PROVIDER` in `dialogs.yml`.
+Arenas without an icon override use the configured default sprite; leave the
+default sprite empty to hide icons unless assigned. The default hover lore omits
+the world.
+
+To use the paginated chest selector, set `dialogs.ffa-arenas: false` in
+`config.yml`, or set `dialogs.enabled: false` for all supported selectors.
+Customize its title, rows, `arena-slots`, filler, arena names/lore, and navigation
+under `ffa` in `menus.yml`. `ffa.arena.material: AUTO` follows the arena icon;
+an explicit material overrides it for this chest screen. Dialog tooltips do not
+change chest lore. Both interfaces use the same arena availability checks.
+Reload with `/rift reload`, then reopen the menu. See
+[Menus & Dialogs](menus-and-dialogs.mdx) for placeholders and slot rules.
 
 ## World layout
 
@@ -55,16 +94,25 @@ The FFA selector's text, hover lore, default icon, title and close icons, and bu
 
 ## Kit
 
-Players joining FFA receive the **default FFA kit**, or the kit they chose with `/ffakit`. Create and default one with:
+Each FFA arena uses its own assigned kit. Equip the inventory, armor, and offhand
+you want players to receive, then save that loadout for the arena:
 
 ```text
-/ffakit create crystal
-/ffakit setdefault crystal
+/arena setkitffa cpvpffa
 ```
 
-See [Kits](kits.mdx) for the full workflow.
+To adjust it later, run `/arena getkitffa cpvpffa`, edit the items in your
+inventory, then run `/arena setkitffa cpvpffa` again. Both commands require
+`rift.admin.arena`. Repeat this setup for each FFA arena.
 
-Each arena's JSON also stores a `kit` ID, which defaults to `premade-crystal` for new arenas. To change it, edit `data/ffa/<id>.json` and run `/arena reload`.
+Joining the arena offers a five-second choice between saved layouts of its
+assigned kit and **Use Arena Default**. If the choice expires, Rift applies the
+arena's default arrangement. Respawns retain the selected layout. Players choose
+an arrangement of that arena's kit, rather than a different kit for the arena.
+
+`setkitffa` creates or updates kit `arena-<arena-id>` and saves its assignment in
+the arena JSON's `ffaKit` field. The separate `kit` field is not the FFA kit
+assignment. See [Kits](kits.mdx#ffa-arena-kits) for the full workflow.
 
 ## Rules
 
@@ -119,5 +167,14 @@ Give staff `rift.bypass.combattag` to exempt them. Operators don't get it automa
 | --- | --- |
 | "You must be in the arena world" | `setmin`, `setmax` and `setspawn` only work while standing in that arena's world. Use `/arena tp <id>` first. |
 | Players can leave the area | Check `/arena info <id>` for the bounds. New arenas default to -500..500 on X/Z until you set them. |
-| Arena doesn't appear in the menu | Make sure it's enabled: `/arena list ffa`. |
+| Arena is enabled but the menu says "No arenas found" | Check `/arena schemstatus <id>`. Enabled FFA arenas are hidden until schematic recovery is ready. |
+| No saved schematic or manifest | Configure the clean map, spawn, and bounds, then run `/arena finish <id>`. |
+| WorldEdit/FAWE unavailable | Install and enable WorldEdit or FAWE, then retry. |
+| Spawn missing or outside bounds | Set a spawn inside the arena with `/arena setspawn <id>`. |
+| Invalid or overlapping bounds | Correct `setmin` and `setmax`; include the spawn, stay within build height, and keep shared-world FFA bounds separate. |
+| Save or restore already running | Wait for completion, then check `schemstatus` again. |
+| Dirty arena or players blocking a restore | Have FFA participants leave, move everyone outside the bounds, then run `/arena restoreschem <id>` before saving again. |
+| Bounds changed since the template was saved | Save a new template of the clean map. For a dirty map, return to the saved bounds and restore before editing and saving again. |
 | Edited JSON not applied | Run `/arena reload`. |
+
+Recovery failures also appear in the server log as `FFA arena <id> is closed: <reason>`. Command feedback, including finish progress and completion, is configurable under `FFA_RECOVERY` in `messages.yml`.

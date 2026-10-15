@@ -1,7 +1,7 @@
 ---
 title: "Kits"
 slug: /Rift/Kits
-description: "FFA kits, the player kit editor, bundled presets, and the premade kit."
+description: "Set a kit for each FFA arena, save player layouts, and configure RTP custom kits and presets."
 ---
 
 # Kits
@@ -10,21 +10,75 @@ Rift has three kinds of kit.
 
 | Kind | Who makes it | Used for |
 | --- | --- | --- |
-| **FFA kits** | Staff | What a player receives when joining FFA and after each respawn |
-| **Player kits** | Players, in the kit editor | A player's own layout and custom kits |
+| **FFA arena kits** | Staff | The assigned loadout for each FFA arena, used on entry and respawn |
+| **Player kits and layouts** | Players, in the kit editor | Saved arrangements of FFA arena kits and fully custom RTP kits |
 | **Presets** | Bundled with Rift | Starting points with IDs beginning `preset-` |
 
 The bundled presets are `crystal`, `cart`, `diamond`, `diamondsmp`, `mace`, `nethpot`, `spearmace`, and `uhc`.
 
-## FFA kits
+## FFA arena kits
 
-Build the kit in your inventory, then save it.
+Each FFA arena has its own assigned kit. Players joining that arena use its
+loadout and can choose one of their saved arrangements of those items. Their
+layout choice applies to that arena entry and subsequent respawns.
+
+### Set an arena's kit
+
+Build the loadout in your inventory, including armor and offhand, then save it
+for an existing FFA arena:
 
 ```text
-/ffakit create <id>
+/arena setkitffa <arena>
 ```
 
-Manage kits with these `/ffakit` subcommands, all staff-only except `list`, `select`, `edit`, and `reset`:
+For example, save a crystal loadout for `cpvpffa`, then equip a sword loadout
+and save it for `swordffa`:
+
+```text
+/arena setkitffa cpvpffa
+/arena setkitffa swordffa
+```
+
+These commands require `rift.admin.arena`. Each saves the current inventory,
+armor, offhand, and selected hotbar slot into that arena's kit. To change an
+existing loadout, fetch it, adjust your items, and save it back:
+
+```text
+/arena getkitffa cpvpffa
+/arena setkitffa cpvpffa
+```
+
+The generated kit ID is `arena-<arena-id>`, and the assignment is stored as
+`ffaKit` in `data/ffa/<arena-id>.json`. `setkitffa` saves the assignment for you;
+you do not need to edit JSON or set a global default. Changing a kit's items
+invalidates layouts saved against its previous contents, so players arrange
+and save new layouts for the updated kit.
+
+### Player layouts
+
+At spawn, players use `/ffakit` to choose an arena kit and one of its **five
+saved layout slots** to arrange in the kit room. Layouts are saved per player
+and per kit. `/ffakit select <id>` and `/ffakit edit <id>` open that kit's layout
+picker; `/ffakit reset <id>` resets its first layout slot. The ID here is the
+kit ID, such as `arena-cpvpffa`, rather than the arena ID.
+
+Entering FFA offers saved layouts for the kit assigned to that arena, plus
+**Use Arena Default** for the staff-defined arrangement. Empty slots cannot be
+selected for use. The choice lasts five seconds; expiry applies the arena's
+default arrangement. Respawns retain that entry's choice. `/ffakit` inside FFA
+reopens the pending choice while its timer is active. Players can arrange the
+assigned kit's items; choosing a layout does not change which kit the arena uses.
+
+The kit and layout pickers use native dialogs by default. Set `dialogs.ffa-kits`
+or `dialogs.enabled` to `false` in `config.yml` to use chest menus, customized
+under `ffa-kits.types` and `ffa-kits.layouts` in `menus.yml`. Players can also
+choose hotbar selection in `/settings`; that preference remains available with
+either interface. See [Menus & Dialogs](menus-and-dialogs.mdx).
+
+### Manage kit records
+
+The `/ffakit` staff commands manage the underlying kit records. Arena kits
+created with `setkitffa` can be managed using their `arena-<arena-id>` IDs:
 
 | Command | Description |
 | --- | --- |
@@ -33,22 +87,34 @@ Manage kits with these `/ffakit` subcommands, all staff-only except `list`, `sel
 | `/ffakit load <id>` | Put a kit's items in your inventory so you can edit them. |
 | `/ffakit seticon <id> [material]` | Set the icon to your held item or a material. |
 | `/ffakit rename <id> <name>` | Set the display name. |
-| `/ffakit setdefault <id>` | Make the kit the default for players who haven't chosen one. |
+| `/ffakit setdefault <id>` | Set the fallback kit; this does not change an arena's assigned kit. |
 | `/ffakit delete <id>` | Delete the kit. |
 
-Admin subcommands need `rift.admin.ffakit`. Players use `/ffakit` to open the menu, `/ffakit select <id>` to pick one, `/ffakit edit <id>` to arrange it in the kit room, and `/ffakit reset <id>` to restore the default layout.
-
-### Quick single kit
-
-If you only want one kit for everyone, stand with it in your inventory and run `/arena setkitffa`. `/arena getkitffa` gives it back to you for adjusting.
+These staff commands require `rift.admin.ffakit`. Creating a standalone kit with
+`/ffakit create` does not assign it to an arena. Use `/arena setkitffa <arena>`
+for the arena setup workflow above.
 
 ## Kit editor
 
-Players open the editor with `/kiteditor`, which sends them to the [kit room](spawn-and-kit-room.mdx). An edit is a session that must be confirmed or canceled at the confirm and cancel stations. Nothing saves until then.
+Players open `/kiteditor` to choose FFA layouts or RTP custom kits, then enter
+the [kit room](spawn-and-kit-room.mdx) to edit. An edit is a session that must be
+confirmed or canceled at the confirm and cancel stations. Nothing saves until then.
+
+Mode, custom-slot, and preset selectors follow `dialogs.kit-editor` and the
+global `dialogs.enabled` switch. Chest versions are configured under
+`kit-editor.modes`, `kit-editor.slots`, and `kit-editor.presets` in `menus.yml`.
+The FFA button then follows the separate `dialogs.ffa-kits` switch: one kit opens
+its layouts directly, while several kits open the type picker first.
+
+RTP custom-slot and preset chest screens have pages. The preset screen keeps the
+selected custom slot and offers **Edit Current Layout / Start Empty** on every
+page. Choosing a preset starts an unsaved edit: Confirm saves to that slot;
+Cancel keeps the previous kit. Item renaming, shulker editing, and the separate
+`/getpremadekit` picker retain their interfaces.
 
 | Setting (`kiteditor.yml`) | Default | Effect |
 | --- | --- | --- |
-| `max-custom-kits` | `8` | Custom kits per player |
+| `max-custom-kits` | `8` | Custom kits per player, clamped to 1–45 |
 | `allow-offhand-edit` | `true` | Allow editing the offhand slot |
 | `protection.isolate-players` | `true` | Players in the room can't see each other |
 | `protection.prevent-damage` | `true` | No damage in the room |

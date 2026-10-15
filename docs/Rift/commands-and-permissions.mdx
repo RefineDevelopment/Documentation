@@ -13,7 +13,7 @@ These need no permission.
 | Command | Aliases | Description |
 | --- | --- | --- |
 | `/ffa [id]` | | Open the FFA arena menu, or join an arena. Also `join`, `leave`, `menu`. |
-| `/ffakit` | `/ffakits` | Choose and arrange your FFA kit. Also `select`, `edit`, `reset`, `list`. |
+| `/ffakit` | `/ffakits` | Edit FFA layout slots at spawn, or reopen the pending arena-entry choice. Also `select`, `edit`, `reset`, `list`. |
 | `/rtp [id]` | `/wild` | Open the RTP menu, or teleport into an arena. Also `leave`, `menu`. |
 | `/queue` | `/rtpqueue`, `/rtpq`, `/duel` | Join or leave the RTP duel queue. Also `join`, `leave`. |
 | `/leave` | `/quit`, `/l` | Leave your current match, arena, or queue. |
@@ -33,6 +33,11 @@ These need no permission.
 | `/tpdeny [player]` | | Deny a request. No name selects the newest. |
 
 Leaderboard categories: `kills`, `deaths`, `kdr`, `wins`, `killstreak`, `balance`.
+
+Player settings, FFA/RTP arena selectors, leaderboards, FFA kits, and kit-editor
+selectors can use native dialogs or chest menus. Command aliases and spawn hotbar
+buttons follow the same `dialogs` switches in `config.yml`. See
+[Menus & Dialogs](menus-and-dialogs.mdx) for configuration and customization.
 
 ### Teleport requests
 
@@ -64,8 +69,12 @@ Alias: `/arenas`.
 | `/arena list [ffa\|rtp]` | List arenas. |
 | `/arena info <id>` | Show an arena's JSON. |
 | `/arena create <id> <ffa\|rtp> [preset] [baseHeight] [hillScale]` | Create an arena. |
-| `/arena delete <id>` | Delete an arena's JSON (alias `remove`). |
-| `/arena enable <id>` / `disable <id>` | Toggle an arena. |
+| `/arena delete <id>` | Delete an arena's JSON and dedicated world folder (alias `remove`). Shared worlds and the primary server world are kept. |
+| `/arena enable <id>` / `disable <id>` | Toggle the enabled setting; enabling does not bypass FFA recovery. |
+| `/arena finish <id>` | Validate FFA setup, save its clean schematic, then enable the arena after success. |
+| `/arena saveschem <id>` | Save a clean FFA template without changing the enabled setting. |
+| `/arena restoreschem <id>` | Restore the saved FFA template after participants leave and everyone is outside the bounds. |
+| `/arena schemstatus <id>` | Show FFA recovery readiness, an active operation, or the blocking reason. |
 | `/arena setspawn <id>` | Set the arena spawn to your position. |
 | `/arena setmin <id>` / `setmax <id>` | Set the bounds corners to your position. |
 | `/arena setcenter <id>` | Set the RTP center. |
@@ -74,7 +83,10 @@ Alias: `/arenas`.
 | `/arena regen <id> [damaged\|radius]` | Restore RTP terrain. |
 | `/arena tp <id>` | Teleport to an arena (alias `teleport`). |
 | `/arena reload` | Reload arena JSON from disk. |
-| `/arena setkitffa` / `getkitffa` | Save or fetch the single FFA kit. |
+| `/arena setkitffa <arena>` | Save your inventory, armor, and offhand as that FFA arena's assigned kit. |
+| `/arena getkitffa <arena>` | Load that FFA arena's kit into your inventory for adjustment. |
+
+The finish and schematic commands are FFA-only and require WorldEdit or FAWE. Use `/arena finish <id>` as the final [FFA setup](setting-up-ffa.mdx) step. Both save commands refuse to overwrite a dirty recovery template; restore the arena before saving an edited clean map.
 
 ### Other admin commands
 

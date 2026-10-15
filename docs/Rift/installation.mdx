@@ -38,14 +38,14 @@ Plugins that use Rift's API must declare `depend: [Retention]` or `softdepend: [
 
 Next, [set up spawn and the kit room](spawn-and-kit-room.mdx), then an [FFA arena](setting-up-ffa.mdx) or [RTP arena](setting-up-rtp.mdx).
 
-## Optional plugins
+## Feature dependencies
 
-Rift soft-depends on these. None are required.
+Rift soft-depends on these plugins. **WorldEdit or FastAsyncWorldEdit is required for FFA schematic recovery and entry.** The other integrations are optional.
 
 | Plugin | Used for |
 | --- | --- |
 | Vault | Economy integration. |
-| WorldEdit / FastAsyncWorldEdit | `/arena tp` selects the arena bounds so you can see them. |
+| WorldEdit / FastAsyncWorldEdit | Required for FFA clean schematics and recovery. Also selects bounds with `/arena tp`. |
 | PlaceholderAPI | [Player-stat placeholders](placeholders.mdx), scoreboard titles and lines, leaderboard holograms, and kit editor station text. |
 | FancyHolograms, FancyNpcs | Leaderboard holograms and kit-room NPCs. |
 | Oraxen, ItemsAdder, Nexo | Custom items in the kit editor. |
@@ -66,10 +66,12 @@ All paths are relative to `plugins/Rift/`.
 | `scoreboard.yml` | Sidebar layouts per state |
 | `holograms.yml` | Leaderboard hologram formats |
 | `hotbar.yml` | Spawn hotbar items |
-| `messages.yml`, `dialogs.yml` | All player-facing text |
+| `menus.yml` | [Chest-menu presentation](menus-and-dialogs.mdx): titles, rows, items, slots, and controls |
+| `messages.yml`, `dialogs.yml` | Chat, native dialog text, and shared setting labels |
 | `data/spawn.json` | Spawn location and bounds |
 | `data/kitroom.json` | Kit room center and stations |
 | `data/ffa/<id>.json` | One file per FFA arena |
+| `schems/<id>.schem`, `schems/<id>.json` | Clean FFA map and matching recovery manifest; created by `/arena finish <id>` or `saveschem` |
 | `data/rtp/<id>.json` | One file per RTP arena |
 | `data/terrain-damage.json` | Recorded RTP block damage awaiting restore |
 
@@ -78,3 +80,7 @@ Locations and arenas live in `data/` as JSON and are managed by commands. Behavi
 ## Reloading
 
 `/rift reload` reloads the YAML files, messages, and every service. Changes to [database settings](database.mdx) need a full restart.
+
+Close and reopen dialogs and chest menus after reloading to see their updated
+text and layout. New `menus.yml` keys receive bundled defaults while existing
+custom values are preserved.

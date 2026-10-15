@@ -67,10 +67,6 @@ The two optional numbers after the preset set the mean surface level (`baseHeigh
 
 These are fixed at creation. A custom arena is stored as `generatorVersion: 2`, so older Rift builds refuse to load it rather than produce seams in the world.
 
-:::note Worlds from the old datapack build
-Worlds created by an earlier datapack-based build can't be loaded without that pack. Keep them as backups and create replacements with new IDs. Rift doesn't convert or delete them.
-:::
-
 ## Spawn area and radius
 
 Players are teleported to a random safe spot between a minimum and maximum distance from the arena center.
@@ -139,10 +135,10 @@ Duel matches roll back with the `reset` section of `config.yml` (`blocks-per-tic
 | `/arena list [ffa\|rtp]` | List arenas. |
 | `/arena info <id>` | Show an arena's JSON. |
 | `/arena enable <id>` / `disable <id>` | Toggle an arena. |
-| `/arena delete <id>` | Delete the arena's JSON file. |
+| `/arena delete <id>` | Delete the arena and its dedicated world folder. |
 | `/arena reload` | Reload all arena JSON from disk. |
 
-Deleting an arena removes its JSON file only. The world folder stays on disk.
+Deleting an arena removes its JSON file and deletes its dedicated world folder. Players in that world are moved to the primary world's spawn before it is unloaded without saving. World folders shared with another arena and the server's primary world are kept.
 
 ## Player commands
 

@@ -50,7 +50,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Server configuration',
-      items: ['Rift/configuration', 'Rift/placeholders', 'Rift/database', 'Rift/commands-and-permissions'],
+      items: ['Rift/configuration', 'Rift/menus-and-dialogs', 'Rift/placeholders', 'Rift/database', 'Rift/commands-and-permissions'],
     },
     {
       type: 'category',

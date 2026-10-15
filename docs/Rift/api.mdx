@@ -15,39 +15,47 @@ The Rift API artifact is a small public API for other plugins. It lets you move 
 
 | | |
 | --- | --- |
-| Group | `me.meng` |
+| Group | `xyz.refinedev.rift` |
 | Artifact | `rift-api` |
 | Version | `1.0-SNAPSHOT` |
+| Repository | `https://maven.refinedev.org/public-repo/` |
 
-The API is built from the Rift repository. Run `.\gradlew.bat :api:build` and use `api/build/libs/rift-api-1.0-SNAPSHOT.jar`. A `-sources.jar` is built next to it. Don't shade the API into your plugin.
+Resolve the API from Refine's public Maven repository. Use `compileOnly` with
+Gradle or `provided` with Maven; don't shade the API into your plugin. The Java
+packages use `xyz.refinedev.rift.api`.
 
 <Tabs groupId="rift-build-tool">
 <TabItem value="gradle" label="Gradle (Kotlin DSL)" default>
 
 ```kotlin
+repositories {
+    maven("https://maven.refinedev.org/public-repo/")
+}
+
 dependencies {
-    compileOnly(files("libs/rift-api-1.0-SNAPSHOT.jar"))
+    compileOnly("xyz.refinedev.rift:rift-api:1.0-SNAPSHOT")
 }
 ```
 
 </TabItem>
 <TabItem value="maven" label="Maven">
 
-Install the jar into your local repository once:
-
-```bash
-mvn install:install-file -Dfile=rift-api-1.0-SNAPSHOT.jar -DgroupId=me.meng -DartifactId=rift-api -Dversion=1.0-SNAPSHOT -Dpackaging=jar
-```
-
-Then depend on it:
-
 ```xml
-<dependency>
-    <groupId>me.meng</groupId>
-    <artifactId>rift-api</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <scope>provided</scope>
-</dependency>
+<repositories>
+    <repository>
+        <id>refine-public</id>
+        <url>https://maven.refinedev.org/public-repo/</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>xyz.refinedev.rift</groupId>
+        <artifactId>rift-api</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <scope>provided</scope>
+    </dependency>
+</dependencies>
 ```
 
 </TabItem>
@@ -87,18 +95,18 @@ Run calls that touch live server state on the primary server thread after Rift e
 
 | Package | Contents |
 | --- | --- |
-| `me.meng.rift.api` | `RiftAPI`: the entry point, registered as a Bukkit service |
-| `me.meng.rift.api.player` | `PlayerAPI`, `PlayerSnapshot`, `PlayerStatsSnapshot`, `PlayerSettingsSnapshot`, `PlayerState`, `PlayerSetting` |
-| `me.meng.rift.api.ffa` | `FfaAPI` |
-| `me.meng.rift.api.duel` | `DuelAPI`, `DuelQueueAPI`, `DuelMatchAPI`, `MatchSnapshot`, `MatchState` |
-| `me.meng.rift.api.rtp` | `WorldRtpAPI` |
-| `me.meng.rift.api.economy` | `EconomyAPI`, `EconomyTransaction` |
-| `me.meng.rift.api.leaderboard` | `LeaderboardAPI`, `LeaderboardEntry`, `LeaderboardMetric` |
-| `me.meng.rift.api.kit` | `KitAPI`, `KitSummary`, `KitSlotSummary` |
-| `me.meng.rift.api.cosmetics` | `CosmeticsAPI`, `CosmeticDefinition`, `CosmeticProfile`, `CosmeticCategory` |
-| `me.meng.rift.api.reset` | `ResetAPI`, `ResetRequest`, `ResetResult`, `ChunkKey` |
-| `me.meng.rift.api.common` | `ActionResult`, `ActionFailure` |
-| `me.meng.rift.api.event.*` | `ffa`, `match`, `player`, `economy`, and `settings` events |
+| `xyz.refinedev.rift.api` | `RiftAPI`: the entry point, registered as a Bukkit service |
+| `xyz.refinedev.rift.api.player` | `PlayerAPI`, `PlayerSnapshot`, `PlayerStatsSnapshot`, `PlayerSettingsSnapshot`, `PlayerState`, `PlayerSetting` |
+| `xyz.refinedev.rift.api.ffa` | `FfaAPI` |
+| `xyz.refinedev.rift.api.duel` | `DuelAPI`, `DuelQueueAPI`, `DuelMatchAPI`, `MatchSnapshot`, `MatchState` |
+| `xyz.refinedev.rift.api.rtp` | `WorldRtpAPI` |
+| `xyz.refinedev.rift.api.economy` | `EconomyAPI`, `EconomyTransaction` |
+| `xyz.refinedev.rift.api.leaderboard` | `LeaderboardAPI`, `LeaderboardEntry`, `LeaderboardMetric` |
+| `xyz.refinedev.rift.api.kit` | `KitAPI`, `KitSummary`, `KitSlotSummary` |
+| `xyz.refinedev.rift.api.cosmetics` | `CosmeticsAPI`, `CosmeticDefinition`, `CosmeticProfile`, `CosmeticCategory` |
+| `xyz.refinedev.rift.api.reset` | `ResetAPI`, `ResetRequest`, `ResetResult`, `ChunkKey` |
+| `xyz.refinedev.rift.api.common` | `ActionResult`, `ActionFailure` |
+| `xyz.refinedev.rift.api.event.*` | `ffa`, `match`, `player`, `economy`, and `settings` events |
 
 ## `RiftAPI`
 
@@ -160,6 +168,8 @@ if (result.isFailure()) {
     }
 }
 ```
+
+An enabled FFA arena is not necessarily ready to admit players. Missing clean schematics, an active save or restore, or a recovery failure keep it unavailable. Administrators finalize the clean map with `/arena finish <id>` and inspect readiness with `/arena schemstatus <id>`. Handle a failed join result rather than assuming the enabled setting guarantees entry. See [Set up FFA](setting-up-ffa.mdx).
 
 ## `DuelAPI` and `WorldRtpAPI`
 

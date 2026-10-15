@@ -19,6 +19,7 @@ Skip [Set up FFA](setting-up-ffa.mdx), [Set up RTP](setting-up-rtp.mdx), and [Sp
 | Java 21 | Use the runtime your Paper version requires. |
 | Retention | Rift loads through Retention, a loader that is not included in the zip. Download it and put it in `plugins/`. See [Installation](installation.mdx). |
 | MariaDB, MySQL, or MongoDB | Rift has no embedded database. Create an empty database first. |
+| WorldEdit or FastAsyncWorldEdit | Must be installed and enabled for FFA schematic recovery. |
 | A machine with enough memory | RTP worlds are loaded in addition to the spawn and FFA worlds. |
 
 ## Set it up
@@ -88,8 +89,9 @@ Lines accept MiniMessage, `{sprite:key}` icons, and the placeholders listed in [
 
 | File | What it controls |
 | --- | --- |
-| `messages.yml` | Chat text for every feature |
-| `dialogs.yml` | Menu and dialog text, such as the FFA and RTP arena pickers |
+| `messages.yml` | Chat text and FFA kit dialog/hotbar text under `FFA_KITS` |
+| `dialogs.yml` | Native dialog text and shared setting labels/descriptions |
+| `menus.yml` | Chest-menu titles, rows, icons, item text, slots, and controls |
 | `holograms.yml` | Leaderboard hologram headers, entries, and colors |
 | `kiteditor.yml` | Kit room station titles and subtitles |
 
@@ -99,7 +101,10 @@ Edit the text, then reload instead of restarting:
 /rift reload
 ```
 
-Open dialogs keep the text they were created with, so reopen a menu to see changes.
+Reopen dialogs and chest menus after reloading to see text and layout changes.
+In `config.yml`, set `dialogs.enabled: false` to use chest menus for the supported
+selectors, or disable individual dialog switches. See
+[Menus & Dialogs](menus-and-dialogs.mdx) for the complete settings and examples.
 
 ## 5. Start and check
 
@@ -112,6 +117,8 @@ Start the server and watch the console for Rift enabling without errors. Then jo
 ```
 
 `/arena list` should show the premade's FFA and RTP arenas. If the console reports a storage error, recheck [step 1](#1-connect-the-database).
+
+For each FFA arena, check `/arena schemstatus <id>` and wait for startup restoration to complete. An enabled arena still needs ready schematic recovery to appear in `/ffa`. If an older premade is missing a template, make sure its map is clean and run `/arena finish <id>` with all FFA participants out of that arena. Keep `plugins/Rift/schems/<id>.schem` and its matching `.json` manifest together in backups. See [FFA troubleshooting](setting-up-ffa.mdx#troubleshooting) for other recovery blockers.
 
 Give yourself operator access from the console so you can use the admin commands:
 

@@ -1,0 +1,212 @@
+---
+title: "Menus & Dialogs"
+slug: /Rift/MenusAndDialogs
+description: "Choose native dialogs or chest menus, customize menus.yml, and configure player selectors."
+---
+
+# Menus & Dialogs
+
+Rift can show player navigation as native dialogs or inventory chest menus.
+Choose the interface in `plugins/Rift/config.yml`, customize chest screens in
+`plugins/Rift/menus.yml`, and run `/rift reload`. Close and reopen the screen
+after reloading; an open chest menu keeps its existing layout snapshot.
+
+## Choose the interface
+
+These are the defaults in `config.yml`:
+
+```yaml
+dialogs:
+  enabled: true
+  ffa-arenas: true
+  rtp-arenas: true
+  settings: true
+  leaderboards: true
+  ffa-kits: true
+  kit-editor: true
+```
+
+A screen uses a native dialog only when both `enabled` and its own switch are
+`true`. Set `enabled: false` to use chest menus for all screens below, or keep it
+`true` and disable individual switches to mix the two interfaces.
+
+| Switch under `dialogs` | Screens affected | Entry points |
+| --- | --- | --- |
+| `settings` | Player preferences | `/settings` |
+| `ffa-arenas` | FFA arena selector | `/ffa`, `/ffa menu` |
+| `rtp-arenas` | World RTP arena selector | `/rtp`, `/rtp menu` |
+| `leaderboards` | Categories, FFA arena selector, ranking pages | `/lb`, `/lb ffa`, `/top ...` |
+| `ffa-kits` | FFA kit types and saved layouts | `/ffakit`, FFA Kits in the kit editor, arena-entry layout choice |
+| `kit-editor` | Mode, RTP custom-slot and preset selectors | `/kiteditor` |
+
+Command aliases and spawn hotbar buttons use the same switches. Direct commands
+such as `/ffa <id>` and `/rtp <id>` still enter an arena without a selector.
+The kit editor's FFA Kits button follows `ffa-kits` after leaving the mode screen,
+so it can open a dialog even when `kit-editor` is `false`, and vice versa.
+
+The global switch covers these selectors. Item renaming keeps its text-input
+prompt, shulker editing keeps its inventory interface, and `/getpremadekit`
+keeps its separate preset picker. Other native dialogs retain their interfaces.
+
+## Where to customize text and layout
+
+| File in `plugins/Rift/` | Purpose |
+| --- | --- |
+| `config.yml` | Select dialogs or chest menus with the switches above |
+| `menus.yml` | Chest titles, rows, icons, names, lore, slots and controls |
+| `dialogs.yml` | Native settings, arena, leaderboard and kit-editor text; shared setting labels and descriptions under `SETTING_TOGGLE` |
+| `messages.yml` | FFA kit dialog/hotbar text under `FFA_KITS`, plus command and action feedback |
+| `kiteditor.yml` | Editor behavior, including `max-custom-kits` (clamped to 1–45) |
+
+Rift creates `menus.yml` on startup and fills missing keys with bundled defaults
+when loading it, while preserving configured values. If the file contains invalid
+YAML or cannot be loaded/saved, Rift logs a warning and keeps the previous menu
+configuration; on first startup, that is the bundled configuration.
+
+## Chest-menu sections
+
+Each section has its own `title`, `rows`, `filler` and item definitions. Edit the
+generated `menus.yml` in place; it contains the full defaults.
+
+| Section | Content layout | Main controls and states |
+| --- | --- | --- |
+| `settings` | `items.<setting>.slot` | `close` |
+| `ffa` | `arena` template across `arena-slots` | `previous`, `next`, `close`, `empty` |
+| `rtp` | `arena` template across `arena-slots` | `previous`, `next`, `close`, `empty` |
+| `leaderboards.categories` | `items.<category>.slot` | `arenas`, `global`, `close` |
+| `leaderboards.arenas` | `entry` template across `entry-slots` | `previous`, `next`, `back`, `close`, `empty` |
+| `leaderboards.rankings` | `entry` template across `entry-slots` | `previous`, `next`, `back`, `period`, `close`, `empty`, `loading`, `error` |
+| `ffa-kits.types` | `entry` template across `entry-slots` | `previous`, `next`, `close`, `empty` |
+| `ffa-kits.layouts` | `items.slot-1` through `items.slot-5` | `back`, `default`, `close` |
+| `kit-editor.modes` | `items.ffa.slot`, `items.rtp.slot` | `close` |
+| `kit-editor.slots` | `entry` template across `entry-slots` | `previous`, `next`, `back`, `close`, `empty` |
+| `kit-editor.presets` | `entry` template across `entry-slots` | `edit`, `previous`, `next`, `back`, `close`, `empty` |
+
+Settings item keys are `scoreboard`, `faster-crystals`, `health-display`,
+`quick-respawn`, `duels-enabled`, `player-visibility`, `dropping-items`,
+`chat-enabled`, and `ffa-kit-selection`. Category keys are `kills`, `deaths`,
+`kdr`, `rtp-wins`, `killstreak`, `balance`, and `totem-practice`.
+
+Controls appear when applicable: previous/next need another page, `global` is
+shown from an arena's categories, and `period` is shown for categories that
+support periods. The layout `default` button appears when choosing a kit for an
+arena entry, rather than while editing layouts.
+
+### Slots and item options
+
+- Slots start at **0** in the top-left, increasing left-to-right, nine per row.
+  A five-row menu uses slots 0–44.
+- `rows` is clamped to 1–6; settings and leaderboard categories require at least
+  two rows. The loader also reserves room for configured controls.
+- Use `arena-slots` for arena selectors and `entry-slots` for other paginated
+  lists. These lists determine both placement and page capacity. Reserved control
+  slots, out-of-range slots and duplicate slots are skipped; if nothing remains,
+  the list falls back to available non-control slots.
+- Fixed items and controls use `slot`. Out-of-range slots use a fallback;
+  collisions move to the next free slot, wrapping around the inventory.
+- `enabled: false` hides an item, control, filler or repeated entry template.
+  Fixed items and controls also accept `slot: -1`. Repeated entries are placed
+  through their slot list, rather than an individual `slot` value.
+- `material` accepts an item material name. `AUTO` uses the screen's original
+  icon; invalid, legacy, air or non-item materials also use that fallback.
+- `name` and `lore` support MiniMessage and `{sprite:key}` tokens. Use a YAML
+  list for lore, `name: ' '` for a blank filler name, and `lore: []` for no lore.
+- `custom-model-data` accepts a nonnegative integer; `-1` leaves it unset.
+  `glint: true` adds an enchantment shine; the default is `false`.
+
+Escape closes chest menus even when their close control is hidden. Hiding an
+item changes its presentation, not the underlying feature or permissions.
+
+For example, merge these values into the existing `settings` section of
+`menus.yml` to move the scoreboard toggle, hide item dropping, and remove filler:
+
+```yaml
+settings:
+  filler:
+    enabled: false
+  items:
+    scoreboard:
+      slot: 11
+      material: PAPER
+      name: '<aqua>{label}</aqua>'
+      lore:
+        - '<gray>{description}</gray>'
+        - '<gray>Status: </gray>{status}'
+      glint: true
+    dropping-items:
+      enabled: false
+```
+
+### Placeholders
+
+Placeholders are specific to the screen and item. Entry placeholders belong in
+the repeated entry's name/lore; they are not available in every title or control.
+Unknown placeholders remain as written.
+
+| Screen or item | Available values |
+| --- | --- |
+| Paginated list navigation | `{page}`, `{pages}` (starting at 1) |
+| FFA arena entry | `{arena}`, `{id}`, `{world}`, `{players}` |
+| RTP arena entry | `{arena}`, `{id}`, `{world}`, `{center_x}`, `{center_z}`, `{min_radius}`, `{max_radius}` |
+| Settings toggle | `{label}`, `{description}`, `{status}` |
+| FFA kit selection preference | `{selection}` |
+| Leaderboard categories | `{scope}`, `{id}`; category items also have `{category}` |
+| Leaderboard arena entry | `{arena}`, `{id}` |
+| Leaderboard rankings | `{scope}`, `{id}`, `{category}`, `{period}`; entries also have `{rank}`, `{player}`, `{value}`, `{self}` |
+| FFA kit type entry | `{kit}`, `{id}`, `{saved}`, `{slots}` (five layouts) |
+| FFA layout screen | `{kit}`, `{id}`; layout items also have `{slot}`, `{status}`, `{hint}` |
+| Kit-editor modes | `{slots}` (custom-slot limit) |
+| Kit-editor custom slots | `{slots}`; entries also have `{slot}`, `{kit}`, `{status}` |
+| Kit-editor presets | `{slot}` (selected custom slot); preset entries also have `{kit}`, `{id}`, `{description}` |
+
+Settings status text comes from `settings.enabled-text` / `disabled-text`;
+selection text uses `hotbar-text`, `dialog-text` and `chest-text`.
+Leaderboard scope uses `leaderboards.categories.global-label` for global views,
+and `{self}` uses `leaderboards.rankings.self-label` only for the viewer's entry.
+FFA layouts use `saved-text`, `empty-text`, `edit-hint`, `use-hint` and
+`empty-hint`. Custom kit slots have their own `saved-text` and `empty-text`.
+
+These `{name}` placeholders belong to `menus.yml`. Dialog templates use the
+numbered placeholders described in `dialogs.yml`; FFA kit messages use the named
+placeholders documented in `messages.yml`.
+
+## Player behavior
+
+Settings changes save immediately and apply the same effects in both interfaces.
+The **FFA Kit Selection** preference chooses hotbar or menu selection. Hotbar
+selection remains available regardless of the dialog switches. Menu selection
+uses `dialogs.enabled` and `dialogs.ffa-kits` to choose its interface.
+
+Each FFA arena uses its own assigned kit, set with `/arena setkitffa <arena>`.
+Players have five independently saved layouts per kit. At spawn, `/ffakit`
+opens the kits and then the layouts to edit. Entering FFA offers saved layouts
+for that arena's assigned kit or **Use Arena Default**; it does not offer a
+different kit for the arena. Empty layouts cannot be selected for use.
+The choice lasts five seconds; expiry closes the choice screen
+and applies the default. `/ffakit` inside FFA reopens the pending choice; it does
+not start another choice after the timer ends. Respawns retain that entry's choice.
+
+The kit editor offers FFA layouts and RTP custom kits. With one FFA kit, its
+layout screen opens directly; with several, the type picker opens first.
+RTP slots and presets have pages, and the preset screen's `edit` action remains
+available on every page. Choosing a preset starts an unsaved edit in the selected
+custom slot: Confirm saves it and Cancel keeps the previous kit.
+
+Leaderboard chest screens keep global and FFA scope, period cycling and player
+statistics actions. Rankings load asynchronously and show configurable loading,
+empty and error states. Results arriving after a player closes or changes the
+screen cannot replace the newer screen.
+
+## Existing servers
+
+Keep existing custom text, and configure the chest equivalents in `menus.yml`
+when switching interfaces. Changing a dialog title or tooltip does not change
+its chest-menu counterpart. Shared setting labels/descriptions still feed
+`{label}` and `{description}` from `dialogs.yml`.
+
+The legacy `RTP_DIALOG_PROVIDER.CHEST_TELEPORT_HINT` in `dialogs.yml` no longer
+controls chest lore; edit `rtp.arena.lore` in `menus.yml` instead. FFA chest lore
+uses `ffa.arena.lore`; native FFA tooltips use `FFA_DIALOG_PROVIDER.ARENA_TOOLTIP`.
+See [arena names and icons](setting-up-ffa.mdx#arena-names-and-icons) for arena names, icon overrides
+and native dialog options.
+

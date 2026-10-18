@@ -36,7 +36,7 @@ A screen uses a native dialog only when both `enabled` and its own switch are
 | `ffa-arenas` | FFA arena selector | `/ffa`, `/ffa menu` |
 | `rtp-arenas` | World RTP arena selector | `/rtp`, `/rtp menu` |
 | `leaderboards` | Categories, FFA arena selector, ranking pages | `/lb`, `/lb ffa`, `/top ...` |
-| `ffa-kits` | FFA kit types and saved layouts | `/ffakit`, FFA Kits in the kit editor, arena-entry layout choice |
+| `ffa-kits` | FFA kit types, saved layouts, shared-pit selection and purchases | `/ffakit`, `/kit`, FFA Kits in the kit editor, arena-entry layout choice |
 | `kit-editor` | Mode, RTP custom-slot and preset selectors | `/kiteditor` |
 
 Command aliases and spawn hotbar buttons use the same switches. Direct commands
@@ -47,6 +47,26 @@ so it can open a dialog even when `kit-editor` is `false`, and vice versa.
 The global switch covers these selectors. Item renaming keeps its text-input
 prompt, shulker editing keeps its inventory interface, and `/getpremadekit`
 keeps its separate preset picker. Other native dialogs retain their interfaces.
+
+## Shared-pit admin menu
+
+Run `/rift pit` with `rift.admin` to configure the shared mode, rotation maps,
+allowed kits, rotation interval, and countdown warnings. This admin screen always
+uses chest menus. Exact timer/countdown values use private chat prompts, including
+when player dialogs are disabled. Enter `cancel` to leave a prompt unchanged;
+prompts time out after 90 seconds of inactivity.
+
+**Save and Apply** persists the draft and restarts the pit timer. **Back** preserves
+the draft; closing a menu or clicking **Cancel** discards it. See the
+[shared-pit setup guide](shared-ffa-pit.mdx#3-enable-the-pit-and-countdown) for map
+ordering, the all-kits option, and save validation.
+
+Customize `ffa-pit-admin.main`, `.maps`, and `.kits` in `menus.yml`. Main-screen
+placeholders are `{status}`, `{maps}`, `{kits}`, `{seconds}`, and `{countdown}`.
+Selector entries use `{id}`, `{status}`, and `{detail}`; paging uses `{page}` and
+`{pages}`. Selected entries glow. `timer-prompt` and `countdown-prompt` under
+`ffa-pit-admin.main` are plain chat text. Titles, item names, lore, and
+`saved-message` use MiniMessage.
 
 ## Where to customize text and layout
 
@@ -78,6 +98,8 @@ generated `menus.yml` in place; it contains the full defaults.
 | `leaderboards.rankings` | `entry` template across `entry-slots` | `previous`, `next`, `back`, `period`, `close`, `empty`, `loading`, `error` |
 | `ffa-kits.types` | `entry` template across `entry-slots` | `previous`, `next`, `close`, `empty` |
 | `ffa-kits.layouts` | `items.slot-1` through `items.slot-5` | `back`, `default`, `close` |
+| `ffa-kits.pit` | Allowed kit `entry` template across `entry-slots` | `previous`, `next`, `close`, `empty` |
+| `ffa-kits.purchase` | Permanent unlock confirmation | `confirm`, `back`, `close` |
 | `kit-editor.modes` | `items.ffa.slot`, `items.rtp.slot` | `close` |
 | `kit-editor.slots` | `entry` template across `entry-slots` | `previous`, `next`, `back`, `close`, `empty` |
 | `kit-editor.presets` | `entry` template across `entry-slots` | `edit`, `previous`, `next`, `back`, `close`, `empty` |
@@ -90,7 +112,7 @@ Settings item keys are `scoreboard`, `faster-crystals`, `health-display`,
 Controls appear when applicable: previous/next need another page, `global` is
 shown from an arena's categories, and `period` is shown for categories that
 support periods. The layout `default` button appears when choosing a kit for an
-arena entry, rather than while editing layouts.
+arena entry or shared-pit selection, rather than while editing layouts.
 
 ### Slots and item options
 
@@ -154,6 +176,8 @@ Unknown placeholders remain as written.
 | Leaderboard arena entry | `{arena}`, `{id}` |
 | Leaderboard rankings | `{scope}`, `{id}`, `{category}`, `{period}`; entries also have `{rank}`, `{player}`, `{value}`, `{self}` |
 | FFA kit type entry | `{kit}`, `{id}`, `{saved}`, `{slots}` (five layouts) |
+| Shared-pit kit entry | `{kit}`, `{id}`, `{saved}`, `{slots}`, `{ability}`, `{status}`, `{hint}`, `{price}` |
+| Shared-pit purchase | `{kit}`, `{price}` |
 | FFA layout screen | `{kit}`, `{id}`; layout items also have `{slot}`, `{status}`, `{hint}` |
 | Kit-editor modes | `{slots}` (custom-slot limit) |
 | Kit-editor custom slots | `{slots}`; entries also have `{slot}`, `{kit}`, `{status}` |
@@ -177,9 +201,18 @@ The **FFA Kit Selection** preference chooses hotbar or menu selection. Hotbar
 selection remains available regardless of the dialog switches. Menu selection
 uses `dialogs.enabled` and `dialogs.ffa-kits` to choose its interface.
 
-Each FFA arena uses its own assigned kit, set with `/arena setkitffa <arena>`.
-Players have five independently saved layouts per kit. At spawn, `/ffakit`
-opens the kits and then the layouts to edit. Entering FFA offers saved layouts
+In the [shared pit](shared-ffa-pit.mdx), `/kit` opens a paginated list of allowed
+kits. Locked kits lead to a purchase confirmation; owned or free kits lead to the
+default/saved-layout picker. Selection is available at the lobby or pit spawn,
+subject to combat restrictions, without a five-second deadline. The selected kit
+and current layout remain through deaths and map changes. Purchase text is under
+`FFA_KITS` in `messages.yml`; chest presentation uses `ffa-kits.pit` and
+`ffa-kits.purchase` in `menus.yml`.
+
+Independent FFA arenas use their assigned kit, set with `/arena setkitffa <arena>`.
+Players have five independently saved layouts per kit. With the pit disabled,
+`/ffakit` at spawn opens kits and then layouts to edit; with it enabled, use
+`/ffakit edit <id>` for editing. Entering FFA offers saved layouts
 for that arena's assigned kit or **Use Arena Default**; it does not offer a
 different kit for the arena. Empty layouts cannot be selected for use.
 The choice lasts five seconds; expiry closes the choice screen

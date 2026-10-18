@@ -1,0 +1,301 @@
+---
+title: "Shared FFA pit"
+slug: /Rift/SharedFfaPit
+description: "Set up one shared FFA pit with selectable kits, coin purchases, NPC entry, automatic map rotation, and countdowns."
+---
+
+# Shared FFA pit setup
+
+[Rift overview](Rift.mdx)
+
+Players choose a kit at the lobby with `/kit`, enter the current arena through an
+NPC or `/ffa join`, earn coins from kills, and buy permanent kit unlocks. Every
+allowed kit fights in the same active map. You choose the number of kits, maps,
+rotation interval, and countdown warnings.
+
+## Before you start
+
+Start with a working [Rift installation](installation.mdx) and a connected
+[database](database.mdx). Enable WorldEdit or
+FastAsyncWorldEdit for FFA schematic saving and recovery. Set your lobby with
+`/spawn set`.
+
+Operators can perform the setup. For delegated administrators, use these
+permissions; `rift.admin` includes them:
+
+| Permission | Setup actions |
+| --- | --- |
+| `rift.admin.spawn` | Set the lobby spawn |
+| `rift.admin.arena` | Create maps, set bounds/spawns, and save schematics |
+| `rift.admin.ffakit` | Create kits and change their items, names, prices, and default |
+| `rift.admin.edit` | Toggle `/edit` while building |
+| `rift.admin` | Open `/rift pit`, save shared-pit settings, and run `/rift reload`; includes the setup permissions above |
+
+Keep at least one allowed kit free so new players can enter and earn coins.
+
+## 1. Create the kits
+
+Put the intended items in your inventory, equip the armor and offhand, and run:
+
+```text
+/ffakit create sword
+/ffakit rename sword Swordsman
+/ffakit setdefault sword
+```
+
+The kit captures those items and your selected hotbar slot. Change your equipment
+before creating each additional kit:
+
+```text
+/ffakit create archer
+/ffakit create tank
+/ffakit list
+```
+
+There is no fixed kit limit and no required count of 20. Both kit menu styles
+support pages. Use stable kit IDs: purchases belong to the ID, so deleting and
+recreating a kit with the same ID retains its previous owners.
+
+To update an existing loadout, prepare the new equipment and run
+`/ffakit setinventory sword`. Renaming or changing items keeps the price and
+ownership. Changing items can invalidate saved player layouts; those players use
+the kit's default arrangement until they save a new layout.
+
+## 2. Prepare each map
+
+This example uses `courtyard` and `ruins`. Repeat the following steps for each ID.
+
+1. Run `/arena create courtyard ffa`, then `/arena tp courtyard` to reach its world.
+2. Build the clean map that resets should restore. Use `/edit` while building.
+3. Stand at the two opposite corners of the playable cuboid and run
+   `/arena setmin courtyard` and `/arena setmax courtyard`. Include the floor,
+   playable air space, and spawn. Bounds in a shared world must not overlap.
+4. Stand at the intended arena spawn inside the bounds and run
+   `/arena setspawn courtyard`.
+5. Have all FFA participants leave that arena, then save it:
+
+   ```text
+   /arena finish courtyard
+   /arena schemstatus courtyard
+   ```
+
+Wait for the successful finish message. `finish` saves the clean schematic and
+its recovery manifest, then enables the map. `/arena enable` alone cannot make a
+map ready. Repeat for `ruins` before adding both maps to the rotation.
+
+Pit maps share the allowed kit list; they do not need an individual
+`/arena setkitffa` loadout. Leave `/edit` before testing the player entry flow.
+Keep the lobby entry NPC outside arena reset bounds.
+
+See [map setup and recovery](setting-up-ffa.mdx) for editing
+existing templates, restoring dirty maps, and resolving recovery errors.
+
+## 3. Enable the pit and countdown
+
+Run `/rift pit` in-game as an operator or a player with `rift.admin`.
+The admin screen always uses a chest menu, regardless of the player dialog settings.
+
+1. Open **Rotation Maps** and select your prepared FFA maps. Selected maps show
+   their rotation position. Select them in the order you want; remove a map and
+   select it again to move it to the end. Use the page arrows for more maps.
+2. Open **Allowed Kits** and choose the kits players may use. **All Saved Kits**
+   includes future kits automatically. Clicking an individual kit while all are
+   allowed switches to an explicit list with that kit removed. Selection pages
+   support any number of saved kits. Keep at least one selected kit free.
+3. Click **Rotation Timer** and enter whole seconds in the private chat prompt,
+   for example `600`. The minimum is 1 second.
+4. Click **Countdown Warnings** and enter seconds remaining, separated by commas:
+   `60,30,10,5,4,3,2,1`. Enter `off` to disable warnings. Duplicate values are
+   removed; warnings above the rotation interval are skipped.
+5. Toggle **Shared Pit** to Enabled, then click **Save and Apply**.
+
+Timer/countdown prompts accept `cancel` and time out after 90 seconds of
+inactivity. Either returns to the menu without changing that field. Changes stay
+in the draft until you click **Save and Apply**. Closing a menu or clicking
+**Cancel** discards the draft. **Back** keeps the draft while returning to settings.
+
+Saving merges these five settings into the existing `config.yml`, preserves
+other settings, and applies the pit settings immediately without `/rift reload`.
+It restarts the rotation timer. If another admin or a file edit changed the
+configuration while the menu was open, reopen `/rift pit` before editing again.
+
+Have players leave the pit maps before enabling or disabling the mode. Once
+enabled, you can save map, kit, timer, and countdown changes while players fight.
+An enabled pit needs at least one ready selected map and one free allowed kit.
+Missing map or kit IDs must be removed from the selection before saving.
+The menu selects existing maps and kits; creating maps, saving schematics, editing
+loadouts, and setting prices still use the commands in this guide.
+
+### Alternative: edit the file
+
+You can also edit the existing `ffa-pit` section in `plugins/Rift/config.yml`.
+Merge these settings into that section rather than creating duplicate top-level
+YAML keys:
+
+```yaml
+ffa-pit:
+  enabled: true
+  maps: [courtyard, ruins]
+  kits: [sword, archer, tank]
+  rotation-seconds: 600
+  countdown-seconds: [60, 30, 10, 5, 4, 3, 2, 1]
+```
+
+Apply manual file edits with `/rift reload`. The in-game menu already saves and applies its changes.
+
+| Setting | Behavior |
+| --- | --- |
+| `enabled` | Enables the shared pit; defaults to `false` |
+| `maps` | Existing FFA arena IDs, in rotation order; one map gives a pit without map changes |
+| `kits` | Allowed FFA kit IDs, in menu order; `[]` allows every saved FFA kit |
+| `rotation-seconds` | Time between map changes; default 600 seconds, minimum 1 |
+| `countdown-seconds` | Chat warnings at those remaining seconds; `[]` disables warnings |
+
+Only ready maps participate. Missing, disabled, or recovering maps are skipped.
+If destination chunk loading fails, that map is skipped for 30 seconds before a
+retry. Warnings are sent to pit players only when another map is ready. A delayed
+server tick reports the current remaining time instead of replaying every missed
+warning.
+
+When the timer expires, Rift loads the destination spawn chunk and starts moving
+all pit players. It does not wait for them to die. Crowded transfers are spread
+across server ticks, so completion time depends on server load. A canceled
+teleport is retried on later rotation checks. The old arena resets after its last
+player leaves.
+
+Saving in the menu or reloading restarts the timer and keeps the current map if
+it is still configured and available. If you remove the active map, rotation
+checks start moving players to a ready selected map. Arenas outside `maps` retain
+their independent assigned-kit behavior.
+
+## 4. Set kill rewards and kit prices
+
+Set the amount earned for an FFA kill in the existing `economy` section of
+`plugins/Rift/config.yml`:
+
+```yaml
+economy:
+  rewards:
+    ffa-kill-coins: 10.0
+```
+
+Run `/rift reload` after changing the reward. Rift uses a registered Vault economy
+provider when available, otherwise its built-in saved coin balance. Players check
+their balance with `/balance`, `/bal`, or `/coins`.
+
+New kits are free. Set permanent unlock prices with:
+
+```text
+/ffakit setprice sword 0
+/ffakit setprice archer 250
+/ffakit setprice tank 500
+```
+
+Prices must be finite, nonnegative numbers. Price commands save immediately;
+wait for the save confirmation. With a 10-coin reward and no other balance changes,
+25 kills earn the 250 coins needed for Archer.
+
+The kit picker shows free, owned, and locked kits. Selecting a locked kit opens a
+purchase confirmation. A successful purchase unlocks that kit permanently for
+the player, and selecting an owned kit does not charge again. Insufficient funds
+leave it locked. Ownership survives deaths, rotations, reconnects, and restarts.
+These prices restrict shared-pit kit selection; independent arenas keep their
+assigned-kit behavior.
+
+## 5. Connect lobby entry
+
+Configure your NPC plugin's click action to execute this **as the clicking player**:
+
+```text
+ffa join
+```
+
+NPC creation and command-binding syntax depend on the NPC plugin. Rift's join
+command requires a player sender; a console action is not interchangeable.
+Use your NPC plugin's syntax for an optional leading slash.
+
+The player flow is:
+
+1. Spawn in the lobby and open `/kit` (alias of `/ffakit`).
+2. Choose a free or owned kit, then its default or a saved layout.
+3. Click the NPC to enter the current pit map with that kit.
+4. Fight to earn coins, then return to the lobby or the arena's safe spawn to
+   choose or buy another kit.
+
+`/ffa join` always chooses the active pit map while one is available. Joining an
+inactive configured pit map by ID also routes to the current map. `/ffa` shows the
+active pit map alongside any independent FFA arenas.
+
+`/shop` opens Rift's cosmetic shop. This shared-pit feature does not add a tag shop.
+
+## Kit selection and persistence
+
+The selected kit and current layout remain through deaths and rotations. The kit
+preference also persists across reconnects and server restarts. Map changes do
+not award kills or count as deaths; statistics remain scoped to their arenas.
+
+Players can change their pit kit at the lobby or within their arena's spawn
+radius, subject to combat-tag restrictions. This location check still applies
+when spawn protection is disabled. Set the area with `ffa-spawn-platform.radius`
+and `ffa-spawn-platform.depth` in `config.yml`. There is no timed kit-choice
+deadline for the shared pit.
+
+If a selected kit becomes unavailable, Rift chooses an allowed free or unlocked
+fallback. If none is available to a player, entry is rejected. Unknown kit IDs in
+the allowed list are skipped; a nonempty list containing no valid kit IDs leaves
+the pit unavailable.
+
+| Player command | Action |
+| --- | --- |
+| `/kit` | Open kit selection and purchases |
+| `/ffakit select sword` | Open the selection flow for that kit |
+| `/ffakit edit sword` | Arrange a kit layout from the lobby |
+| `/ffa join` | Enter the active map |
+| `/ffa leave` | Return to spawn, subject to combat restrictions |
+| `/balance` | Show the current coin balance |
+
+## Customize the menus
+
+Native dialogs are the default. To use chest menus for kits, set
+`dialogs.ffa-kits: false` in `config.yml`, then reload and reopen the picker.
+Setting `dialogs.enabled: false` selects chest menus for all supported screens.
+
+Edit `ffa-kits.pit` and `ffa-kits.purchase` in `plugins/Rift/menus.yml` for the
+chest selector and confirmation screen. Kit feedback, purchase dialog text,
+countdown messages, and map-change messages are in `messages.yml`. The admin
+screens use `ffa-pit-admin.main`, `ffa-pit-admin.maps`, and `ffa-pit-admin.kits` in
+`menus.yml`. The `timer-prompt` and `countdown-prompt` fields are plain chat text.
+
+## Check the setup
+
+With two test players, choose different kits and enter through the NPC. Leave
+the protected spawn area, record a kill, and check that the killer's balance
+increased. Buy a locked kit, confirm the deduction, then select it again to check
+that it is already owned.
+
+First open `/rift pit`, change a setting, and cancel; reopen it to check that the
+saved value is unchanged. For a short functional check, use the menu to save a
+60-second rotation and countdown warnings `10,5,4,3,2,1`. Check that both living players move to the
+new map, keep their choices after a death, and retain the purchased unlock after
+a reconnect and normal server restart. Restore your intended timer afterward.
+
+## Troubleshooting
+
+| Problem | Check |
+| --- | --- |
+| Rift disables during startup | Correct `database.yml` or database availability, then restart |
+| No arenas are available | Check `ffa-pit.enabled`, the map IDs, and `/arena schemstatus <id>`; finish or restore each map as needed |
+| Map appears enabled but cannot be entered | Enabled status does not bypass schematic recovery; inspect `schemstatus` |
+| A new player cannot join | Ensure at least one valid allowed kit is free |
+| A kit is missing from the picker | Open `/rift pit` → Allowed Kits, check the selection, and Save and Apply |
+| The admin menu refuses to save | Read the error: ensure a ready map and free kit are selected, remove missing IDs, or reopen after another config change |
+| No map change or countdown | At least two ready maps are needed; check the interval, countdown list, and recovery status |
+| Kit changes are refused | Return to the lobby or arena spawn, leave `/edit`, and wait for the combat tag to expire |
+| NPC click does nothing | Test `/ffa join` directly and confirm the NPC runs the action as the clicking player |
+| Purchases fail despite sufficient funds | Check the active economy provider and console for storage or purchase errors; retain `data/kit-pending-writes.json` if present |
+| Kits or unlocks disappear after moving servers | Move the configured database too; copying only `config.yml` does not move player data |
+
+Back up the database, arena worlds, and `plugins/Rift/`. Keep each schematic and
+its matching manifest together. Retain pending-write recovery files until Rift
+has replayed them successfully. If Vault supplies the economy, include its
+provider's data in the backup.

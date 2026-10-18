@@ -45,7 +45,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Setup',
-      items: ['Rift/spawn-and-kit-room', 'Rift/setting-up-ffa', 'Rift/setting-up-rtp', 'Rift/kits'],
+      items: ['Rift/spawn-and-kit-room', 'Rift/setting-up-ffa', 'Rift/shared-ffa-pit', 'Rift/setting-up-rtp', 'Rift/kits'],
     },
     {
       type: 'category',

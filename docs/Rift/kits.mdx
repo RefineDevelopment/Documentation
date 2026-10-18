@@ -1,7 +1,7 @@
 ---
 title: "Kits"
 slug: /Rift/Kits
-description: "Set a kit for each FFA arena, save player layouts, and configure RTP custom kits and presets."
+description: "Configure shared-pit kit choices and permanent purchases, assigned arena kits, player layouts, and RTP kits."
 ---
 
 # Kits
@@ -10,15 +10,43 @@ Rift has three kinds of kit.
 
 | Kind | Who makes it | Used for |
 | --- | --- | --- |
-| **FFA arena kits** | Staff | The assigned loadout for each FFA arena, used on entry and respawn |
+| **FFA kits** | Staff | Selectable shared-pit kits or assigned loadouts for independent arenas |
 | **Player kits and layouts** | Players, in the kit editor | Saved arrangements of FFA arena kits and fully custom RTP kits |
 | **Presets** | Bundled with Rift | Starting points with IDs beginning `preset-` |
 
 The bundled presets are `crystal`, `cart`, `diamond`, `diamondsmp`, `mace`, `nethpot`, `spearmace`, and `uhc`.
 
+## Shared-pit kits
+
+With `ffa-pit.enabled: true`, players use `/kit` (alias of `/ffakit`) at the lobby
+or their pit's safe spawn to choose a kit and its default or a saved layout.
+All allowed kits fight together in the active map. Kit and current layout choices
+remain through deaths and map rotations; the kit preference also survives reconnects.
+The shared picker has no five-second choice deadline, and combat-tag restrictions
+still apply.
+
+Create each loadout with `/ffakit create <id>` while carrying its inventory, armor,
+and offhand. Set `ffa-pit.kits` to a list of IDs in menu order, or `[]` to allow
+every saved FFA kit. There is no fixed kit count; both menu styles have pages.
+
+```text
+/ffakit setprice sword 0
+/ffakit setprice archer 250
+```
+
+New kits are free. A positive price adds a permanent unlock purchase with a
+confirmation screen. Owned kits do not charge again, and ownership survives
+deaths, map changes, reconnects, and restarts. Keep at least one allowed kit free.
+Renaming or updating a kit preserves its owners; reusing a deleted ID preserves
+that ID's owners too. Prices apply to shared-pit selection.
+
+See [Shared FFA pit](shared-ffa-pit.mdx) for map rotation, coin rewards, NPC entry,
+configuration, and troubleshooting. Use `/ffakit edit <id>` at the lobby to edit
+layouts while the pit is enabled.
+
 ## FFA arena kits
 
-Each FFA arena has its own assigned kit. Players joining that arena use its
+Each independent FFA arena outside `ffa-pit.maps` has its own assigned kit. Players joining that arena use its
 loadout and can choose one of their saved arrangements of those items. Their
 layout choice applies to that arena entry and subsequent respawns.
 
@@ -56,7 +84,7 @@ and save new layouts for the updated kit.
 
 ### Player layouts
 
-At spawn, players use `/ffakit` to choose an arena kit and one of its **five
+With the shared pit disabled, players at spawn use `/ffakit` to choose an arena kit and one of its **five
 saved layout slots** to arrange in the kit room. Layouts are saved per player
 and per kit. `/ffakit select <id>` and `/ffakit edit <id>` open that kit's layout
 picker; `/ffakit reset <id>` resets its first layout slot. The ID here is the
@@ -88,11 +116,13 @@ created with `setkitffa` can be managed using their `arena-<arena-id>` IDs:
 | `/ffakit seticon <id> [material]` | Set the icon to your held item or a material. |
 | `/ffakit rename <id> <name>` | Set the display name. |
 | `/ffakit setdefault <id>` | Set the fallback kit; this does not change an arena's assigned kit. |
+| `/ffakit setprice <id> <price>` | Set the shared-pit permanent unlock price; `0` makes it free. |
 | `/ffakit delete <id>` | Delete the kit. |
 
 These staff commands require `rift.admin.ffakit`. Creating a standalone kit with
 `/ffakit create` does not assign it to an arena. Use `/arena setkitffa <arena>`
-for the arena setup workflow above.
+for an independent arena, or include the standalone kit in `ffa-pit.kits` for
+shared-pit selection.
 
 ## Kit editor
 

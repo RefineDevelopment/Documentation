@@ -10,7 +10,7 @@ Rift's behavior settings are YAML files in `plugins/Rift/`. Run `/rift reload` a
 
 | File | Controls |
 | --- | --- |
-| `config.yml` | Features, economy, arenas, RTP, terrain regen, spawn, leaderboards |
+| `config.yml` | Features, economy, shared pit, map rotation/countdowns, arenas, RTP, terrain regen, spawn, leaderboards |
 | `ffa.yml` | FFA death and respawn rules |
 | `combat.yml` | Combat tag and logout |
 | `features.yml` | Trim workshop, shield designer, golden head, totem practice |
@@ -61,6 +61,41 @@ economy:
     name-plural: "Coins"
     symbol: "⛃"
 ```
+
+Shared-pit kits can be purchased with these coins. Use
+`/ffakit setprice <id> <price>` to set a permanent unlock price; `0` is free.
+Rift uses a registered Vault economy provider when available, otherwise its
+saved internal balance. See [Shared FFA pit](shared-ffa-pit.mdx) for the purchase flow.
+
+### Shared FFA pit
+
+The pit is disabled by default. After preparing and finishing the maps, use
+`/rift pit` (`rift.admin`) to enable it, select maps and kits, and enter the rotation
+timer and countdown warnings in-game. **Save and Apply** writes the existing
+`ffa-pit` section and restarts the timer; no reload is needed. Closing the menu
+discards unsaved edits. See [the menu setup steps](shared-ffa-pit.mdx#3-enable-the-pit-and-countdown).
+
+For manual file editing, merge this into `config.yml` and run `/rift reload`:
+
+```yaml
+ffa-pit:
+  enabled: true
+  maps: [courtyard, ruins]
+  kits: [sword, archer, tank]
+  rotation-seconds: 600
+  countdown-seconds: [60, 30, 10, 5, 4, 3, 2, 1]
+```
+
+`maps` lists existing FFA arena IDs in rotation order. `kits` lists allowed FFA
+kit IDs in menu order; `[]` allows every saved FFA kit. There is no fixed kit limit.
+The timer defaults to 600 seconds with a minimum of 1. Use one map for a pit
+without map changes, or `countdown-seconds: []` to turn warnings off.
+
+At rotation, ready destination chunks load before transfers begin. All pit players
+are moved without waiting for deaths; crowded transfers span server ticks.
+Missing, disabled, or recovering maps are skipped. Saving from the admin menu
+or running a reload restarts the timer.
+See [Shared FFA pit](shared-ffa-pit.mdx) for the complete setup and persistence rules.
 
 ### Arenas
 

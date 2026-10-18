@@ -6,6 +6,10 @@ description: "Create an FFA arena, set its bounds and spawn, save its clean sche
 
 # Set up FFA
 
+For multiple kit choices in one active arena, follow [Shared FFA pit](shared-ffa-pit.mdx).
+That mode adds timed map rotation, countdowns, NPC entry, and permanent kit
+purchases. Use the map-building and schematic steps below for each pit map.
+
 FFA arenas are void worlds. Rift creates the world, you build the arena in it, then you finish setup by saving its clean map. Install and enable **WorldEdit or FastAsyncWorldEdit** before using FFA. Run these commands in-game with `rift.admin.arena` (included in `rift.admin`).
 
 <Steps>
@@ -21,7 +25,7 @@ FFA arenas are void worlds. Rift creates the world, you build the arena in it, t
 2. Build the arena. A 3x3 bedrock platform is placed at `0, 64, 0` to stand on. Turn this off with `arenas.spawn-platform: false` in `config.yml`.
 3. Stand where players should spawn and run `/arena setspawn <id>`.
 4. Stand in one corner of the playable area and run `/arena setmin <id>`, then in the opposite corner and run `/arena setmax <id>`. You must be inside the arena's world. Include the spawn and the air above the floor, keep the bounds within the world's build height, and avoid overlapping other FFA arenas in the same world. New arenas start with broad bounds; tighten them around your map.
-5. Choose the kit (see below). Make sure the map is clean: this is the version that resets will restore.
+5. For an independent arena, choose its assigned kit (see below). Shared-pit maps use `ffa-pit.kits` instead. Make sure the map is clean: this is the version that resets will restore.
 6. Have all FFA participants leave this arena, then finish setup:
 
    ```text
@@ -94,7 +98,8 @@ Reload with `/rift reload`, then reopen the menu. See
 
 ## Kit
 
-Each FFA arena uses its own assigned kit. Equip the inventory, armor, and offhand
+An independent FFA arena uses its own assigned kit. Arenas listed in
+`ffa-pit.maps` use the [shared-pit kit list](shared-ffa-pit.mdx) instead. Equip the inventory, armor, and offhand
 you want players to receive, then save that loadout for the arena:
 
 ```text
@@ -159,7 +164,7 @@ Give staff `rift.bypass.combattag` to exempt them. Operators don't get it automa
 | `/ffa` | Open the arena menu, or join an arena by ID. |
 | `/ffa join [id]` | Join an arena. |
 | `/ffa leave` | Leave FFA and return to spawn. |
-| `/ffakit` | Choose and arrange an FFA kit. |
+| `/ffakit` / `/kit` | Choose or buy a shared-pit kit; arrange layouts for independent arena kits. |
 
 ## Troubleshooting
 
